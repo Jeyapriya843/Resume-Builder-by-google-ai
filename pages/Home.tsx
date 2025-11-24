@@ -1,12 +1,14 @@
 
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useRef, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import { Icons } from '../components/ui/Icons';
-import { motion } from 'framer-motion';
 import { TemplatesMap } from '../components/templates';
 import { ResumeData } from '../types';
+import { motion } from 'framer-motion';
+import { Icons } from '../components/ui/Icons';
+import { useResume } from '../App';
+import { parseResumeFromText } from '../services/geminiService';
 
 // Dummy data for the homepage preview
 const previewData: ResumeData = {
@@ -24,31 +26,6 @@ const previewData: ResumeData = {
   skills: ["React", "TypeScript", "Tailwind"],
   templateId: 'modern'
 };
-
-const AbstractResumePreview = ({ scale = 1, className = "" }: { scale?: number, className?: string }) => (
-  <div className={`bg-white shadow-lg rounded-lg overflow-hidden border border-gray-200 ${className}`} style={{ width: 300, height: 400 }}>
-     <div className="p-4 space-y-3">
-        <div className="flex gap-3">
-           <div className="w-12 h-12 bg-gray-200 rounded-full shrink-0"></div>
-           <div className="space-y-2 w-full">
-              <div className="h-3 bg-gray-300 rounded w-3/4"></div>
-              <div className="h-2 bg-gray-100 rounded w-1/2"></div>
-           </div>
-        </div>
-        <div className="h-2 bg-gray-100 rounded w-full mt-4"></div>
-        <div className="h-2 bg-gray-100 rounded w-full"></div>
-        <div className="h-2 bg-gray-100 rounded w-5/6"></div>
-        
-        <div className="space-y-2 mt-6">
-           <div className="h-20 bg-gray-100 rounded w-full"></div>
-           <div className="flex gap-2">
-              <div className="h-20 bg-gray-200 rounded w-1/3"></div>
-              <div className="h-20 bg-gray-100 rounded w-2/3"></div>
-           </div>
-        </div>
-     </div>
-  </div>
-);
 
 const FeatureIllustration = ({ variant }: { variant: 1 | 2 | 3 | 4 }) => {
    if (variant === 1) {
@@ -93,11 +70,98 @@ const FeatureIllustration = ({ variant }: { variant: 1 | 2 | 3 | 4 }) => {
 };
 
 const Home: React.FC = () => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isImporting, setIsImporting] = useState(false);
+  const { setResumeData } = useResume();
+  const navigate = useNavigate();
+
+  const handleImportClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const extractTextFromPdf = async (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        const typedarray = new Uint8Array(e.target?.result as ArrayBuffer);
+        try {
+          // @ts-ignore
+          const pdf = await window.pdfjsLib.getDocument(typedarray).promise;
+          let fullText = '';
+          for (let i = 1; i <= pdf.numPages; i++) {
+            const page = await pdf.getPage(i);
+            const textContent = await page.getTextContent();
+            const pageText = textContent.items.map((item: any) => item.str).join(' ');
+            fullText += pageText + '\n';
+          }
+          resolve(fullText);
+        } catch (error) {
+          reject(error);
+        }
+      };
+      reader.readAsArrayBuffer(file);
+    });
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsImporting(true);
+
+    try {
+      let textToParse = '';
+
+      if (file.type === 'application/json') {
+        // JSON Import
+        const text = await file.text();
+        const data = JSON.parse(text);
+        setResumeData(prev => ({ ...prev, ...data }));
+        navigate('/builder/summary'); // Go to summary to review
+        return;
+      } else if (file.type === 'application/pdf') {
+        // PDF Parsing
+        textToParse = await extractTextFromPdf(file);
+      } else {
+        alert("Please upload a PDF or JSON file.");
+        setIsImporting(false);
+        return;
+      }
+
+      if (textToParse) {
+        // AI Parsing
+        const parsedData = await parseResumeFromText(textToParse);
+        if (Object.keys(parsedData).length > 0) {
+           setResumeData(prev => ({ ...prev, ...parsedData }));
+           navigate('/builder/header'); // Start from header to verify details
+        } else {
+           alert("Could not extract data from resume. Please try filling it manually.");
+        }
+      }
+
+    } catch (error) {
+      console.error("Import failed:", error);
+      alert("Failed to import resume. Please try again.");
+    } finally {
+      setIsImporting(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
+  };
+
   return (
     <div className="flex flex-col min-h-screen bg-white font-sans text-navy-900">
       <Header />
       
       <main className="flex-1">
+        {/* Hidden File Input */}
+        <input 
+          type="file" 
+          accept=".pdf,.json" 
+          ref={fileInputRef} 
+          onChange={handleFileChange} 
+          className="hidden" 
+        />
+
         {/* --- Hero Section --- */}
         <section className="pt-16 pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
            <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -121,10 +185,20 @@ const Home: React.FC = () => {
                     >
                        Build Resume
                     </Link>
-                    <button className="px-8 py-3 bg-gray-100 text-navy-900 font-semibold rounded-md hover:bg-gray-200 transition-colors">
-                       Import Resume
+                    <button 
+                      onClick={handleImportClick}
+                      disabled={isImporting}
+                      className="px-8 py-3 bg-gray-100 text-navy-900 font-semibold rounded-md hover:bg-gray-200 transition-colors disabled:opacity-60 flex items-center gap-2"
+                    >
+                       {isImporting ? (
+                         <>
+                           <div className="w-4 h-4 border-2 border-navy-900/30 border-t-navy-900 rounded-full animate-spin"></div>
+                           Importing...
+                         </>
+                       ) : "Import Resume"}
                     </button>
                  </div>
+                 <p className="mt-4 text-xs text-gray-400">* Supports PDF (AI Parsed) or JSON backups</p>
               </motion.div>
 
               <motion.div

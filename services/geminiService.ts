@@ -1,4 +1,5 @@
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenAI, Type } from "@google/genai";
+import { ResumeData, initialResumeState } from "../types";
 
 const apiKey = process.env.API_KEY || ''; // Ensure API_KEY is set in environment
 
@@ -26,5 +27,81 @@ export const generateResumeSummary = async (
   } catch (error) {
     console.error("Gemini API Error:", error);
     return "Error generating summary. Please try again.";
+  }
+};
+
+export const parseResumeFromText = async (text: string): Promise<Partial<ResumeData>> => {
+  if (!apiKey) {
+    console.warn("API Key not found. Cannot parse resume.");
+    return {};
+  }
+
+  try {
+    const ai = new GoogleGenAI({ apiKey });
+    const model = "gemini-2.5-flash";
+    
+    const response = await ai.models.generateContent({
+      model,
+      contents: `Parse the following resume text into a structured JSON format. 
+      
+      Resume Text:
+      ${text}
+      
+      Return a JSON object with this schema:
+      {
+        "firstName": "string",
+        "lastName": "string",
+        "jobTitle": "string",
+        "email": "string",
+        "phone": "string",
+        "city": "string",
+        "country": "string",
+        "summary": "string",
+        "experience": [
+          {
+            "id": "string (unique)",
+            "jobTitle": "string",
+            "employer": "string",
+            "startDate": "string",
+            "endDate": "string",
+            "location": "string",
+            "description": "string (full description)"
+          }
+        ],
+        "education": [
+          {
+            "id": "string (unique)",
+            "school": "string",
+            "degree": "string",
+            "fieldOfStudy": "string",
+            "startDate": "string",
+            "endDate": "string",
+            "location": "string"
+          }
+        ],
+        "skills": ["string"],
+        "projects": [
+           {
+             "id": "string (unique)",
+             "title": "string",
+             "link": "string",
+             "description": "string",
+             "technologies": ["string"]
+           }
+        ]
+      }`,
+      config: {
+        responseMimeType: "application/json",
+      }
+    });
+
+    const jsonText = response.text;
+    if (!jsonText) return {};
+    
+    const parsed = JSON.parse(jsonText);
+    return parsed;
+  } catch (error) {
+    console.error("Gemini Parse Error:", error);
+    return {};
   }
 };
