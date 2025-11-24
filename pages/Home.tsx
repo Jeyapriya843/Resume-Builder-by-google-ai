@@ -1,103 +1,317 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { Icons } from '../components/ui/Icons';
 import { motion } from 'framer-motion';
+import { TemplatesMap } from '../components/templates';
+import { ResumeData } from '../types';
+
+// Dummy data for the homepage preview
+const previewData: ResumeData = {
+  firstName: "Jane",
+  lastName: "Doe",
+  jobTitle: "Software Engineer",
+  email: "jane@example.com",
+  phone: "(555) 123-4567",
+  city: "San Francisco",
+  country: "CA",
+  summary: "Passionate developer with expertise in React and Node.js.",
+  experience: [],
+  education: [],
+  skills: ["React", "TypeScript", "Tailwind"],
+  templateId: 'modern'
+};
+
+const AbstractResumePreview = ({ scale = 1, className = "" }: { scale?: number, className?: string }) => (
+  <div className={`bg-white shadow-lg rounded-lg overflow-hidden border border-gray-200 ${className}`} style={{ width: 300, height: 400 }}>
+     <div className="p-4 space-y-3">
+        <div className="flex gap-3">
+           <div className="w-12 h-12 bg-gray-200 rounded-full shrink-0"></div>
+           <div className="space-y-2 w-full">
+              <div className="h-3 bg-gray-300 rounded w-3/4"></div>
+              <div className="h-2 bg-gray-100 rounded w-1/2"></div>
+           </div>
+        </div>
+        <div className="h-2 bg-gray-100 rounded w-full mt-4"></div>
+        <div className="h-2 bg-gray-100 rounded w-full"></div>
+        <div className="h-2 bg-gray-100 rounded w-5/6"></div>
+        
+        <div className="space-y-2 mt-6">
+           <div className="h-20 bg-gray-100 rounded w-full"></div>
+           <div className="flex gap-2">
+              <div className="h-20 bg-gray-200 rounded w-1/3"></div>
+              <div className="h-20 bg-gray-100 rounded w-2/3"></div>
+           </div>
+        </div>
+     </div>
+  </div>
+);
+
+const FeatureIllustration = ({ variant }: { variant: 1 | 2 | 3 | 4 }) => {
+   if (variant === 1) {
+     return (
+       <div className="w-full aspect-[4/3] bg-gray-100 rounded-lg relative overflow-hidden flex items-center justify-center p-8">
+          <div className="w-3/4 h-3/4 bg-gray-200 rounded shadow-sm relative">
+             <div className="absolute right-[-20px] bottom-[40px] w-32 h-8 bg-gray-400 rounded shadow-md z-10"></div>
+             <div className="absolute right-[-20px] bottom-[80px] w-32 h-8 bg-gray-400 rounded shadow-md z-10 opacity-60"></div>
+          </div>
+       </div>
+     );
+   }
+   if (variant === 2) {
+     return (
+        <div className="w-full aspect-[4/3] bg-gray-50 rounded-lg flex items-center justify-center p-8">
+           <div className="w-3/4 space-y-3">
+              <div className="h-24 bg-gray-200 rounded w-full"></div>
+              <div className="h-6 bg-gray-400 rounded w-full"></div>
+              <div className="h-6 bg-gray-400 rounded w-full"></div>
+           </div>
+        </div>
+     );
+   }
+   if (variant === 3) {
+      return (
+        <div className="w-full aspect-[4/3] bg-gray-50 rounded-lg flex items-center justify-center p-8">
+           <div className="w-2/3 h-3/4 bg-gray-200 rounded relative">
+              <div className="absolute -right-8 bottom-12 w-32 h-16 bg-gray-400 rounded shadow-sm"></div>
+              <div className="absolute -right-8 bottom-32 w-32 h-8 bg-gray-400 rounded shadow-sm opacity-60"></div>
+           </div>
+        </div>
+      );
+   }
+   // Variant 4: Three cards stacking
+   return (
+      <div className="w-full aspect-[4/3] bg-gray-50 rounded-lg flex items-center justify-center p-8 relative">
+          <div className="w-32 h-40 bg-gray-300 rounded shadow-sm absolute left-1/4 top-10 transform -rotate-6"></div>
+          <div className="w-32 h-40 bg-gray-300 rounded shadow-sm absolute right-1/4 top-10 transform rotate-6"></div>
+          <div className="w-36 h-48 bg-gray-200 rounded shadow-lg relative z-10"></div>
+      </div>
+   );
+};
 
 const Home: React.FC = () => {
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-white font-sans text-navy-900">
       <Header />
-      <main className="flex-1 bg-white">
-        {/* Hero Section */}
-        <section className="relative pt-20 pb-32 overflow-hidden">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
-              
-              {/* Text Content */}
+      
+      <main className="flex-1">
+        {/* --- Hero Section --- */}
+        <section className="pt-16 pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+           <div className="grid lg:grid-cols-2 gap-12 items-center">
               <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6 }}
-                className="text-center lg:text-left"
               >
-                <div className="inline-block mb-4 px-3 py-1 bg-blue-50 rounded-full text-blue-600 text-xs font-semibold uppercase tracking-wide">
-                  Online Resume Builder
-                </div>
-                <h1 className="text-4xl md:text-6xl font-bold text-navy-900 leading-tight mb-6">
-                  Create a Job-ready <br />
-                  <span className="text-blue-500">Resume</span> in minutes
-                </h1>
-                <p className="text-gray-500 text-lg md:text-xl mb-8 leading-relaxed max-w-2xl mx-auto lg:mx-0">
-                  An AI-powered resume builder creates ATS-friendly resumes & optimizes your content with the right keywords to match job descriptions.
-                </p>
-                
-                <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                  <Link 
-                    to="/builder"
-                    className="px-8 py-4 bg-navy-900 text-white rounded-lg font-semibold hover:bg-navy-800 transition-all shadow-xl shadow-navy-900/10"
-                  >
-                    Build Resume
-                  </Link>
-                  <button className="px-8 py-4 bg-gray-100 text-navy-900 rounded-lg font-semibold hover:bg-gray-200 transition-all">
-                    Import Resume
-                  </button>
-                </div>
+                 <div className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Online Resume Builder</div>
+                 <h1 className="text-4xl md:text-6xl font-bold leading-[1.1] mb-6 text-gray-900">
+                    Create a Job-ready <br />
+                    <span className="text-gray-900">Resume</span> <span className="text-gray-400 font-normal">in minutes</span>
+                 </h1>
+                 <p className="text-gray-500 text-lg mb-8 leading-relaxed max-w-md">
+                    An AI-powered resume builder creates ATS-friendly resume & optimizes your content with the right keywords to match job description to boost your chances of landing interviews.
+                 </p>
+                 <div className="flex gap-4">
+                    <Link 
+                      to="/builder"
+                      className="px-8 py-3 bg-navy-900 text-white font-semibold rounded-md hover:bg-navy-800 transition-colors shadow-lg shadow-navy-900/10"
+                    >
+                       Build Resume
+                    </Link>
+                    <button className="px-8 py-3 bg-gray-100 text-navy-900 font-semibold rounded-md hover:bg-gray-200 transition-colors">
+                       Import Resume
+                    </button>
+                 </div>
               </motion.div>
 
-              {/* Hero Image */}
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-                className="relative"
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="relative hidden lg:block"
               >
-                 <div className="relative z-10 rounded-2xl overflow-hidden shadow-2xl bg-gray-50 border border-gray-200 p-2">
-                    <img 
-                      src="https://picsum.photos/800/600?grayscale" 
-                      alt="Resume Builder Interface" 
-                      className="w-full h-auto rounded-xl"
-                    />
-                    {/* Floating Cards Mockup */}
-                    <div className="absolute -bottom-6 -left-6 w-48 h-24 bg-white rounded-lg shadow-xl p-4 hidden md:block animate-bounce">
-                        <div className="h-2 w-20 bg-gray-200 rounded mb-2"></div>
-                        <div className="h-2 w-32 bg-gray-100 rounded"></div>
+                 <div className="bg-gray-100 rounded-xl p-8 relative min-h-[500px] flex items-center justify-center">
+                    {/* Abstract Shapes replicating the design */}
+                    <div className="absolute top-20 left-10 w-24 h-12 bg-gray-400 rounded shadow-sm z-20"></div>
+                    <div className="absolute bottom-20 right-20 w-32 h-12 bg-gray-400 rounded shadow-sm z-20"></div>
+                    
+                    {/* Main Card */}
+                    <div className="w-[300px] h-[400px] bg-white shadow-2xl rounded-lg p-6 space-y-4 relative z-10">
+                       <div className="w-16 h-16 bg-gray-200 rounded-full mb-4"></div>
+                       <div className="h-4 bg-gray-800 rounded w-3/4"></div>
+                       <div className="h-3 bg-gray-300 rounded w-1/2"></div>
+                       <div className="h-px bg-gray-100 my-4"></div>
+                       <div className="space-y-2">
+                          <div className="h-2 bg-gray-100 rounded w-full"></div>
+                          <div className="h-2 bg-gray-100 rounded w-full"></div>
+                          <div className="h-2 bg-gray-100 rounded w-5/6"></div>
+                       </div>
+                       <div className="h-24 bg-gray-50 rounded w-full mt-4 border border-dashed border-gray-200"></div>
                     </div>
                  </div>
-                 {/* Decorative blobs */}
-                 <div className="absolute -top-10 -right-10 w-64 h-64 bg-blue-100 rounded-full blur-3xl -z-10 opacity-50"></div>
-                 <div className="absolute -bottom-10 -left-10 w-72 h-72 bg-purple-100 rounded-full blur-3xl -z-10 opacity-50"></div>
               </motion.div>
-            </div>
-          </div>
+           </div>
         </section>
 
-        {/* Templates Teaser */}
-        <section className="py-24 bg-gray-50">
-          <div className="max-w-7xl mx-auto px-4 text-center">
-            <h2 className="text-3xl font-bold text-navy-900 mb-4">Our top templates</h2>
-            <p className="text-gray-500 mb-12 max-w-2xl mx-auto">Our curated list of resume templates designed for ATS friendly resumes.</p>
-            
-            <div className="grid md:grid-cols-3 gap-8">
-              {[1, 2, 3].map((i) => (
-                <motion.div 
-                  key={i}
-                  whileHover={{ y: -5 }}
-                  className="group relative bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all"
-                >
-                  <div className="aspect-[3/4] bg-gray-200 relative overflow-hidden">
-                    <img src={`https://picsum.photos/400/600?random=${i}`} alt="Template" className="object-cover w-full h-full" />
-                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                      <Link to="/builder" className="px-6 py-2 bg-white text-navy-900 rounded-full font-semibold">Use Template</Link>
+        {/* --- Top Templates Section --- */}
+        <section className="bg-gray-100 py-24">
+           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="text-center mb-16">
+                 <h2 className="text-3xl font-bold text-navy-900 mb-3">Our top templates</h2>
+                 <p className="text-gray-500 max-w-lg mx-auto">Our curated list of resume templates designed for ATS friendly resume</p>
+              </div>
+
+              <div className="flex flex-col lg:flex-row items-center gap-16">
+                 {/* Left Text */}
+                 <div className="lg:w-1/3">
+                    <h3 className="text-2xl font-bold text-navy-900 mb-4">All in one resume</h3>
+                    <p className="text-gray-500 mb-8">One template that fits for all roles and industry.</p>
+                    <Link 
+                      to="/templates"
+                      className="px-6 py-3 bg-navy-900 text-white font-semibold rounded-md hover:bg-navy-800 transition-colors"
+                    >
+                       Build Resume
+                    </Link>
+                 </div>
+
+                 {/* Right Visual (Overlapping Cards) */}
+                 <div className="lg:w-2/3 relative h-[500px] flex items-center justify-center">
+                    {/* Background Cards */}
+                    <div className="absolute left-0 lg:left-20 top-10 transform -rotate-6 opacity-60 scale-90 blur-[1px]">
+                        <div className="w-[280px] h-[400px] bg-gray-400 rounded-lg shadow-xl"></div>
                     </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
+                    <div className="absolute right-0 lg:right-20 top-10 transform rotate-6 opacity-60 scale-90 blur-[1px]">
+                        <div className="w-[280px] h-[400px] bg-gray-400 rounded-lg shadow-xl"></div>
+                    </div>
+                    
+                    {/* Main Center Card (Real Preview) */}
+                    <div className="relative z-10 transform hover:scale-105 transition-transform duration-500 shadow-2xl">
+                       <div className="w-[340px] h-[480px] bg-white rounded-lg overflow-hidden border border-gray-200">
+                          {/* We use scale to fit the A4 component into this small box */}
+                          <div className="w-[210mm] h-[297mm] origin-top-left transform scale-[0.41]">
+                             <TemplatesMap.modern data={previewData} />
+                          </div>
+                       </div>
+                    </div>
+                 </div>
+              </div>
+           </div>
+        </section>
+
+        {/* --- Features Section --- */}
+        <section className="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+           <div className="text-center mb-20">
+              <h2 className="text-3xl font-bold text-navy-900 mb-4">Tools Designed to Land You Interviews</h2>
+              <p className="text-gray-500 max-w-xl mx-auto text-sm">From AI optimization, ATS friendly templates & everything you need to turn your resume into an interview magnet.</p>
+           </div>
+
+           <div className="space-y-24">
+              {/* Feature 1 */}
+              <div className="grid md:grid-cols-2 gap-12 items-center">
+                 <FeatureIllustration variant={1} />
+                 <div className="md:pl-10">
+                    <h3 className="text-2xl font-bold text-navy-900 mb-4">Smarter Resumes. More Interviews.</h3>
+                    <p className="text-gray-500 leading-relaxed mb-6">
+                       Just paste the job description or role or industry you looking for and let AI do the heavy lifting—optimizing your resume to recruiter's expectations.
+                    </p>
+                 </div>
+              </div>
+
+              {/* Feature 2 */}
+              <div className="grid md:grid-cols-2 gap-12 items-center">
+                 <div className="order-2 md:order-1 md:pr-10">
+                    <h3 className="text-2xl font-bold text-navy-900 mb-4">Auto generation makes easy</h3>
+                    <p className="text-gray-500 leading-relaxed mb-6">
+                       Skip the struggle of writing—our auto-generate feature creates polished resume content in just a click —fast, smart, and hassle-free.
+                    </p>
+                 </div>
+                 <div className="order-1 md:order-2">
+                    <FeatureIllustration variant={2} />
+                 </div>
+              </div>
+
+              {/* Feature 3 */}
+              <div className="grid md:grid-cols-2 gap-12 items-center">
+                 <FeatureIllustration variant={3} />
+                 <div className="md:pl-10">
+                    <h3 className="text-2xl font-bold text-navy-900 mb-4">ATS-Ready Resume Templates</h3>
+                    <p className="text-gray-500 leading-relaxed mb-6">
+                       Choose from recruiter-approved templates designed to pass Applicant Tracking Systems without losing style or readability.
+                    </p>
+                 </div>
+              </div>
+
+               {/* Feature 4 */}
+               <div className="grid md:grid-cols-2 gap-12 items-center">
+                 <div className="order-2 md:order-1 md:pr-10">
+                    <h3 className="text-2xl font-bold text-navy-900 mb-4">A Template for Every Career Path</h3>
+                    <p className="text-gray-500 leading-relaxed mb-6">
+                       Choose from 20+ polished, ATS-optimized templates designed for different industries and career levels. Whether you're applying for your first job or a leadership role.
+                    </p>
+                 </div>
+                 <div className="order-1 md:order-2">
+                    <FeatureIllustration variant={4} />
+                 </div>
+              </div>
+           </div>
+        </section>
+
+        {/* --- Testimonials Section --- */}
+        <section className="py-24 bg-white">
+           <div className="max-w-4xl mx-auto px-4 text-center">
+              <h2 className="text-3xl font-bold text-navy-900 mb-16">Hear from our customers</h2>
+              
+              <div className="grid md:grid-cols-2 gap-12 text-left">
+                 {/* Testimonial 1 */}
+                 <div className="flex flex-col items-center text-center">
+                    <div className="flex gap-2 mb-4">
+                       {[1,2,3,4,5].map(i => <div key={i} className="w-8 h-8 bg-gray-300 rounded-sm"></div>)}
+                    </div>
+                    <p className="text-gray-500 text-sm mb-4 leading-relaxed">
+                       "Loved the auto-generate feature, it saved me so much time and gave me polished content I wouldn't have written myself."
+                    </p>
+                 </div>
+
+                 {/* Testimonial 2 */}
+                 <div className="flex flex-col items-center text-center">
+                    <div className="flex gap-2 mb-4">
+                       {[1,2,3,4,5].map(i => <div key={i} className="w-8 h-8 bg-gray-300 rounded-sm"></div>)}
+                    </div>
+                    <p className="text-gray-500 text-sm mb-4 leading-relaxed">
+                       "A game-changer! Simple to use, with 20+ modern templates and AI suggestions that actually impress recruiters."
+                    </p>
+                 </div>
+
+                  {/* Testimonial 3 */}
+                  <div className="flex flex-col items-center text-center md:col-span-2 max-w-md mx-auto">
+                    <div className="flex gap-2 mb-4">
+                       {[1,2,3,4,5].map(i => <div key={i} className="w-8 h-8 bg-gray-300 rounded-sm"></div>)}
+                    </div>
+                    <p className="text-gray-500 text-sm mb-4 leading-relaxed">
+                       "Super easy to use—AI tailored my resume perfectly to the job description and saved me hours of editing."
+                    </p>
+                 </div>
+              </div>
+           </div>
+        </section>
+
+        {/* --- Bottom CTA --- */}
+        <section className="pb-24 px-4">
+           <div className="max-w-5xl mx-auto bg-gray-200 rounded-sm py-16 px-8 text-center">
+              <h2 className="text-3xl font-bold text-navy-900 mb-2">Build. Apply. Get Hired.</h2>
+              <p className="text-gray-500 mb-8 max-w-md mx-auto">Create your optimized resume in minutes with AI and ATS-friendly templates.</p>
+              <Link 
+                to="/builder"
+                className="px-8 py-3 bg-navy-900 text-white font-semibold rounded-sm hover:bg-navy-800 transition-colors"
+              >
+                 Build Resume
+              </Link>
+           </div>
         </section>
       </main>
+
       <Footer />
     </div>
   );
