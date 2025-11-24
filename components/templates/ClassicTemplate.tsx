@@ -7,9 +7,9 @@ interface TemplateProps {
 
 const ClassicTemplate: React.FC<TemplateProps> = ({ data }) => {
   return (
-    <div className="bg-white w-[21cm] min-h-[29.7cm] p-[2.5cm] text-gray-900 font-serif shadow-lg">
+    <div className="bg-white w-[21cm] min-h-[29.7cm] p-[1.5cm] text-gray-900 font-serif shadow-lg">
       {/* Centered Header */}
-      <header className="text-center border-b border-gray-900 pb-6 mb-8">
+      <header className="text-center border-b border-gray-900 pb-4 mb-6">
         <h1 className="text-3xl font-bold text-gray-900 mb-2 uppercase tracking-widest">
           {data.firstName || 'First Name'} {data.lastName || 'Last Name'}
         </h1>
@@ -26,7 +26,7 @@ const ClassicTemplate: React.FC<TemplateProps> = ({ data }) => {
       </header>
 
       {/* Content */}
-      <div className="space-y-6">
+      <div className="space-y-5">
         {/* Summary */}
         {data.summary && (
           <section>
@@ -42,10 +42,10 @@ const ClassicTemplate: React.FC<TemplateProps> = ({ data }) => {
         {/* Experience */}
         {data.experience.length > 0 && (
           <section>
-            <h2 className="text-md font-bold text-gray-900 uppercase border-b border-gray-300 mb-4">
+            <h2 className="text-md font-bold text-gray-900 uppercase border-b border-gray-300 mb-3">
               Work Experience
             </h2>
-            <div className="space-y-5">
+            <div className="space-y-4">
               {data.experience.map((exp) => (
                 <div key={exp.id}>
                   <div className="flex justify-between font-bold text-gray-900 mb-1">
@@ -53,7 +53,7 @@ const ClassicTemplate: React.FC<TemplateProps> = ({ data }) => {
                     <span className="text-sm italic">{exp.startDate} – {exp.endDate}</span>
                   </div>
                   <div className="text-sm font-semibold italic mb-1">{exp.jobTitle}</div>
-                  <p className="text-sm text-gray-800 whitespace-pre-line">
+                  <p className="text-sm text-gray-800 whitespace-pre-line text-justify">
                     {exp.description}
                   </p>
                 </div>
@@ -62,13 +62,36 @@ const ClassicTemplate: React.FC<TemplateProps> = ({ data }) => {
           </section>
         )}
 
+        {/* Projects */}
+        {data.projects && data.projects.length > 0 && (
+          <section>
+            <h2 className="text-md font-bold text-gray-900 uppercase border-b border-gray-300 mb-3">
+              Projects
+            </h2>
+            <div className="space-y-4">
+               {data.projects.map(proj => (
+                  <div key={proj.id}>
+                     <div className="flex justify-between font-bold text-gray-900 mb-1">
+                        <h3>{proj.title}</h3>
+                        {proj.link && <span className="text-sm font-normal italic">{proj.link}</span>}
+                     </div>
+                     <p className="text-sm text-gray-800 mb-1">{proj.description}</p>
+                     {proj.technologies && (
+                       <p className="text-xs text-gray-600 italic">Technology: {proj.technologies.join(', ')}</p>
+                     )}
+                  </div>
+               ))}
+            </div>
+          </section>
+        )}
+
         {/* Education */}
         {data.education.length > 0 && (
           <section>
-            <h2 className="text-md font-bold text-gray-900 uppercase border-b border-gray-300 mb-4">
+            <h2 className="text-md font-bold text-gray-900 uppercase border-b border-gray-300 mb-3">
               Education
             </h2>
-            <div className="space-y-4">
+            <div className="space-y-3">
               {data.education.map((edu) => (
                 <div key={edu.id}>
                   <div className="flex justify-between font-bold text-gray-900">

@@ -7,6 +7,7 @@ import ExperienceStep from '../components/builder/steps/ExperienceStep';
 import EducationStep from '../components/builder/steps/EducationStep';
 import SkillsStep from '../components/builder/steps/SkillsStep';
 import SummaryStep from '../components/builder/steps/SummaryStep';
+import ProjectsStep from '../components/builder/steps/ProjectsStep';
 
 const Builder: React.FC = () => {
   return (
@@ -25,6 +26,7 @@ const Builder: React.FC = () => {
              <Route path="header" element={<HeaderStep />} />
              <Route path="experience" element={<ExperienceStep />} />
              <Route path="education" element={<EducationStep />} />
+             <Route path="projects" element={<ProjectsStep />} />
              <Route path="skills" element={<SkillsStep />} />
              <Route path="summary" element={<SummaryStep />} />
            </Routes>

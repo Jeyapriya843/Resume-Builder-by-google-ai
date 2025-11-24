@@ -20,6 +20,7 @@ const previewData: ResumeData = {
   summary: "Passionate developer with expertise in React and Node.js.",
   experience: [],
   education: [],
+  projects: [],
   skills: ["React", "TypeScript", "Tailwind"],
   templateId: 'modern'
 };

@@ -1,3 +1,4 @@
+
 import React from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -14,28 +15,28 @@ const dummyData: ResumeData = {
   lastName: "Morgan",
   jobTitle: "Product Designer",
   email: "alex@example.com",
-  phone: "+1 234 567 890",
+  phone: "+1 (234) 567-890",
   city: "San Francisco",
   country: "CA",
-  summary: "Creative designer with 5+ years of experience in building digital products. Passionate about user experience and minimal design.",
+  summary: "Creative Product Designer with 6+ years of experience designing intuitive, user-centered digital products for SaaS, e-commerce, and mobile applications. Skilled in conducting user research, defining design systems, and collaborating with cross-functional teams to deliver pixel-perfect interfaces. Strong believer in data-driven design, accessibility, and seamless product experiences.",
   experience: [
     {
       id: "1",
-      jobTitle: "Senior UX Designer",
+      jobTitle: "Senior Product Designer",
       employer: "Creative Studio",
       startDate: "2020",
       endDate: "Present",
       location: "New York",
-      description: "Leading design systems and user research."
+      description: "Led end-to-end product design for web and mobile apps used by 200k+ monthly active users.\nCollaborated with product managers and engineers to define requirements, user journeys, and wireframes.\nCreated a scalable design system that reduced development time by 30%.\nConducted usability tests and implemented improvements that boosted user engagement by 18%."
     },
     {
         id: "2",
-        jobTitle: "Junior Designer",
+        jobTitle: "UX/UI Designer",
         employer: "Tech Corp",
         startDate: "2018",
         endDate: "2020",
         location: "Austin",
-        description: "Designed marketing assets and web interfaces."
+        description: "Designed intuitive dashboards and admin interfaces for enterprise clients.\nImproved onboarding flows, reducing drop-off rate by 22%.\nWorked closely with developers to ensure UX consistency across multiple platforms.\nCreated interactive prototypes for stakeholders using Figma and Adobe XD."
     }
   ],
   education: [
@@ -49,7 +50,13 @@ const dummyData: ResumeData = {
       location: "London"
     }
   ],
-  skills: ["Figma", "React", "Prototyping", "UI/UX"],
+  skills: [
+    "Figma", "Adobe XD", "Sketch", "Illustrator", "Photoshop",
+    "HTML", "CSS", "React basics",
+    "Wireframing", "User Research", "Prototyping", "Usability Testing",
+    "Design Systems", "Accessibility", "A/B Testing", "Agile Collaboration"
+  ],
+  projects: [],
   templateId: 'modern'
 };
 

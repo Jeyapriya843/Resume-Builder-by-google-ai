@@ -18,6 +18,14 @@ export interface Education {
   location: string;
 }
 
+export interface Project {
+  id: string;
+  title: string;
+  link: string;
+  description: string;
+  technologies: string[];
+}
+
 export interface ResumeData {
   firstName: string;
   lastName: string;
@@ -29,6 +37,7 @@ export interface ResumeData {
   summary: string;
   experience: Experience[];
   education: Education[];
+  projects: Project[];
   skills: string[];
   templateId: string;
 }
@@ -44,6 +53,7 @@ export const initialResumeState: ResumeData = {
   summary: '',
   experience: [],
   education: [],
+  projects: [],
   skills: [],
-  templateId: 'modern'
+  templateId: 'professional'
 };

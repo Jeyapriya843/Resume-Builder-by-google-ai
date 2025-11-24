@@ -1,15 +1,23 @@
 import ModernTemplate from './ModernTemplate';
 import ClassicTemplate from './ClassicTemplate';
 import MinimalTemplate from './MinimalTemplate';
+import ProfessionalTemplate from './ProfessionalTemplate';
 import { ResumeData } from '../../types';
 
 export const TemplatesMap: Record<string, React.FC<{ data: ResumeData }>> = {
   'modern': ModernTemplate,
   'classic': ClassicTemplate,
   'minimal': MinimalTemplate,
+  'professional': ProfessionalTemplate,
 };
 
 export const availableTemplates = [
+  {
+    id: 'professional',
+    name: "Professional ATS",
+    description: "Standard, high-readability layout preferred by recruiters. Optimized for ATS parsing.",
+    tags: ["ATS Friendly", "Standard", "Recommended"]
+  },
   {
     id: 'modern',
     name: "Modern Professional",

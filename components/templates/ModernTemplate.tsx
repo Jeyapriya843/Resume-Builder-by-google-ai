@@ -7,9 +7,9 @@ interface TemplateProps {
 
 const ModernTemplate: React.FC<TemplateProps> = ({ data }) => {
   return (
-    <div className="bg-white w-[21cm] min-h-[29.7cm] p-[2cm] text-gray-800 shadow-lg">
+    <div className="bg-white w-[21cm] min-h-[29.7cm] p-[1.2cm] text-gray-800 shadow-lg">
       {/* Header */}
-      <header className="border-b-4 border-navy-900 pb-6 mb-8 flex justify-between items-end">
+      <header className="border-b-4 border-navy-900 pb-4 mb-6 flex justify-between items-end">
         <div>
           <h1 className="text-4xl font-bold text-navy-900 mb-2 uppercase tracking-wide">
             {data.firstName || 'First Name'} {data.lastName || 'Last Name'}
@@ -26,17 +26,17 @@ const ModernTemplate: React.FC<TemplateProps> = ({ data }) => {
       </header>
 
       {/* Two Column Layout */}
-      <div className="grid grid-cols-12 gap-8">
+      <div className="grid grid-cols-12 gap-6">
         {/* Main Column */}
-        <div className="col-span-8 space-y-8">
+        <div className="col-span-8 space-y-6">
           {/* Summary */}
           {data.summary && (
             <section>
-              <h2 className="text-sm font-bold text-navy-900 uppercase tracking-wider border-b border-gray-200 pb-2 mb-3 flex items-center gap-2">
+              <h2 className="text-sm font-bold text-navy-900 uppercase tracking-wider border-b border-gray-200 pb-1 mb-2 flex items-center gap-2">
                 <span className="w-2 h-2 bg-blue-600 rounded-full inline-block"></span>
                 Professional Summary
               </h2>
-              <p className="text-sm leading-relaxed text-gray-700">
+              <p className="text-sm leading-relaxed text-gray-700 text-justify">
                 {data.summary}
               </p>
             </section>
@@ -45,11 +45,11 @@ const ModernTemplate: React.FC<TemplateProps> = ({ data }) => {
           {/* Experience */}
           {data.experience.length > 0 && (
             <section>
-              <h2 className="text-sm font-bold text-navy-900 uppercase tracking-wider border-b border-gray-200 pb-2 mb-4 flex items-center gap-2">
+              <h2 className="text-sm font-bold text-navy-900 uppercase tracking-wider border-b border-gray-200 pb-1 mb-3 flex items-center gap-2">
                 <span className="w-2 h-2 bg-blue-600 rounded-full inline-block"></span>
                 Experience
               </h2>
-              <div className="space-y-6">
+              <div className="space-y-4">
                 {data.experience.map((exp) => (
                   <div key={exp.id}>
                     <div className="flex justify-between items-baseline mb-1">
@@ -61,7 +61,7 @@ const ModernTemplate: React.FC<TemplateProps> = ({ data }) => {
                     <div className="text-sm text-blue-600 font-medium mb-2">
                       {exp.employer} {exp.location && `| ${exp.location}`}
                     </div>
-                    <p className="text-sm text-gray-700 whitespace-pre-line leading-relaxed">
+                    <p className="text-sm text-gray-700 whitespace-pre-line leading-relaxed text-justify">
                       {exp.description}
                     </p>
                   </div>
@@ -70,14 +70,40 @@ const ModernTemplate: React.FC<TemplateProps> = ({ data }) => {
             </section>
           )}
 
+          {/* Projects */}
+          {data.projects && data.projects.length > 0 && (
+            <section>
+              <h2 className="text-sm font-bold text-navy-900 uppercase tracking-wider border-b border-gray-200 pb-1 mb-3 flex items-center gap-2">
+                <span className="w-2 h-2 bg-blue-600 rounded-full inline-block"></span>
+                Projects
+              </h2>
+              <div className="space-y-4">
+                 {data.projects.map(proj => (
+                    <div key={proj.id}>
+                       <div className="flex justify-between items-baseline mb-1">
+                          <h3 className="font-bold text-gray-900 text-md">{proj.title}</h3>
+                          {proj.link && <span className="text-xs text-blue-500">{proj.link}</span>}
+                       </div>
+                       <p className="text-sm text-gray-700 leading-relaxed mb-1">{proj.description}</p>
+                       {proj.technologies && proj.technologies.length > 0 && (
+                         <div className="text-xs text-gray-500 italic">
+                           Stack: {proj.technologies.join(', ')}
+                         </div>
+                       )}
+                    </div>
+                 ))}
+              </div>
+            </section>
+          )}
+
            {/* Education (if main column preference) */}
            {data.education.length > 0 && (
             <section>
-               <h2 className="text-sm font-bold text-navy-900 uppercase tracking-wider border-b border-gray-200 pb-2 mb-4 flex items-center gap-2">
+               <h2 className="text-sm font-bold text-navy-900 uppercase tracking-wider border-b border-gray-200 pb-1 mb-3 flex items-center gap-2">
                 <span className="w-2 h-2 bg-blue-600 rounded-full inline-block"></span>
                 Education
               </h2>
-              <div className="space-y-4">
+              <div className="space-y-3">
                 {data.education.map((edu) => (
                   <div key={edu.id}>
                     <div className="flex justify-between items-baseline mb-1">
@@ -96,11 +122,11 @@ const ModernTemplate: React.FC<TemplateProps> = ({ data }) => {
         </div>
 
         {/* Sidebar Column */}
-        <div className="col-span-4 space-y-8">
+        <div className="col-span-4 space-y-6">
           {/* Skills */}
           {data.skills.length > 0 && (
             <section className="bg-gray-50 p-4 rounded-lg">
-              <h2 className="text-sm font-bold text-navy-900 uppercase tracking-wider border-b border-gray-200 pb-2 mb-3">
+              <h2 className="text-sm font-bold text-navy-900 uppercase tracking-wider border-b border-gray-200 pb-1 mb-3">
                 Skills
               </h2>
               <div className="flex flex-wrap gap-2">
