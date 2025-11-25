@@ -7,104 +7,115 @@ const HeaderStep: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="max-w-2xl mx-auto">
+    <div className="max-w-3xl mx-auto">
       <div className="mb-8">
-        <h2 className="text-2xl font-bold text-navy-900 mb-2">Personal Information</h2>
-        <p className="text-gray-500">Add your contact details so recruiters can reach you.</p>
+        <h2 className="text-3xl font-bold text-navy-900 mb-2">Personal Information</h2>
+        <p className="text-gray-500">Add your info so recruiters can easily reach you</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {/* Best Practice Banner */}
+      <div className="flex items-center gap-3 mb-8">
+         <span className="bg-navy-900 text-white text-xs font-bold px-2 py-1 rounded-sm">Best practice</span>
+         <span className="text-sm text-gray-500">The best practice goes here</span>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
         {/* First Name */}
-        <div className="space-y-2">
-          <label className="text-sm font-medium text-gray-700">First Name</label>
+        <div className="space-y-1.5">
+          <label className="text-sm font-medium text-gray-700">First name</label>
           <input 
             type="text" 
             value={resumeData.firstName}
             onChange={(e) => updateField('firstName', e.target.value)}
-            className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all"
-            placeholder="e.g. John"
+            className="w-full px-4 py-3.5 rounded-lg bg-gray-100 border-transparent focus:bg-white focus:border-blue-500 focus:ring-0 outline-none transition-all font-medium text-gray-900"
+            placeholder="Frontend developer"
           />
         </div>
 
         {/* Last Name */}
-        <div className="space-y-2">
-          <label className="text-sm font-medium text-gray-700">Last Name</label>
+        <div className="space-y-1.5">
+          <label className="text-sm font-medium text-gray-700">Last name</label>
           <input 
             type="text" 
             value={resumeData.lastName}
             onChange={(e) => updateField('lastName', e.target.value)}
-            className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all"
-            placeholder="e.g. Doe"
+            className="w-full px-4 py-3.5 rounded-lg bg-gray-100 border-transparent focus:bg-white focus:border-blue-500 focus:ring-0 outline-none transition-all font-medium text-gray-900"
+            placeholder="Frontend developer"
           />
         </div>
 
-        {/* Job Title */}
-        <div className="space-y-2 md:col-span-2">
+        {/* Job Title (Full Width in design concept, but splitting here for grid consistency) */}
+        <div className="space-y-1.5 md:col-span-2">
           <label className="text-sm font-medium text-gray-700">Job Title</label>
           <input 
             type="text" 
             value={resumeData.jobTitle}
             onChange={(e) => updateField('jobTitle', e.target.value)}
-            className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all"
+            className="w-full px-4 py-3.5 rounded-lg bg-gray-100 border-transparent focus:bg-white focus:border-blue-500 focus:ring-0 outline-none transition-all font-medium text-gray-900"
             placeholder="e.g. Senior Frontend Engineer"
           />
         </div>
 
+        {/* Phone */}
+        <div className="space-y-1.5">
+          <label className="text-sm font-medium text-gray-700">Phone number</label>
+          <input 
+            type="tel" 
+            value={resumeData.phone}
+            onChange={(e) => updateField('phone', e.target.value)}
+            className="w-full px-4 py-3.5 rounded-lg bg-gray-100 border-transparent focus:bg-white focus:border-blue-500 focus:ring-0 outline-none transition-all font-medium text-gray-900"
+            placeholder="Enter your number"
+          />
+        </div>
+
         {/* Email */}
-        <div className="space-y-2">
+        <div className="space-y-1.5">
           <label className="text-sm font-medium text-gray-700">Email</label>
           <input 
             type="email" 
             value={resumeData.email}
             onChange={(e) => updateField('email', e.target.value)}
-            className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all"
-            placeholder="john@example.com"
-          />
-        </div>
-
-        {/* Phone */}
-        <div className="space-y-2">
-          <label className="text-sm font-medium text-gray-700">Phone</label>
-          <input 
-            type="tel" 
-            value={resumeData.phone}
-            onChange={(e) => updateField('phone', e.target.value)}
-            className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all"
-            placeholder="+1 234 567 890"
+            className="w-full px-4 py-3.5 rounded-lg bg-gray-100 border-transparent focus:bg-white focus:border-blue-500 focus:ring-0 outline-none transition-all font-medium text-gray-900"
+            placeholder="Enter your email"
           />
         </div>
         
         {/* City */}
-        <div className="space-y-2">
+        <div className="space-y-1.5">
           <label className="text-sm font-medium text-gray-700">City</label>
           <input 
             type="text" 
             value={resumeData.city}
             onChange={(e) => updateField('city', e.target.value)}
-            className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all"
-            placeholder="New York"
+            className="w-full px-4 py-3.5 rounded-lg bg-gray-100 border-transparent focus:bg-white focus:border-blue-500 focus:ring-0 outline-none transition-all font-medium text-gray-900"
+            placeholder="Enter your country"
           />
         </div>
 
-        {/* Country */}
-         <div className="space-y-2">
-          <label className="text-sm font-medium text-gray-700">Country</label>
+        {/* Pincode/Country */}
+         <div className="space-y-1.5">
+          <label className="text-sm font-medium text-gray-700">Pincode</label>
           <input 
             type="text" 
             value={resumeData.country}
             onChange={(e) => updateField('country', e.target.value)}
-            className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all"
-            placeholder="USA"
+            className="w-full px-4 py-3.5 rounded-lg bg-gray-100 border-transparent focus:bg-white focus:border-blue-500 focus:ring-0 outline-none transition-all font-medium text-gray-900"
+            placeholder="Enter your pincode"
           />
         </div>
       </div>
 
-      <div className="mt-10 flex justify-end">
+      <div className="mt-8 flex gap-6">
+         <button className="text-navy-900 font-semibold text-sm border-b border-navy-900 pb-0.5 hover:opacity-80">+Add linkedin profile</button>
+         <button className="text-navy-900 font-semibold text-sm border-b border-navy-900 pb-0.5 hover:opacity-80">+Add portfolio</button>
+      </div>
+
+      <div className="mt-12 flex justify-end">
         <button 
           onClick={() => navigate('/builder/experience')}
-          className="px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+          className="px-10 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors shadow-md"
         >
-          Save & Continue
+          Continue
         </button>
       </div>
     </div>

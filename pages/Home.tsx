@@ -5,10 +5,11 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { TemplatesMap } from '../components/templates';
 import { ResumeData } from '../types';
-import { motion } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 import { Icons } from '../components/ui/Icons';
 import { useResume } from '../App';
 import { parseResumeFromText } from '../services/geminiService';
+import { parseResumeFromTextLocal } from '../services/localParserService';
 
 // Dummy data for the homepage preview
 const previewData: ResumeData = {
@@ -27,45 +28,127 @@ const previewData: ResumeData = {
   templateId: 'modern'
 };
 
+// --- Animation Variants ---
+const fadeInUp: Variants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
+};
+
+const staggerContainer: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.2
+    }
+  }
+};
+
+const fadeInLeft: Variants = {
+  hidden: { opacity: 0, x: -50 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.6, ease: "easeOut" } }
+};
+
+const fadeInRight: Variants = {
+  hidden: { opacity: 0, x: 50 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.6, ease: "easeOut" } }
+};
+
 const FeatureIllustration = ({ variant }: { variant: 1 | 2 | 3 | 4 }) => {
    if (variant === 1) {
      return (
-       <div className="w-full aspect-[4/3] bg-gray-100 rounded-lg relative overflow-hidden flex items-center justify-center p-8">
-          <div className="w-3/4 h-3/4 bg-gray-200 rounded shadow-sm relative">
-             <div className="absolute right-[-20px] bottom-[40px] w-32 h-8 bg-gray-400 rounded shadow-md z-10"></div>
-             <div className="absolute right-[-20px] bottom-[80px] w-32 h-8 bg-gray-400 rounded shadow-md z-10 opacity-60"></div>
+       <motion.div 
+         className="w-full aspect-[4/3] bg-gray-100 rounded-lg relative overflow-hidden flex items-center justify-center p-8"
+         whileHover={{ scale: 1.02 }}
+         transition={{ duration: 0.3 }}
+       >
+          <div className="w-3/4 h-3/4 bg-gray-200 rounded shadow-sm relative border border-gray-300">
+             <motion.div 
+                className="absolute -right-6 bottom-10 w-32 h-8 bg-blue-200 rounded shadow-md z-10"
+                animate={{ x: [0, 5, 0] }}
+                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+             />
+             <motion.div 
+                className="absolute -right-6 bottom-24 w-32 h-8 bg-blue-300 rounded shadow-md z-10 opacity-80"
+                animate={{ x: [0, 10, 0] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+             />
           </div>
-       </div>
+       </motion.div>
      );
    }
    if (variant === 2) {
      return (
-        <div className="w-full aspect-[4/3] bg-gray-50 rounded-lg flex items-center justify-center p-8">
+        <motion.div 
+          className="w-full aspect-[4/3] bg-gray-50 rounded-lg flex items-center justify-center p-8"
+          whileHover={{ scale: 1.02 }}
+        >
            <div className="w-3/4 space-y-3">
-              <div className="h-24 bg-gray-200 rounded w-full"></div>
-              <div className="h-6 bg-gray-400 rounded w-full"></div>
-              <div className="h-6 bg-gray-400 rounded w-full"></div>
+              <motion.div 
+                className="h-24 bg-white border border-gray-200 rounded w-full shadow-sm"
+                initial={{ width: "0%" }}
+                whileInView={{ width: "100%" }}
+                viewport={{ once: true }}
+                transition={{ duration: 1, delay: 0.2 }}
+              />
+              <motion.div 
+                className="h-6 bg-gray-300 rounded w-full"
+                initial={{ width: "0%" }}
+                whileInView={{ width: "100%" }}
+                viewport={{ once: true }}
+                transition={{ duration: 1, delay: 0.4 }}
+              />
+              <motion.div 
+                className="h-6 bg-gray-300 rounded w-3/4"
+                initial={{ width: "0%" }}
+                whileInView={{ width: "75%" }}
+                viewport={{ once: true }}
+                transition={{ duration: 1, delay: 0.6 }}
+              />
            </div>
-        </div>
+        </motion.div>
      );
    }
    if (variant === 3) {
       return (
-        <div className="w-full aspect-[4/3] bg-gray-50 rounded-lg flex items-center justify-center p-8">
-           <div className="w-2/3 h-3/4 bg-gray-200 rounded relative">
-              <div className="absolute -right-8 bottom-12 w-32 h-16 bg-gray-400 rounded shadow-sm"></div>
-              <div className="absolute -right-8 bottom-32 w-32 h-8 bg-gray-400 rounded shadow-sm opacity-60"></div>
+        <motion.div 
+          className="w-full aspect-[4/3] bg-gray-100 rounded-lg flex items-center justify-center p-8"
+          whileHover={{ scale: 1.02 }}
+        >
+           <div className="w-2/3 h-3/4 bg-white border border-gray-200 rounded relative shadow-sm">
+              <motion.div 
+                className="absolute -right-8 bottom-12 w-32 h-16 bg-blue-100 rounded shadow-sm flex items-center justify-center border border-blue-200"
+                animate={{ y: [0, -10, 0] }}
+                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+              >
+                 <Icons.Check className="text-blue-500" />
+              </motion.div>
            </div>
-        </div>
+        </motion.div>
       );
    }
    // Variant 4: Three cards stacking
    return (
-      <div className="w-full aspect-[4/3] bg-gray-50 rounded-lg flex items-center justify-center p-8 relative">
-          <div className="w-32 h-40 bg-gray-300 rounded shadow-sm absolute left-1/4 top-10 transform -rotate-6"></div>
-          <div className="w-32 h-40 bg-gray-300 rounded shadow-sm absolute right-1/4 top-10 transform rotate-6"></div>
-          <div className="w-36 h-48 bg-gray-200 rounded shadow-lg relative z-10"></div>
-      </div>
+      <motion.div 
+        className="w-full aspect-[4/3] bg-gray-50 rounded-lg flex items-center justify-center p-8 relative"
+        whileHover={{ scale: 1.02 }}
+      >
+          <motion.div 
+            className="w-32 h-40 bg-gray-300 rounded shadow-sm absolute left-1/4 top-10 border border-gray-100"
+            animate={{ rotate: -6, y: [0, -5, 0] }}
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.div 
+            className="w-32 h-40 bg-gray-400 rounded shadow-sm absolute right-1/4 top-10 border border-gray-100"
+            animate={{ rotate: 6, y: [0, -5, 0] }}
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+          />
+          <motion.div 
+            className="w-36 h-48 bg-white rounded shadow-xl relative z-10 border border-gray-200"
+            animate={{ y: [0, -8, 0] }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          />
+      </motion.div>
    );
 };
 
@@ -113,14 +196,12 @@ const Home: React.FC = () => {
       let textToParse = '';
 
       if (file.type === 'application/json') {
-        // JSON Import
         const text = await file.text();
         const data = JSON.parse(text);
         setResumeData(prev => ({ ...prev, ...data }));
-        navigate('/builder/summary'); // Go to summary to review
+        navigate('/builder/summary'); 
         return;
       } else if (file.type === 'application/pdf') {
-        // PDF Parsing
         textToParse = await extractTextFromPdf(file);
       } else {
         alert("Please upload a PDF or JSON file.");
@@ -129,11 +210,21 @@ const Home: React.FC = () => {
       }
 
       if (textToParse) {
-        // AI Parsing
-        const parsedData = await parseResumeFromText(textToParse);
+        let parsedData = await parseResumeFromText(textToParse);
+        let method = 'AI';
+
+        if (Object.keys(parsedData).length === 0) {
+           console.log("AI parsing unavailable or failed. Falling back to local parser.");
+           parsedData = parseResumeFromTextLocal(textToParse);
+           method = 'Local';
+        }
+
         if (Object.keys(parsedData).length > 0) {
            setResumeData(prev => ({ ...prev, ...parsedData }));
-           navigate('/builder/header'); // Start from header to verify details
+           if (method === 'Local') {
+              alert("Resume imported using local parser. Some fields may need manual adjustment.");
+           }
+           navigate('/builder/header');
         } else {
            alert("Could not extract data from resume. Please try filling it manually.");
         }
@@ -149,11 +240,10 @@ const Home: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-white font-sans text-navy-900">
+    <div className="flex flex-col min-h-screen bg-white font-sans text-navy-900 overflow-x-hidden">
       <Header />
       
       <main className="flex-1">
-        {/* Hidden File Input */}
         <input 
           type="file" 
           accept=".pdf,.json" 
@@ -166,29 +256,32 @@ const Home: React.FC = () => {
         <section className="pt-16 pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
            <div className="grid lg:grid-cols-2 gap-12 items-center">
               <motion.div 
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6 }}
+                initial="hidden"
+                animate="visible"
+                variants={staggerContainer}
               >
-                 <div className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Online Resume Builder</div>
-                 <h1 className="text-4xl md:text-6xl font-bold leading-[1.1] mb-6 text-gray-900">
+                 <motion.div variants={fadeInUp} className="text-xs font-bold text-blue-500 uppercase tracking-widest mb-4 flex items-center gap-2">
+                    <span className="w-8 h-0.5 bg-blue-500 inline-block"></span>
+                    Online Resume Builder
+                 </motion.div>
+                 <motion.h1 variants={fadeInUp} className="text-4xl md:text-6xl font-bold leading-[1.1] mb-6 text-navy-900">
                     Create a Job-ready <br />
-                    <span className="text-gray-900">Resume</span> <span className="text-gray-400 font-normal">in minutes</span>
-                 </h1>
-                 <p className="text-gray-500 text-lg mb-8 leading-relaxed max-w-md">
-                    An AI-powered resume builder creates ATS-friendly resume & optimizes your content with the right keywords to match job description to boost your chances of landing interviews.
-                 </p>
-                 <div className="flex gap-4">
+                    <span className="text-navy-900">Resume</span> <span className="text-gray-400 font-light">in minutes</span>
+                 </motion.h1>
+                 <motion.p variants={fadeInUp} className="text-gray-500 text-lg mb-8 leading-relaxed max-w-md">
+                    An AI-powered resume builder that optimizes your content to match job descriptions and boost your landing chances.
+                 </motion.p>
+                 <motion.div variants={fadeInUp} className="flex flex-wrap gap-4">
                     <Link 
                       to="/builder"
-                      className="px-8 py-3 bg-navy-900 text-white font-semibold rounded-md hover:bg-navy-800 transition-colors shadow-lg shadow-navy-900/10"
+                      className="px-8 py-3.5 bg-navy-900 text-white font-semibold rounded-full hover:bg-navy-800 transition-all shadow-lg shadow-navy-900/20 hover:shadow-navy-900/30 transform hover:-translate-y-0.5"
                     >
                        Build Resume
                     </Link>
                     <button 
                       onClick={handleImportClick}
                       disabled={isImporting}
-                      className="px-8 py-3 bg-gray-100 text-navy-900 font-semibold rounded-md hover:bg-gray-200 transition-colors disabled:opacity-60 flex items-center gap-2"
+                      className="px-8 py-3.5 bg-white text-navy-900 border border-gray-200 font-semibold rounded-full hover:bg-gray-50 transition-all shadow-sm hover:shadow-md transform hover:-translate-y-0.5 flex items-center gap-2 disabled:opacity-60"
                     >
                        {isImporting ? (
                          <>
@@ -197,79 +290,129 @@ const Home: React.FC = () => {
                          </>
                        ) : "Import Resume"}
                     </button>
-                 </div>
-                 <p className="mt-4 text-xs text-gray-400">* Supports PDF (AI Parsed) or JSON backups</p>
+                 </motion.div>
               </motion.div>
 
               <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
+                initial={{ opacity: 0, x: 50, rotate: 2 }}
+                animate={{ opacity: 1, x: 0, rotate: 0 }}
+                transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
                 className="relative hidden lg:block"
               >
-                 <div className="bg-gray-100 rounded-xl p-8 relative min-h-[500px] flex items-center justify-center">
-                    {/* Abstract Shapes replicating the design */}
-                    <div className="absolute top-20 left-10 w-24 h-12 bg-gray-400 rounded shadow-sm z-20"></div>
-                    <div className="absolute bottom-20 right-20 w-32 h-12 bg-gray-400 rounded shadow-sm z-20"></div>
+                 <div className="bg-gray-50 rounded-3xl p-10 relative min-h-[500px] flex items-center justify-center overflow-hidden">
+                    {/* Floating elements */}
+                    <motion.div 
+                       className="absolute top-20 left-10 w-24 h-12 bg-white rounded-lg shadow-md z-20 border border-gray-100"
+                       animate={{ y: [0, -15, 0] }}
+                       transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                    />
+                    <motion.div 
+                       className="absolute bottom-32 right-10 w-32 h-12 bg-white rounded-lg shadow-md z-20 border border-gray-100"
+                       animate={{ y: [0, 15, 0] }}
+                       transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                    />
                     
                     {/* Main Card */}
-                    <div className="w-[300px] h-[400px] bg-white shadow-2xl rounded-lg p-6 space-y-4 relative z-10">
-                       <div className="w-16 h-16 bg-gray-200 rounded-full mb-4"></div>
-                       <div className="h-4 bg-gray-800 rounded w-3/4"></div>
-                       <div className="h-3 bg-gray-300 rounded w-1/2"></div>
-                       <div className="h-px bg-gray-100 my-4"></div>
-                       <div className="space-y-2">
+                    <motion.div 
+                       className="w-[340px] h-[440px] bg-white shadow-2xl rounded-xl p-8 space-y-5 relative z-10 border border-gray-100"
+                       whileHover={{ scale: 1.02, rotate: -1 }}
+                       transition={{ duration: 0.4 }}
+                    >
+                       <div className="flex items-center gap-4 mb-6">
+                          <div className="w-14 h-14 bg-gray-100 rounded-full"></div>
+                          <div className="space-y-2 flex-1">
+                             <div className="h-3 bg-navy-900 rounded w-3/4"></div>
+                             <div className="h-2 bg-gray-300 rounded w-1/2"></div>
+                          </div>
+                       </div>
+                       <div className="h-px bg-gray-100 my-6"></div>
+                       <div className="space-y-3">
                           <div className="h-2 bg-gray-100 rounded w-full"></div>
                           <div className="h-2 bg-gray-100 rounded w-full"></div>
                           <div className="h-2 bg-gray-100 rounded w-5/6"></div>
+                          <div className="h-2 bg-gray-100 rounded w-4/5"></div>
                        </div>
-                       <div className="h-24 bg-gray-50 rounded w-full mt-4 border border-dashed border-gray-200"></div>
-                    </div>
+                       <div className="mt-8 p-4 bg-blue-50 rounded-lg border border-blue-100">
+                          <div className="h-2 bg-blue-200 rounded w-1/3 mb-2"></div>
+                          <div className="h-2 bg-blue-100 rounded w-full"></div>
+                       </div>
+                    </motion.div>
                  </div>
               </motion.div>
            </div>
         </section>
 
         {/* --- Top Templates Section --- */}
-        <section className="bg-gray-100 py-24">
+        <section className="bg-gray-50 py-24 overflow-hidden">
            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="text-center mb-16">
-                 <h2 className="text-3xl font-bold text-navy-900 mb-3">Our top templates</h2>
-                 <p className="text-gray-500 max-w-lg mx-auto">Our curated list of resume templates designed for ATS friendly resume</p>
-              </div>
+              <motion.div 
+                 initial="hidden"
+                 whileInView="visible"
+                 viewport={{ once: true, margin: "-100px" }}
+                 variants={fadeInUp}
+                 className="text-center mb-16"
+              >
+                 <h2 className="text-3xl md:text-4xl font-bold text-navy-900 mb-3">Our top templates</h2>
+                 <p className="text-gray-500 max-w-lg mx-auto">Professionally designed, ATS-friendly templates that get you hired.</p>
+              </motion.div>
 
               <div className="flex flex-col lg:flex-row items-center gap-16">
                  {/* Left Text */}
-                 <div className="lg:w-1/3">
-                    <h3 className="text-2xl font-bold text-navy-900 mb-4">All in one resume</h3>
-                    <p className="text-gray-500 mb-8">One template that fits for all roles and industry.</p>
+                 <motion.div 
+                    className="lg:w-1/3"
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true }}
+                    variants={fadeInLeft}
+                 >
+                    <h3 className="text-3xl font-bold text-navy-900 mb-4">All in one resume</h3>
+                    <p className="text-gray-500 mb-8 leading-relaxed">
+                       One template that fits for all roles and industries. Whether you are a creative designer or a financial analyst, our templates adapt to your story.
+                    </p>
                     <Link 
                       to="/templates"
-                      className="px-6 py-3 bg-navy-900 text-white font-semibold rounded-md hover:bg-navy-800 transition-colors"
+                      className="inline-flex items-center gap-2 px-8 py-3 bg-navy-900 text-white font-semibold rounded-full hover:bg-navy-800 transition-all shadow-lg hover:shadow-xl"
                     >
-                       Build Resume
+                       View All Templates <Icons.ChevronRight size={16} />
                     </Link>
-                 </div>
+                 </motion.div>
 
                  {/* Right Visual (Overlapping Cards) */}
                  <div className="lg:w-2/3 relative h-[500px] flex items-center justify-center">
-                    {/* Background Cards */}
-                    <div className="absolute left-0 lg:left-20 top-10 transform -rotate-6 opacity-60 scale-90 blur-[1px]">
-                        <div className="w-[280px] h-[400px] bg-gray-400 rounded-lg shadow-xl"></div>
-                    </div>
-                    <div className="absolute right-0 lg:right-20 top-10 transform rotate-6 opacity-60 scale-90 blur-[1px]">
-                        <div className="w-[280px] h-[400px] bg-gray-400 rounded-lg shadow-xl"></div>
-                    </div>
+                    <motion.div 
+                       className="absolute left-0 lg:left-10 top-10 z-0"
+                       initial={{ opacity: 0, x: -50, rotate: -10 }}
+                       whileInView={{ opacity: 0.6, x: 0, rotate: -6 }}
+                       viewport={{ once: true }}
+                       transition={{ duration: 0.8 }}
+                    >
+                        <div className="w-[280px] h-[400px] bg-gray-300 rounded-xl shadow-lg"></div>
+                    </motion.div>
+                    <motion.div 
+                       className="absolute right-0 lg:right-10 top-10 z-0"
+                       initial={{ opacity: 0, x: 50, rotate: 10 }}
+                       whileInView={{ opacity: 0.6, x: 0, rotate: 6 }}
+                       viewport={{ once: true }}
+                       transition={{ duration: 0.8 }}
+                    >
+                        <div className="w-[280px] h-[400px] bg-gray-300 rounded-xl shadow-lg"></div>
+                    </motion.div>
                     
-                    {/* Main Center Card (Real Preview) */}
-                    <div className="relative z-10 transform hover:scale-105 transition-transform duration-500 shadow-2xl">
-                       <div className="w-[340px] h-[480px] bg-white rounded-lg overflow-hidden border border-gray-200">
-                          {/* We use scale to fit the A4 component into this small box */}
+                    {/* Main Center Card */}
+                    <motion.div 
+                       className="relative z-10"
+                       initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                       whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                       viewport={{ once: true }}
+                       whileHover={{ y: -10 }}
+                       transition={{ duration: 0.6 }}
+                    >
+                       <div className="w-[340px] h-[480px] bg-white rounded-xl overflow-hidden border border-gray-200 shadow-2xl">
                           <div className="w-[210mm] h-[297mm] origin-top-left transform scale-[0.41]">
                              <TemplatesMap.modern data={previewData} />
                           </div>
                        </div>
-                    </div>
+                    </motion.div>
                  </div>
               </div>
            </div>
@@ -277,113 +420,162 @@ const Home: React.FC = () => {
 
         {/* --- Features Section --- */}
         <section className="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-           <div className="text-center mb-20">
-              <h2 className="text-3xl font-bold text-navy-900 mb-4">Tools Designed to Land You Interviews</h2>
-              <p className="text-gray-500 max-w-xl mx-auto text-sm">From AI optimization, ATS friendly templates & everything you need to turn your resume into an interview magnet.</p>
-           </div>
+           <motion.div 
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeInUp}
+              className="text-center mb-24"
+           >
+              <h2 className="text-3xl md:text-4xl font-bold text-navy-900 mb-4">Tools Designed to Land You Interviews</h2>
+              <p className="text-gray-500 max-w-xl mx-auto text-sm">From AI optimization to ATS friendly templates & everything you need.</p>
+           </motion.div>
 
-           <div className="space-y-24">
+           <div className="space-y-32">
               {/* Feature 1 */}
-              <div className="grid md:grid-cols-2 gap-12 items-center">
-                 <FeatureIllustration variant={1} />
-                 <div className="md:pl-10">
-                    <h3 className="text-2xl font-bold text-navy-900 mb-4">Smarter Resumes. More Interviews.</h3>
-                    <p className="text-gray-500 leading-relaxed mb-6">
-                       Just paste the job description or role or industry you looking for and let AI do the heavy lifting—optimizing your resume to recruiter's expectations.
+              <motion.div 
+                 className="grid md:grid-cols-2 gap-16 items-center"
+                 initial="hidden"
+                 whileInView="visible"
+                 viewport={{ once: true, margin: "-100px" }}
+                 variants={staggerContainer}
+              >
+                 <motion.div variants={fadeInLeft}>
+                    <FeatureIllustration variant={1} />
+                 </motion.div>
+                 <motion.div variants={fadeInRight} className="md:pl-8">
+                    <h3 className="text-3xl font-bold text-navy-900 mb-4">Smarter Resumes. More Interviews.</h3>
+                    <p className="text-gray-500 leading-relaxed mb-6 text-lg">
+                       Just paste the job description or industry you are looking for and let AI do the heavy lifting—optimizing your resume to meet recruiter's expectations perfectly.
                     </p>
-                 </div>
-              </div>
+                 </motion.div>
+              </motion.div>
 
               {/* Feature 2 */}
-              <div className="grid md:grid-cols-2 gap-12 items-center">
-                 <div className="order-2 md:order-1 md:pr-10">
-                    <h3 className="text-2xl font-bold text-navy-900 mb-4">Auto generation makes easy</h3>
-                    <p className="text-gray-500 leading-relaxed mb-6">
-                       Skip the struggle of writing—our auto-generate feature creates polished resume content in just a click —fast, smart, and hassle-free.
+              <motion.div 
+                 className="grid md:grid-cols-2 gap-16 items-center"
+                 initial="hidden"
+                 whileInView="visible"
+                 viewport={{ once: true, margin: "-100px" }}
+                 variants={staggerContainer}
+              >
+                 <motion.div variants={fadeInLeft} className="order-2 md:order-1 md:pr-8">
+                    <h3 className="text-3xl font-bold text-navy-900 mb-4">Auto generation makes easy</h3>
+                    <p className="text-gray-500 leading-relaxed mb-6 text-lg">
+                       Skip the struggle of writing—our auto-generate feature creates polished resume content in just a click. Fast, smart, and completely hassle-free.
                     </p>
-                 </div>
-                 <div className="order-1 md:order-2">
+                 </motion.div>
+                 <motion.div variants={fadeInRight} className="order-1 md:order-2">
                     <FeatureIllustration variant={2} />
-                 </div>
-              </div>
+                 </motion.div>
+              </motion.div>
 
               {/* Feature 3 */}
-              <div className="grid md:grid-cols-2 gap-12 items-center">
-                 <FeatureIllustration variant={3} />
-                 <div className="md:pl-10">
-                    <h3 className="text-2xl font-bold text-navy-900 mb-4">ATS-Ready Resume Templates</h3>
-                    <p className="text-gray-500 leading-relaxed mb-6">
-                       Choose from recruiter-approved templates designed to pass Applicant Tracking Systems without losing style or readability.
+              <motion.div 
+                 className="grid md:grid-cols-2 gap-16 items-center"
+                 initial="hidden"
+                 whileInView="visible"
+                 viewport={{ once: true, margin: "-100px" }}
+                 variants={staggerContainer}
+              >
+                 <motion.div variants={fadeInLeft}>
+                    <FeatureIllustration variant={3} />
+                 </motion.div>
+                 <motion.div variants={fadeInRight} className="md:pl-8">
+                    <h3 className="text-3xl font-bold text-navy-900 mb-4">ATS-Ready Resume Templates</h3>
+                    <p className="text-gray-500 leading-relaxed mb-6 text-lg">
+                       Choose from recruiter-approved templates designed specifically to pass Applicant Tracking Systems (ATS) without losing visual appeal.
                     </p>
-                 </div>
-              </div>
-
-               {/* Feature 4 */}
-               <div className="grid md:grid-cols-2 gap-12 items-center">
-                 <div className="order-2 md:order-1 md:pr-10">
-                    <h3 className="text-2xl font-bold text-navy-900 mb-4">A Template for Every Career Path</h3>
-                    <p className="text-gray-500 leading-relaxed mb-6">
-                       Choose from 20+ polished, ATS-optimized templates designed for different industries and career levels. Whether you're applying for your first job or a leadership role.
-                    </p>
-                 </div>
-                 <div className="order-1 md:order-2">
-                    <FeatureIllustration variant={4} />
-                 </div>
-              </div>
+                 </motion.div>
+              </motion.div>
            </div>
         </section>
 
         {/* --- Testimonials Section --- */}
         <section className="py-24 bg-white">
-           <div className="max-w-4xl mx-auto px-4 text-center">
-              <h2 className="text-3xl font-bold text-navy-900 mb-16">Hear from our customers</h2>
+           <div className="max-w-6xl mx-auto px-4 text-center">
+              <motion.h2 
+                 initial="hidden"
+                 whileInView="visible"
+                 viewport={{ once: true }}
+                 variants={fadeInUp}
+                 className="text-3xl md:text-4xl font-bold text-navy-900 mb-16"
+              >
+                 Hear from our customers
+              </motion.h2>
               
-              <div className="grid md:grid-cols-2 gap-12 text-left">
-                 {/* Testimonial 1 */}
-                 <div className="flex flex-col items-center text-center">
-                    <div className="flex gap-2 mb-4">
-                       {[1,2,3,4,5].map(i => <div key={i} className="w-8 h-8 bg-gray-300 rounded-sm"></div>)}
-                    </div>
-                    <p className="text-gray-500 text-sm mb-4 leading-relaxed">
-                       "Loved the auto-generate feature, it saved me so much time and gave me polished content I wouldn't have written myself."
-                    </p>
-                 </div>
-
-                 {/* Testimonial 2 */}
-                 <div className="flex flex-col items-center text-center">
-                    <div className="flex gap-2 mb-4">
-                       {[1,2,3,4,5].map(i => <div key={i} className="w-8 h-8 bg-gray-300 rounded-sm"></div>)}
-                    </div>
-                    <p className="text-gray-500 text-sm mb-4 leading-relaxed">
-                       "A game-changer! Simple to use, with 20+ modern templates and AI suggestions that actually impress recruiters."
-                    </p>
-                 </div>
-
-                  {/* Testimonial 3 */}
-                  <div className="flex flex-col items-center text-center md:col-span-2 max-w-md mx-auto">
-                    <div className="flex gap-2 mb-4">
-                       {[1,2,3,4,5].map(i => <div key={i} className="w-8 h-8 bg-gray-300 rounded-sm"></div>)}
-                    </div>
-                    <p className="text-gray-500 text-sm mb-4 leading-relaxed">
-                       "Super easy to use—AI tailored my resume perfectly to the job description and saved me hours of editing."
-                    </p>
-                 </div>
-              </div>
+              <motion.div 
+                 className="grid md:grid-cols-3 gap-8 text-left"
+                 initial="hidden"
+                 whileInView="visible"
+                 viewport={{ once: true }}
+                 variants={staggerContainer}
+              >
+                 {[
+                    {
+                       text: "Loved the auto-generate feature, it saved me so much time and gave me polished content I wouldn't have written myself.",
+                       author: "Sarah J.",
+                       role: "Product Manager"
+                    },
+                    {
+                       text: "A game-changer! Simple to use, with modern templates and AI suggestions that actually impress recruiters.",
+                       author: "Mark T.",
+                       role: "Developer"
+                    },
+                    {
+                       text: "Super easy to use—AI tailored my resume perfectly to the job description and saved me hours of editing.",
+                       author: "Emily R.",
+                       role: "Designer"
+                    }
+                 ].map((t, i) => (
+                    <motion.div 
+                       key={i} 
+                       variants={fadeInUp}
+                       className="bg-gray-50 p-8 rounded-2xl hover:shadow-lg transition-all duration-300 border border-gray-100"
+                    >
+                       <div className="flex gap-1 mb-4">
+                          {[1,2,3,4,5].map(star => <Icons.Sparkles key={star} size={16} className="text-yellow-400 fill-yellow-400" />)}
+                       </div>
+                       <p className="text-gray-600 text-sm mb-6 leading-relaxed">"{t.text}"</p>
+                       <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold">
+                             {t.author[0]}
+                          </div>
+                          <div>
+                             <div className="font-bold text-navy-900 text-sm">{t.author}</div>
+                             <div className="text-xs text-gray-400">{t.role}</div>
+                          </div>
+                       </div>
+                    </motion.div>
+                 ))}
+              </motion.div>
            </div>
         </section>
 
         {/* --- Bottom CTA --- */}
-        <section className="pb-24 px-4">
-           <div className="max-w-5xl mx-auto bg-gray-200 rounded-sm py-16 px-8 text-center">
-              <h2 className="text-3xl font-bold text-navy-900 mb-2">Build. Apply. Get Hired.</h2>
-              <p className="text-gray-500 mb-8 max-w-md mx-auto">Create your optimized resume in minutes with AI and ATS-friendly templates.</p>
+        <section className="py-24 px-4">
+           <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="max-w-5xl mx-auto bg-navy-900 rounded-3xl py-20 px-8 text-center text-white relative overflow-hidden"
+           >
+              {/* Decorative circles */}
+              <div className="absolute top-0 left-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -ml-20 -mt-20"></div>
+              <div className="absolute bottom-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl -mr-20 -mb-20"></div>
+
+              <h2 className="text-3xl md:text-5xl font-bold mb-4 relative z-10">Build. Apply. Get Hired.</h2>
+              <p className="text-blue-100 mb-10 max-w-md mx-auto relative z-10 text-lg">
+                 Create your optimized resume in minutes with AI and ATS-friendly templates.
+              </p>
               <Link 
                 to="/builder"
-                className="px-8 py-3 bg-navy-900 text-white font-semibold rounded-sm hover:bg-navy-800 transition-colors"
+                className="relative z-10 px-10 py-4 bg-white text-navy-900 font-bold rounded-full hover:bg-blue-50 transition-all shadow-xl hover:shadow-2xl transform hover:-translate-y-1 inline-block"
               >
-                 Build Resume
+                 Start Building Now
               </Link>
-           </div>
+           </motion.div>
         </section>
       </main>
 

@@ -17,46 +17,57 @@ const SummaryStep: React.FC = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto">
+    <div className="max-w-3xl mx-auto">
       <div className="mb-8">
-        <h2 className="text-2xl font-bold text-navy-900 mb-2">Professional Summary</h2>
-        <p className="text-gray-500">Write a short professional summary to introduce yourself.</p>
+        <h2 className="text-3xl font-bold text-navy-900 mb-2">Summary</h2>
+        <p className="text-gray-500">List your roles, achievements, and impact at work</p>
       </div>
 
-      <div className="space-y-4">
-        <div className="flex justify-end">
+      {/* Best Practice Banner */}
+      <div className="flex items-center gap-3 mb-8">
+         <span className="bg-navy-900 text-white text-xs font-bold px-2 py-1 rounded-sm">Best practice</span>
+         <span className="text-sm text-gray-500">The best practice goes here</span>
+      </div>
+
+      <div className="space-y-1.5">
+        <div className="flex justify-between items-center">
+           <label className="text-sm font-medium text-gray-700">Summary</label>
            <button 
              onClick={handleGenerate}
              disabled={isGenerating}
-             className="flex items-center gap-2 text-sm text-blue-600 font-medium hover:text-blue-700 bg-blue-50 px-4 py-2 rounded-lg transition-colors disabled:opacity-50"
+             className="flex items-center gap-1 bg-[#8B5CF6] text-white text-xs px-3 py-1.5 rounded-md hover:bg-[#7C3AED] transition-colors disabled:opacity-50"
            >
-             <Icons.Sparkles size={16} />
-             {isGenerating ? 'Generating...' : 'Generate with AI'}
+             <Icons.Sparkles size={12} />
+             {isGenerating ? 'Generating...' : 'Generate'}
            </button>
         </div>
 
         <textarea 
           value={resumeData.summary}
           onChange={(e) => updateField('summary', e.target.value)}
-          placeholder="Experienced professional with a proven track record..."
-          className="w-full h-48 px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 outline-none bg-white resize-none text-base leading-relaxed"
+          placeholder="Write your summary here"
+          className="w-full h-64 px-4 py-4 rounded-xl bg-gray-50 border-transparent focus:bg-white focus:border-blue-500 outline-none resize-none text-base leading-relaxed"
         />
-        
-        <p className="text-xs text-gray-400 text-right">{resumeData.summary.length} characters</p>
       </div>
 
-      <div className="mt-10 flex justify-between">
-        <button 
-          onClick={() => navigate('/builder/skills')}
-          className="px-6 py-3 text-gray-600 font-medium hover:bg-gray-100 rounded-lg transition-colors"
-        >
-          Back
-        </button>
+      {/* AI Suggestion Stub */}
+      {resumeData.summary === '' && (
+         <div className="mt-6 p-4 border border-gray-200 rounded-lg bg-white">
+            <p className="text-sm text-gray-500 leading-relaxed mb-4">
+               Front-End Developer with 3 years of experience building responsive, user-friendly web applications. Skilled in HTML5, CSS3, JavaScript (ES6+), and React.js...
+            </p>
+            <p className="text-sm text-gray-500 leading-relaxed">
+               Front-End Developer with 3 years of experience building responsive, user-friendly web applications. Skilled in HTML5, CSS3, JavaScript (ES6+), and React.js...
+            </p>
+         </div>
+      )}
+
+      <div className="mt-12 flex justify-end">
         <button 
           onClick={() => navigate('/preview')}
-          className="px-8 py-3 bg-navy-900 text-white rounded-lg font-semibold hover:bg-navy-800 transition-colors shadow-lg shadow-navy-900/20"
+          className="px-10 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors shadow-md"
         >
-          Finish & Preview
+          Continue
         </button>
       </div>
     </div>

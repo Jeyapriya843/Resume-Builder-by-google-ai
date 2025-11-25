@@ -1,3 +1,5 @@
+
+import React from 'react';
 import ModernTemplate from './ModernTemplate';
 import ClassicTemplate from './ClassicTemplate';
 import MinimalTemplate from './MinimalTemplate';
@@ -7,6 +9,9 @@ import SerifElegantTemplate from './SerifElegantTemplate';
 import BoldSidebarTemplate from './BoldSidebarTemplate';
 import TimelineTemplate from './TimelineTemplate';
 import DarkSidebarTemplate from './DarkSidebarTemplate';
+import SimpleProfessionalTemplate from './SimpleProfessionalTemplate';
+import TechDesignTemplate from './TechDesignTemplate';
+import TealModernTemplate from './TealModernTemplate';
 import { ResumeData } from '../../types';
 
 export const TemplatesMap: Record<string, React.FC<{ data: ResumeData }>> = {
@@ -19,6 +24,9 @@ export const TemplatesMap: Record<string, React.FC<{ data: ResumeData }>> = {
   'bold-sidebar': BoldSidebarTemplate,
   'timeline': TimelineTemplate,
   'dark-sidebar': DarkSidebarTemplate,
+  'simple-professional': SimpleProfessionalTemplate,
+  'tech-design': TechDesignTemplate,
+  'teal-modern': TealModernTemplate,
 };
 
 export const availableTemplates = [
@@ -33,6 +41,24 @@ export const availableTemplates = [
     name: "Modern Professional",
     description: "Clean, structured, and ATS-friendly. Perfect for corporate roles.",
     tags: ["ATS Friendly", "Corporate", "Popular"]
+  },
+  {
+    id: 'simple-professional',
+    name: "Simple Professional",
+    description: "Minimalist, centered layout with strong headers. Based on Sebastian Bennett design.",
+    tags: ["Minimal", "Clean", "Finance"]
+  },
+  {
+    id: 'tech-design',
+    name: "Tech Design",
+    description: "Modern pill-shaped headers and clear hierarchy. Based on Daniel Gallego design.",
+    tags: ["Modern", "Tech", "Creative"]
+  },
+  {
+    id: 'teal-modern',
+    name: "Teal Modern",
+    description: "Professional layout with teal accents and split skills section. Based on Drew Feig design.",
+    tags: ["Color", "Marketing", "Split"]
   },
   {
     id: 'clean-modern',

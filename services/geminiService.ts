@@ -1,20 +1,22 @@
-import { GoogleGenAI, Type } from "@google/genai";
-import { ResumeData, initialResumeState } from "../types";
 
-const apiKey = process.env.API_KEY || ''; // Ensure API_KEY is set in environment
+import { GoogleGenAI, Type } from "@google/genai";
+import { ResumeData } from "../types";
+
+const getAiClient = () => {
+  const apiKey = process.env.API_KEY;
+  if (!apiKey) return null;
+  return new GoogleGenAI({ apiKey });
+};
 
 export const generateResumeSummary = async (
   jobTitle: string,
   skills: string[],
   experienceYears: string = "some"
 ): Promise<string> => {
-  if (!apiKey) {
-    console.warn("API Key not found. Returning mock response.");
-    return `Highly motivated ${jobTitle} with ${experienceYears} years of experience. Proven track record in ${skills.join(', ')}. Committed to delivering high-quality results and driving business success.`;
-  }
-
   try {
-    const ai = new GoogleGenAI({ apiKey });
+    const ai = getAiClient();
+    if (!ai) return "AI service unavailable (Missing API Key).";
+
     const model = "gemini-2.5-flash";
     const prompt = `Write a professional, ATS-friendly resume summary (approx 50-70 words) for a ${jobTitle} with experience in ${skills.join(', ')}. Use a professional tone.`;
 
@@ -31,75 +33,92 @@ export const generateResumeSummary = async (
 };
 
 export const parseResumeFromText = async (text: string): Promise<Partial<ResumeData>> => {
-  if (!apiKey) {
-    console.warn("API Key not found. Cannot parse resume.");
-    return {};
-  }
-
   try {
-    const ai = new GoogleGenAI({ apiKey });
+    const ai = getAiClient();
+    if (!ai) {
+      console.warn("No API Key found, skipping AI parsing.");
+      return {}; // Return empty to trigger local fallback
+    }
+
     const model = "gemini-2.5-flash";
     
     const response = await ai.models.generateContent({
       model,
       contents: `Parse the following resume text into a structured JSON format. 
-      
       Resume Text:
-      ${text}
-      
-      Return a JSON object with this schema:
-      {
-        "firstName": "string",
-        "lastName": "string",
-        "jobTitle": "string",
-        "email": "string",
-        "phone": "string",
-        "city": "string",
-        "country": "string",
-        "summary": "string",
-        "experience": [
-          {
-            "id": "string (unique)",
-            "jobTitle": "string",
-            "employer": "string",
-            "startDate": "string",
-            "endDate": "string",
-            "location": "string",
-            "description": "string (full description)"
-          }
-        ],
-        "education": [
-          {
-            "id": "string (unique)",
-            "school": "string",
-            "degree": "string",
-            "fieldOfStudy": "string",
-            "startDate": "string",
-            "endDate": "string",
-            "location": "string"
-          }
-        ],
-        "skills": ["string"],
-        "projects": [
-           {
-             "id": "string (unique)",
-             "title": "string",
-             "link": "string",
-             "description": "string",
-             "technologies": ["string"]
-           }
-        ]
-      }`,
+      ${text}`,
       config: {
         responseMimeType: "application/json",
+        responseSchema: {
+          type: Type.OBJECT,
+          properties: {
+            firstName: { type: Type.STRING },
+            lastName: { type: Type.STRING },
+            jobTitle: { type: Type.STRING },
+            email: { type: Type.STRING },
+            phone: { type: Type.STRING },
+            city: { type: Type.STRING },
+            country: { type: Type.STRING },
+            summary: { type: Type.STRING },
+            experience: {
+              type: Type.ARRAY,
+              items: {
+                type: Type.OBJECT,
+                properties: {
+                  id: { type: Type.STRING },
+                  jobTitle: { type: Type.STRING },
+                  employer: { type: Type.STRING },
+                  startDate: { type: Type.STRING },
+                  endDate: { type: Type.STRING },
+                  location: { type: Type.STRING },
+                  description: { type: Type.STRING },
+                },
+              },
+            },
+            education: {
+              type: Type.ARRAY,
+              items: {
+                type: Type.OBJECT,
+                properties: {
+                  id: { type: Type.STRING },
+                  school: { type: Type.STRING },
+                  degree: { type: Type.STRING },
+                  fieldOfStudy: { type: Type.STRING },
+                  startDate: { type: Type.STRING },
+                  endDate: { type: Type.STRING },
+                  location: { type: Type.STRING },
+                },
+              },
+            },
+            skills: {
+              type: Type.ARRAY,
+              items: { type: Type.STRING },
+            },
+            projects: {
+              type: Type.ARRAY,
+              items: {
+                type: Type.OBJECT,
+                properties: {
+                  id: { type: Type.STRING },
+                  title: { type: Type.STRING },
+                  link: { type: Type.STRING },
+                  description: { type: Type.STRING },
+                  technologies: {
+                    type: Type.ARRAY,
+                    items: { type: Type.STRING },
+                  },
+                },
+              },
+            },
+          },
+        },
       }
     });
 
     const jsonText = response.text;
     if (!jsonText) return {};
     
-    const parsed = JSON.parse(jsonText);
-    return parsed;
+    return JSON.parse(jsonText);
   } catch (error) {
     console.error("Gemini Parse Error:", error);
     return {};

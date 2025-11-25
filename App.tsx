@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { HashRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { ResumeData, initialResumeState } from './types';
@@ -6,6 +7,7 @@ import Builder from './pages/Builder';
 import Preview from './pages/Preview';
 import About from './pages/About';
 import Templates from './pages/Templates';
+import Pricing from './pages/Pricing';
 
 // --- Context Setup ---
 interface ResumeContextType {
@@ -55,6 +57,7 @@ const App: React.FC = () => {
              <Route path="/" element={<Home />} />
              <Route path="/about" element={<About />} />
              <Route path="/templates" element={<Templates />} />
+             <Route path="/pricing" element={<Pricing />} />
              <Route path="/builder/*" element={<Builder />} />
              <Route path="/preview" element={<Preview />} />
              <Route path="*" element={<Navigate to="/" replace />} />

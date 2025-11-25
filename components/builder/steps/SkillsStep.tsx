@@ -29,86 +29,89 @@ const SkillsStep: React.FC = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto">
+    <div className="max-w-3xl mx-auto">
       <div className="mb-8">
-        <h2 className="text-2xl font-bold text-navy-900 mb-2">Skills</h2>
-        <p className="text-gray-500">List your professional skills and tools.</p>
+        <h2 className="text-3xl font-bold text-navy-900 mb-2">Skills</h2>
+        <p className="text-gray-500">List your roles, achievements, and impact at work</p>
       </div>
 
-      <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
-        <div className="flex gap-2 mb-6">
-          <input 
-            type="text" 
-            value={currentSkill}
-            onChange={(e) => setCurrentSkill(e.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder="Add a skill (e.g. React, Project Management)"
-            className="flex-1 px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 outline-none bg-white"
-          />
-          <button 
-            onClick={addSkill}
-            className="bg-navy-900 text-white px-6 rounded-lg font-medium hover:bg-navy-800 transition-colors"
-          >
-            Add
-          </button>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
-          <AnimatePresence>
-            {resumeData.skills.map((skill) => (
-              <motion.span 
-                key={skill}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.8 }}
-                className="bg-white border border-gray-200 text-navy-900 px-3 py-1.5 rounded-full text-sm font-medium flex items-center gap-2 shadow-sm"
-              >
-                {skill}
-                <button 
-                  onClick={() => removeSkill(skill)}
-                  className="text-gray-400 hover:text-red-500"
-                >
-                  <Icons.X size={14} />
-                </button>
-              </motion.span>
-            ))}
-          </AnimatePresence>
-          {resumeData.skills.length === 0 && (
-             <p className="text-gray-400 text-sm italic">No skills added yet.</p>
-          )}
-        </div>
+      {/* Best Practice Banner */}
+      <div className="flex items-center gap-3 mb-8">
+         <span className="bg-navy-900 text-white text-xs font-bold px-2 py-1 rounded-sm">Best practice</span>
+         <span className="text-sm text-gray-500">The best practice goes here</span>
       </div>
 
-      {/* Suggested Skills Stub */}
-      <div className="mt-6">
-         <p className="text-sm font-semibold text-gray-500 mb-3">Popular Skills</p>
+      <div className="space-y-2">
+         <div className="flex justify-between items-center mb-2">
+            <label className="text-sm font-medium text-gray-700">Skills</label>
+            <button className="flex items-center gap-1 bg-[#8B5CF6] text-white text-xs px-3 py-1.5 rounded-md hover:bg-[#7C3AED] transition-colors">
+               <Icons.Sparkles size={12} />
+               Generate
+            </button>
+         </div>
+         
+         <div className="bg-gray-50 p-6 rounded-xl border border-gray-100 min-h-[120px]">
+            <div className="flex flex-wrap gap-3 mb-4">
+               <AnimatePresence>
+                  {resumeData.skills.map((skill) => (
+                  <motion.span 
+                     key={skill}
+                     initial={{ opacity: 0, scale: 0.8 }}
+                     animate={{ opacity: 1, scale: 1 }}
+                     exit={{ opacity: 0, scale: 0.8 }}
+                     className="bg-white border border-navy-900 text-navy-900 px-4 py-2 rounded-full text-sm font-medium flex items-center gap-3 shadow-sm"
+                  >
+                     {skill}
+                     <button 
+                        onClick={() => removeSkill(skill)}
+                        className="text-gray-400 hover:text-navy-900"
+                     >
+                        <Icons.X size={16} />
+                     </button>
+                  </motion.span>
+                  ))}
+               </AnimatePresence>
+            </div>
+            
+            <div className="relative">
+               <input 
+                  type="text" 
+                  value={currentSkill}
+                  onChange={(e) => setCurrentSkill(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  placeholder="Add a skill..."
+                  className="w-full px-4 py-3 rounded-lg bg-white border border-gray-200 focus:border-blue-500 outline-none"
+               />
+               <button 
+                  onClick={addSkill}
+                  className="absolute right-2 top-2 bg-navy-900 text-white px-4 py-1.5 rounded-md text-xs font-bold hover:bg-navy-800"
+               >
+                  ADD
+               </button>
+            </div>
+         </div>
+      </div>
+
+      {/* Suggested Pills Stub */}
+      <div className="mt-8">
          <div className="flex flex-wrap gap-2">
-            {['Leadership', 'Communication', 'Python', 'Figma', 'Problem Solving'].map(s => (
+            {['Skills', 'Skills', 'Skills', 'Skills', 'Skills'].map((s, i) => (
                 <button 
-                   key={s} 
-                   onClick={() => {
-                       if(!resumeData.skills.includes(s)) updateField('skills', [...resumeData.skills, s])
-                   }}
-                   className="text-xs bg-blue-50 text-blue-600 px-3 py-1 rounded-full hover:bg-blue-100 transition-colors"
+                   key={i} 
+                   className="text-sm border border-navy-900 text-navy-900 px-4 py-1.5 rounded-full hover:bg-navy-50 transition-colors flex items-center gap-1"
                 >
-                    + {s}
+                    {s} <Icons.Plus size={14} />
                 </button>
             ))}
          </div>
       </div>
 
-      <div className="mt-10 flex justify-between">
-        <button 
-          onClick={() => navigate('/builder/education')}
-          className="px-6 py-3 text-gray-600 font-medium hover:bg-gray-100 rounded-lg transition-colors"
-        >
-          Back
-        </button>
+      <div className="mt-12 flex justify-end">
         <button 
           onClick={() => navigate('/builder/summary')}
-          className="px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+          className="px-10 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors shadow-md"
         >
-          Save & Continue
+          Continue
         </button>
       </div>
     </div>

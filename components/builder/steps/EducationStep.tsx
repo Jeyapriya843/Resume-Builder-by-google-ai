@@ -36,11 +36,11 @@ const EducationStep: React.FC = () => {
   return (
     <div className="max-w-3xl mx-auto">
       <div className="mb-8">
-        <h2 className="text-2xl font-bold text-navy-900 mb-2">Education</h2>
-        <p className="text-gray-500">Add your academic background.</p>
+        <h2 className="text-3xl font-bold text-navy-900 mb-2">Education</h2>
+        <p className="text-gray-500">List your school, college & other educational details</p>
       </div>
 
-      <div className="space-y-6">
+      <div className="space-y-8">
         <AnimatePresence>
           {resumeData.education.map((edu, index) => (
             <motion.div 
@@ -48,86 +48,107 @@ const EducationStep: React.FC = () => {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              className="bg-gray-50 p-6 rounded-xl border border-gray-200 relative group"
+              className="relative group"
             >
+              {index > 0 && <hr className="border-gray-100 mb-8" />}
               <button 
                 onClick={() => removeEducation(edu.id)}
-                className="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors"
+                className="absolute -right-2 -top-2 text-gray-300 hover:text-red-500 transition-colors"
               >
                 <Icons.Trash2 size={18} />
               </button>
               
-              <h3 className="text-sm font-bold text-gray-400 uppercase mb-4">Education {index + 1}</h3>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <input 
-                  placeholder="School / University" 
-                  value={edu.school}
-                  onChange={(e) => updateEducationItem(edu.id, 'school', e.target.value)}
-                  className="px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 outline-none bg-white"
-                />
-                <input 
-                  placeholder="Degree" 
-                  value={edu.degree}
-                  onChange={(e) => updateEducationItem(edu.id, 'degree', e.target.value)}
-                  className="px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 outline-none bg-white"
-                />
-                <input 
-                  placeholder="Field of Study" 
-                  value={edu.fieldOfStudy}
-                  onChange={(e) => updateEducationItem(edu.id, 'fieldOfStudy', e.target.value)}
-                  className="px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 outline-none bg-white md:col-span-2"
-                />
-                <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                <div className="space-y-1.5">
+                   <label className="text-sm font-medium text-gray-700">College name</label>
                    <input 
-                      type="text" 
-                      placeholder="Start Date" 
-                      onFocus={(e) => e.target.type = 'date'}
-                      value={edu.startDate}
-                      onChange={(e) => updateEducationItem(edu.id, 'startDate', e.target.value)}
-                      className="px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 outline-none bg-white"
-                   />
-                   <input 
-                      type="text" 
-                      placeholder="End Date" 
-                      onFocus={(e) => e.target.type = 'date'}
-                      value={edu.endDate}
-                      onChange={(e) => updateEducationItem(edu.id, 'endDate', e.target.value)}
-                      className="px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 outline-none bg-white"
+                     value={edu.school}
+                     onChange={(e) => updateEducationItem(edu.id, 'school', e.target.value)}
+                     className="w-full px-4 py-3.5 rounded-lg bg-gray-100 border-transparent focus:bg-white focus:border-blue-500 outline-none"
+                     placeholder="Anna university"
                    />
                 </div>
-                <input 
-                  placeholder="City, Country" 
-                  value={edu.location}
-                  onChange={(e) => updateEducationItem(edu.id, 'location', e.target.value)}
-                  className="px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 outline-none bg-white"
-                />
+                <div className="space-y-1.5">
+                   <label className="text-sm font-medium text-gray-700">City</label>
+                   <input 
+                     value={edu.location}
+                     onChange={(e) => updateEducationItem(edu.id, 'location', e.target.value)}
+                     className="w-full px-4 py-3.5 rounded-lg bg-gray-100 border-transparent focus:bg-white focus:border-blue-500 outline-none"
+                     placeholder="Chennai"
+                   />
+                </div>
+                <div className="space-y-1.5">
+                   <label className="text-sm font-medium text-gray-700">Degree</label>
+                   <input 
+                     value={edu.degree}
+                     onChange={(e) => updateEducationItem(edu.id, 'degree', e.target.value)}
+                     className="w-full px-4 py-3.5 rounded-lg bg-gray-100 border-transparent focus:bg-white focus:border-blue-500 outline-none"
+                     placeholder="Enter your degree"
+                   />
+                </div>
+                <div className="space-y-1.5">
+                   <label className="text-sm font-medium text-gray-700">Field of study</label>
+                   <input 
+                     value={edu.fieldOfStudy}
+                     onChange={(e) => updateEducationItem(edu.id, 'fieldOfStudy', e.target.value)}
+                     className="w-full px-4 py-3.5 rounded-lg bg-gray-100 border-transparent focus:bg-white focus:border-blue-500 outline-none"
+                     placeholder="Enter your field of study"
+                   />
+                </div>
+                <div className="space-y-1.5">
+                   <label className="text-sm font-medium text-gray-700">Start date</label>
+                   <div className="relative">
+                      <input 
+                         type="text" 
+                         onFocus={(e) => e.target.type = 'date'}
+                         value={edu.startDate}
+                         onChange={(e) => updateEducationItem(edu.id, 'startDate', e.target.value)}
+                         className="w-full px-4 py-3.5 rounded-lg bg-gray-100 border-transparent focus:bg-white focus:border-blue-500 outline-none"
+                         placeholder="Starting date"
+                      />
+                   </div>
+                </div>
+                <div className="space-y-1.5">
+                   <label className="text-sm font-medium text-gray-700">End date</label>
+                   <div className="relative">
+                      <input 
+                         type="text" 
+                         onFocus={(e) => e.target.type = 'date'}
+                         value={edu.endDate}
+                         onChange={(e) => updateEducationItem(edu.id, 'endDate', e.target.value)}
+                         className="w-full px-4 py-3.5 rounded-lg bg-gray-100 border-transparent focus:bg-white focus:border-blue-500 outline-none"
+                         placeholder="Ended date"
+                      />
+                   </div>
+                </div>
+              </div>
+              <div className="mt-4 flex items-center gap-2 text-gray-500 text-sm">
+                 <div className="w-4 h-4 rounded-full border border-gray-400 flex items-center justify-center">
+                    <div className="w-2 h-2 bg-transparent rounded-full"></div>
+                 </div>
+                 Currently working here
               </div>
             </motion.div>
           ))}
         </AnimatePresence>
 
-        <button 
-          onClick={addEducation}
-          className="w-full py-4 border-2 border-dashed border-gray-300 rounded-xl text-gray-500 font-medium hover:border-blue-500 hover:text-blue-500 transition-colors flex items-center justify-center gap-2"
-        >
-          <Icons.Plus size={20} />
-          Add Education
-        </button>
+        <div className="flex justify-center mt-8">
+           <button 
+             onClick={addEducation}
+             className="flex items-center gap-2 px-6 py-3 border border-navy-900 rounded-lg text-navy-900 font-semibold hover:bg-gray-50 transition-colors"
+           >
+             <Icons.Plus size={18} />
+             Add education
+           </button>
+        </div>
       </div>
 
-      <div className="mt-10 flex justify-between">
-        <button 
-          onClick={() => navigate('/builder/experience')}
-          className="px-6 py-3 text-gray-600 font-medium hover:bg-gray-100 rounded-lg transition-colors"
-        >
-          Back
-        </button>
+      <div className="mt-12 flex justify-end">
         <button 
           onClick={() => navigate('/builder/skills')}
-          className="px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+          className="px-10 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors shadow-md"
         >
-          Save & Continue
+          Continue
         </button>
       </div>
     </div>

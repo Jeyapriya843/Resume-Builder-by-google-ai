@@ -1,3 +1,4 @@
+
 import React, { useRef, useState } from 'react';
 import { useResume } from '../App';
 import { Link } from 'react-router-dom';
@@ -12,6 +13,9 @@ const Preview: React.FC = () => {
 
   const handleDownload = () => {
     setIsDownloading(true);
+    // Scroll to top to ensure no cropping
+    window.scrollTo(0, 0);
+    
     const element = resumeRef.current;
     
     // Check if html2pdf is available (loaded via CDN in index.html)
@@ -20,8 +24,14 @@ const Preview: React.FC = () => {
        const opt = {
           margin: 0,
           filename: `${resumeData.firstName || 'Resume'}_${resumeData.lastName || 'Resume'}.pdf`,
-          image: { type: 'jpeg', quality: 0.98 },
-          html2canvas: { scale: 2, useCORS: true, logging: false },
+          image: { type: 'jpeg', quality: 1.0 }, // Max quality
+          html2canvas: { 
+            scale: 4, // High resolution (4x)
+            useCORS: true, 
+            logging: false,
+            letterRendering: true, // Improves text rendering
+            scrollY: 0
+          },
           jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
        };
 
@@ -31,7 +41,9 @@ const Preview: React.FC = () => {
        }).catch((err: any) => {
           console.error('PDF generation failed', err);
           setIsDownloading(false);
-          alert('Failed to generate PDF. Please try using the Print option (Ctrl+P) and Save as PDF.');
+          // Fallback
+          alert('Generation failed. Opening print dialog for manual save.');
+          window.print();
        });
     } else {
        // Fallback to native print
@@ -84,8 +96,9 @@ const Preview: React.FC = () => {
         </div>
 
         {/* Resume Page Container */}
+        {/* We remove shadow for print/pdf generation to avoid artifacts */}
         <div className="relative shadow-2xl print:shadow-none">
-           <div ref={resumeRef} className="print:w-full print:max-w-none bg-white">
+           <div ref={resumeRef} className="bg-white print:w-[210mm] print:h-[297mm] overflow-hidden">
               <SelectedTemplate data={resumeData} />
            </div>
         </div>

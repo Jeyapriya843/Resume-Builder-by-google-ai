@@ -40,8 +40,14 @@ const ProjectsStep: React.FC = () => {
   return (
     <div className="max-w-3xl mx-auto">
       <div className="mb-8">
-        <h2 className="text-2xl font-bold text-navy-900 mb-2">Projects</h2>
+        <h2 className="text-3xl font-bold text-navy-900 mb-2">Projects</h2>
         <p className="text-gray-500">Add relevant academic or personal projects.</p>
+      </div>
+
+      {/* Best Practice Banner */}
+      <div className="flex items-center gap-3 mb-8">
+         <span className="bg-navy-900 text-white text-xs font-bold px-2 py-1 rounded-sm">Best practice</span>
+         <span className="text-sm text-gray-500">Include links to live demos or GitHub repositories</span>
       </div>
 
       <div className="space-y-6">
@@ -52,68 +58,76 @@ const ProjectsStep: React.FC = () => {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              className="bg-gray-50 p-6 rounded-xl border border-gray-200 relative group"
+              className="relative group"
             >
+              {index > 0 && <hr className="border-gray-100 mb-8" />}
               <button 
                 onClick={() => removeProject(project.id)}
-                className="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors"
+                className="absolute -right-2 -top-2 text-gray-300 hover:text-red-500 transition-colors"
               >
                 <Icons.Trash2 size={18} />
               </button>
               
-              <h3 className="text-sm font-bold text-gray-400 uppercase mb-4">Project {index + 1}</h3>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <input 
-                  placeholder="Project Title" 
-                  value={project.title}
-                  onChange={(e) => updateProjectItem(project.id, 'title', e.target.value)}
-                  className="px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 outline-none bg-white"
-                />
-                <input 
-                  placeholder="Link (e.g. github.com/...)" 
-                  value={project.link}
-                  onChange={(e) => updateProjectItem(project.id, 'link', e.target.value)}
-                  className="px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 outline-none bg-white"
-                />
-                <input 
-                  placeholder="Technologies (comma separated)" 
-                  defaultValue={project.technologies.join(', ')}
-                  onBlur={(e) => handleTechChange(project.id, e.target.value)}
-                  className="px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 outline-none bg-white md:col-span-2"
-                />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6 mb-6">
+                <div className="space-y-1.5">
+                   <label className="text-sm font-medium text-gray-700">Project Title</label>
+                   <input 
+                     placeholder="e.g. E-commerce Dashboard" 
+                     value={project.title}
+                     onChange={(e) => updateProjectItem(project.id, 'title', e.target.value)}
+                     className="w-full px-4 py-3.5 rounded-lg bg-gray-100 border-transparent focus:bg-white focus:border-blue-500 outline-none"
+                   />
+                </div>
+                <div className="space-y-1.5">
+                   <label className="text-sm font-medium text-gray-700">Link</label>
+                   <input 
+                     placeholder="e.g. github.com/user/repo" 
+                     value={project.link}
+                     onChange={(e) => updateProjectItem(project.id, 'link', e.target.value)}
+                     className="w-full px-4 py-3.5 rounded-lg bg-gray-100 border-transparent focus:bg-white focus:border-blue-500 outline-none"
+                   />
+                </div>
+                <div className="space-y-1.5 md:col-span-2">
+                   <label className="text-sm font-medium text-gray-700">Technologies used</label>
+                   <input 
+                     placeholder="React, Node.js, MongoDB (comma separated)" 
+                     defaultValue={project.technologies.join(', ')}
+                     onBlur={(e) => handleTechChange(project.id, e.target.value)}
+                     className="w-full px-4 py-3.5 rounded-lg bg-gray-100 border-transparent focus:bg-white focus:border-blue-500 outline-none"
+                   />
+                </div>
               </div>
-              <textarea 
-                placeholder="Description of the project..." 
-                value={project.description}
-                onChange={(e) => updateProjectItem(project.id, 'description', e.target.value)}
-                className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 outline-none bg-white h-24 resize-none"
-              />
+
+              <div className="space-y-1.5">
+                 <label className="text-sm font-medium text-gray-700">Description</label>
+                 <textarea 
+                   placeholder="Describe what you built, your role, and the outcome..." 
+                   value={project.description}
+                   onChange={(e) => updateProjectItem(project.id, 'description', e.target.value)}
+                   className="w-full px-4 py-4 rounded-lg bg-gray-100 border-transparent focus:bg-white focus:border-blue-500 outline-none h-24 resize-none"
+                 />
+              </div>
             </motion.div>
           ))}
         </AnimatePresence>
 
-        <button 
-          onClick={addProject}
-          className="w-full py-4 border-2 border-dashed border-gray-300 rounded-xl text-gray-500 font-medium hover:border-blue-500 hover:text-blue-500 transition-colors flex items-center justify-center gap-2"
-        >
-          <Icons.Plus size={20} />
-          Add Project
-        </button>
+        <div className="flex justify-center mt-8">
+           <button 
+             onClick={addProject}
+             className="flex items-center gap-2 px-6 py-3 border border-navy-900 rounded-lg text-navy-900 font-semibold hover:bg-gray-50 transition-colors"
+           >
+             <Icons.Plus size={18} />
+             Add Project
+           </button>
+        </div>
       </div>
 
-      <div className="mt-10 flex justify-between">
-        <button 
-          onClick={() => navigate('/builder/education')}
-          className="px-6 py-3 text-gray-600 font-medium hover:bg-gray-100 rounded-lg transition-colors"
-        >
-          Back
-        </button>
+      <div className="mt-12 flex justify-end">
         <button 
           onClick={() => navigate('/builder/skills')}
-          className="px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+          className="px-10 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors shadow-md"
         >
-          Save & Continue
+          Continue
         </button>
       </div>
     </div>
