@@ -12,6 +12,12 @@ import DarkSidebarTemplate from './DarkSidebarTemplate';
 import SimpleProfessionalTemplate from './SimpleProfessionalTemplate';
 import TechDesignTemplate from './TechDesignTemplate';
 import TealModernTemplate from './TealModernTemplate';
+import DarkBlueBorderTemplate from './DarkBlueBorderTemplate';
+import BlueHeaderTemplate from './BlueHeaderTemplate';
+import PhotoSidebarTemplate from './PhotoSidebarTemplate';
+import ElegantSerifTemplate from './ElegantSerifTemplate';
+import MinimalistTealTemplate from './MinimalistTealTemplate';
+import CleanSplitTemplate from './CleanSplitTemplate';
 import { ResumeData } from '../../types';
 
 export const TemplatesMap: Record<string, React.FC<{ data: ResumeData }>> = {
@@ -27,6 +33,12 @@ export const TemplatesMap: Record<string, React.FC<{ data: ResumeData }>> = {
   'simple-professional': SimpleProfessionalTemplate,
   'tech-design': TechDesignTemplate,
   'teal-modern': TealModernTemplate,
+  'dark-blue-border': DarkBlueBorderTemplate,
+  'blue-header': BlueHeaderTemplate,
+  'photo-sidebar': PhotoSidebarTemplate,
+  'elegant-serif': ElegantSerifTemplate,
+  'minimalist-teal': MinimalistTealTemplate,
+  'clean-split': CleanSplitTemplate,
 };
 
 export const availableTemplates = [
@@ -101,5 +113,41 @@ export const availableTemplates = [
     name: "Executive Classic",
     description: "Timeless serif design. Best for academic, legal, or executive roles.",
     tags: ["Senior", "Professional", "Traditional"]
+  },
+  {
+    id: 'dark-blue-border',
+    name: "Hannah",
+    description: "Bold dark blue border with a highly structured layout. Excellent for Marketing Managers.",
+    tags: ["Bold", "Border", "Marketing"]
+  },
+  {
+    id: 'blue-header',
+    name: "Morgan",
+    description: "Professional dark blue header block with gold accents. Great for Developers.",
+    tags: ["Header", "Professional", "Developer"]
+  },
+  {
+    id: 'photo-sidebar',
+    name: "Donna",
+    description: "Friendly layout with a circular photo and soft gray sidebar. Perfect for Sales/Client roles.",
+    tags: ["Photo", "Sidebar", "Sales"]
+  },
+  {
+    id: 'elegant-serif',
+    name: "Catrine",
+    description: "High-end serif typography with a split header. Ideal for Project Managers.",
+    tags: ["Serif", "Elegant", "Manager"]
+  },
+  {
+    id: 'minimalist-teal',
+    name: "Lorna",
+    description: "Clean, open layout with centered headers and subtle structure. Art Director style.",
+    tags: ["Clean", "Minimal", "Creative"]
+  },
+  {
+    id: 'clean-split',
+    name: "Richard",
+    description: "Strict, organized split layout with a centered header. Very organized.",
+    tags: ["Split", "Organized", "Manager"]
   }
 ];

@@ -13,7 +13,11 @@ import {
   Plus,
   Trash2,
   Menu,
-  X
+  X,
+  Phone,
+  Mail,
+  MapPin,
+  Globe
 } from 'lucide-react';
 
 export const Icons = {
@@ -30,5 +34,9 @@ export const Icons = {
   Plus,
   Trash2,
   Menu,
-  X
+  X,
+  Phone,
+  Mail,
+  MapPin,
+  Globe
 };
