@@ -23,6 +23,7 @@ const Header: React.FC = () => {
 
             {/* Desktop Nav */}
             <div className="hidden md:flex items-center gap-8">
+              <Link to="/resume" className="text-gray-600 hover:text-navy-900 text-sm font-medium transition-colors">Resume</Link>
               <Link to="/templates" className="text-gray-600 hover:text-navy-900 text-sm font-medium transition-colors">Templates</Link>
               <Link to="/about" className="text-gray-600 hover:text-navy-900 text-sm font-medium transition-colors">About</Link>
               
@@ -54,6 +55,7 @@ const Header: React.FC = () => {
         {/* Mobile Nav */}
         {mobileMenuOpen && (
           <div className="md:hidden absolute top-16 left-0 w-full bg-white border-b border-gray-100 shadow-xl p-4 flex flex-col gap-4">
+             <Link to="/resume" className="text-gray-600 font-medium p-2" onClick={() => setMobileMenuOpen(false)}>Resume</Link>
              <Link to="/templates" className="text-gray-600 font-medium p-2" onClick={() => setMobileMenuOpen(false)}>Templates</Link>
              <Link to="/about" className="text-gray-600 font-medium p-2" onClick={() => setMobileMenuOpen(false)}>About</Link>
              <button 

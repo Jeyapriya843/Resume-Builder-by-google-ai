@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { 
   FileText, 
@@ -17,7 +18,8 @@ import {
   Phone,
   Mail,
   MapPin,
-  Globe
+  Globe,
+  Upload
 } from 'lucide-react';
 
 export const Icons = {
@@ -38,5 +40,6 @@ export const Icons = {
   Phone,
   Mail,
   MapPin,
-  Globe
+  Globe,
+  Upload
 };

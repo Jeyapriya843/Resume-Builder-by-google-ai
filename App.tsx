@@ -8,6 +8,7 @@ import Preview from './pages/Preview';
 import About from './pages/About';
 import Templates from './pages/Templates';
 import Pricing from './pages/Pricing';
+import Resume from './pages/Resume';
 
 // --- Context Setup ---
 interface ResumeContextType {
@@ -56,6 +57,7 @@ const App: React.FC = () => {
            <Routes>
              <Route path="/" element={<Home />} />
              <Route path="/about" element={<About />} />
+             <Route path="/resume" element={<Resume />} />
              <Route path="/templates" element={<Templates />} />
              <Route path="/pricing" element={<Pricing />} />
              <Route path="/builder/*" element={<Builder />} />
