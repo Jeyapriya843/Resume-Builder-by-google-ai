@@ -271,7 +271,7 @@ const Home: React.FC = () => {
                  <motion.p variants={fadeInUp} className="text-gray-500 text-lg mb-8 leading-relaxed max-w-md">
                     An AI-powered resume builder that optimizes your content to match job descriptions and boost your landing chances.
                  </motion.p>
-                 <motion.div variants={fadeInUp} className="flex flex-wrap gap-4">
+                 <motion.div variants={fadeInUp} className="flex flex-wrap gap-4 justify-center">
                     <Link 
                       to="/builder"
                       className="px-8 py-3.5 bg-navy-900 text-white font-semibold rounded-full hover:bg-navy-800 transition-all shadow-lg shadow-navy-900/20 hover:shadow-navy-900/30 transform hover:-translate-y-0.5"

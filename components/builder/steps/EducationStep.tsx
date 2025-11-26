@@ -143,14 +143,6 @@ const EducationStep: React.FC = () => {
         </div>
       </div>
 
-      <div className="mt-12 flex justify-end">
-        <button 
-          onClick={() => navigate('/builder/skills')}
-          className="px-10 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors shadow-md"
-        >
-          Continue
-        </button>
-      </div>
     </div>
   );
 };

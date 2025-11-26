@@ -110,14 +110,6 @@ const HeaderStep: React.FC = () => {
          <button className="text-navy-900 font-semibold text-sm border-b border-navy-900 pb-0.5 hover:opacity-80">+Add portfolio</button>
       </div>
 
-      <div className="mt-12 flex justify-end">
-        <button 
-          onClick={() => navigate('/builder/experience')}
-          className="px-10 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors shadow-md"
-        >
-          Continue
-        </button>
-      </div>
     </div>
   );
 };

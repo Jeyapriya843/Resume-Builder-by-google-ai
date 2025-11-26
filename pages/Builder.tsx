@@ -7,11 +7,11 @@ import EducationStep from '../components/builder/steps/EducationStep';
 import SkillsStep from '../components/builder/steps/SkillsStep';
 import SummaryStep from '../components/builder/steps/SummaryStep';
 import ProjectsStep from '../components/builder/steps/ProjectsStep';
+import LivePreview from '../components/LivePreview';
 
 const Builder: React.FC = () => {
   const location = useLocation();
   
-  // Map routes to step numbers
   const stepMap: Record<string, number> = {
     'header': 1,
     'experience': 2,
@@ -20,38 +20,24 @@ const Builder: React.FC = () => {
     'skills': 5,
     'summary': 6
   };
+  const totalSteps = Object.keys(stepMap).length;
 
   const currentPath = location.pathname.split('/').pop() || 'header';
   const currentStep = stepMap[currentPath] || 1;
-  const totalSteps = 6;
-  const progress = (currentStep / totalSteps) * 100;
 
   return (
-    <div className="flex flex-col h-screen bg-white selection:bg-blue-100">
-      <div className="flex flex-1 overflow-hidden">
-        {/* Sidebar */}
-        <div className="hidden md:flex h-full">
-           <Stepper />
-        </div>
-        
-        {/* Main Content Area */}
-        <main className="flex-1 overflow-y-auto bg-white">
-           {/* Top Progress Header */}
-           <div className="sticky top-0 z-20 bg-white/90 backdrop-blur-sm pt-8 px-8 pb-4 border-b border-gray-100 md:border-none">
-              <div className="max-w-3xl mx-auto">
-                 <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium text-gray-900">Step {currentStep} of {totalSteps}</span>
-                 </div>
-                 <div className="h-1.5 w-48 bg-gray-100 rounded-full overflow-hidden">
-                    <div 
-                      className="h-full bg-navy-900 rounded-full transition-all duration-500 ease-out"
-                      style={{ width: `${progress}%` }}
-                    ></div>
-                 </div>
-              </div>
-           </div>
+    <div className="min-h-screen bg-gray-50 flex flex-col lg:flex-row">
+      {/* 1. Stepper Sidebar */}
+      <div className="w-full lg:w-64 flex-shrink-0 bg-white border-b lg:border-b-0 lg:border-r border-gray-100">
+        <Stepper />
+      </div>
 
-           <div className="p-4 md:p-12 pt-4">
+      {/* Main Content (Forms & Preview) */}
+      <div className="flex-1 flex flex-col xl:flex-row overflow-hidden">
+        
+        {/* 2. Form Content Area (Scrollable) */}
+        <main className="flex-1 overflow-y-auto bg-white">
+           <div className="p-4 md:p-12 pt-8">
              <Routes>
                <Route path="/" element={<Navigate to="header" replace />} />
                <Route path="header" element={<HeaderStep />} />
@@ -63,6 +49,13 @@ const Builder: React.FC = () => {
              </Routes>
            </div>
         </main>
+
+        {/* 3. Live Preview Pane */}
+        <aside className="w-full xl:w-[450px] flex-shrink-0 bg-gray-50 border-t xl:border-t-0 xl:border-l border-gray-200 p-8 overflow-y-auto">
+          <div className="xl:sticky xl:top-8">
+             <LivePreview />
+          </div>
+        </aside>
       </div>
     </div>
   );
