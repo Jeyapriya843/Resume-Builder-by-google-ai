@@ -8,11 +8,16 @@ interface TemplateProps {
 }
 
 const CleanSplitTemplate: React.FC<TemplateProps> = ({ data }) => {
+  const fullName = `${data.firstName} ${data.lastName}`;
+  const nameSizeClass = fullName.length > 20 ? 'text-4xl' : 'text-5xl';
+  const accentColor = data.accentColor || '#2c3e50';
+  const fontFamily = data.fontFamily || 'Poppins';
+
   return (
-    <div className="bg-[#f7f7f7] w-[21cm] min-h-[29.7cm] p-[1.5cm] shadow-lg font-sans text-[#2d3436]">
+    <div className="bg-[#f7f7f7] w-[21cm] h-[29.7cm] overflow-hidden p-[1.5cm] text-[#2d3436]" style={{ fontFamily: `'${fontFamily}', sans-serif` }}>
       {/* Header */}
       <header className="text-center mb-10">
-        <h1 className="text-5xl font-bold text-[#2c3e50] uppercase tracking-widest mb-2">
+        <h1 className={`${nameSizeClass} font-bold uppercase tracking-widest mb-2 break-words`} style={{ color: accentColor }}>
           {data.firstName} {data.lastName}
         </h1>
         <p className="text-xl text-gray-500 uppercase tracking-[0.3em] mb-8">
@@ -37,7 +42,7 @@ const CleanSplitTemplate: React.FC<TemplateProps> = ({ data }) => {
       {data.summary && (
          <section className="mb-10">
             <div className="flex items-center gap-4 mb-4">
-               <h2 className="text-xl font-bold text-[#2c3e50] uppercase tracking-widest whitespace-nowrap">Profile Info</h2>
+               <h2 className="text-xl font-bold uppercase tracking-widest whitespace-nowrap" style={{ color: accentColor }}>Profile Info</h2>
                <hr className="w-full border-gray-400" />
             </div>
             <p className="text-sm leading-loose text-gray-600 text-justify">
@@ -52,14 +57,14 @@ const CleanSplitTemplate: React.FC<TemplateProps> = ({ data }) => {
             {/* Education */}
             {data.education.length > 0 && (
                <section>
-                  <div className="border-b-2 border-[#2c3e50] pb-1 mb-6 inline-block">
-                     <h2 className="text-lg font-bold text-[#2c3e50] uppercase tracking-widest">Education</h2>
+                  <div className="pb-1 mb-6 inline-block" style={{ borderBottom: `2px solid ${accentColor}` }}>
+                     <h2 className="text-lg font-bold uppercase tracking-widest" style={{ color: accentColor }}>Education</h2>
                   </div>
                   <div className="space-y-6">
                      {data.education.map(edu => (
                         <div key={edu.id}>
                            <div className="font-bold text-gray-800 text-sm">{edu.startDate} - {edu.endDate}</div>
-                           <h3 className="font-bold text-[#2c3e50] text-sm uppercase">{edu.school}</h3>
+                           <h3 className="font-bold text-sm uppercase" style={{ color: accentColor }}>{edu.school}</h3>
                            <ul className="list-disc list-inside text-xs text-gray-600 mt-1">
                               <li>{edu.degree}</li>
                            </ul>
@@ -72,13 +77,13 @@ const CleanSplitTemplate: React.FC<TemplateProps> = ({ data }) => {
             {/* Skills */}
             {data.skills.length > 0 && (
                <section>
-                  <div className="border-b-2 border-[#2c3e50] pb-1 mb-6 inline-block">
-                     <h2 className="text-lg font-bold text-[#2c3e50] uppercase tracking-widest">Skills</h2>
+                  <div className="pb-1 mb-6 inline-block" style={{ borderBottom: `2px solid ${accentColor}` }}>
+                     <h2 className="text-lg font-bold uppercase tracking-widest" style={{ color: accentColor }}>Skills</h2>
                   </div>
                   <ul className="space-y-3 text-sm text-gray-600">
                      {data.skills.map(skill => (
                         <li key={skill} className="flex items-center gap-2">
-                           <span className="w-1 h-1 bg-[#2c3e50] rounded-full"></span> {skill}
+                           <span className="w-1 h-1 rounded-full" style={{ backgroundColor: accentColor }}></span> {skill}
                         </li>
                      ))}
                   </ul>
@@ -87,8 +92,8 @@ const CleanSplitTemplate: React.FC<TemplateProps> = ({ data }) => {
 
             {/* Languages */}
             <section>
-               <div className="border-b-2 border-[#2c3e50] pb-1 mb-6 inline-block">
-                  <h2 className="text-lg font-bold text-[#2c3e50] uppercase tracking-widest">Languages</h2>
+               <div className="pb-1 mb-6 inline-block" style={{ borderBottom: `2px solid ${accentColor}` }}>
+                  <h2 className="text-lg font-bold uppercase tracking-widest" style={{ color: accentColor }}>Languages</h2>
                </div>
                <ul className="space-y-2 text-sm text-gray-600 list-disc list-inside">
                   <li>English (Fluent)</li>
@@ -104,7 +109,7 @@ const CleanSplitTemplate: React.FC<TemplateProps> = ({ data }) => {
             {data.experience.length > 0 && (
                <section>
                   <div className="flex items-center gap-4 mb-6">
-                     <h2 className="text-xl font-bold text-[#2c3e50] uppercase tracking-widest whitespace-nowrap">Work Experience</h2>
+                     <h2 className="text-xl font-bold uppercase tracking-widest whitespace-nowrap" style={{ color: accentColor }}>Work Experience</h2>
                      <hr className="w-full border-hidden" /> {/* Just placeholder alignment if needed, but style is different */}
                   </div>
                   
@@ -129,8 +134,8 @@ const CleanSplitTemplate: React.FC<TemplateProps> = ({ data }) => {
 
             {/* Reference */}
             <section>
-               <div className="border-b-2 border-[#2c3e50] pb-1 mb-6 inline-block">
-                  <h2 className="text-lg font-bold text-[#2c3e50] uppercase tracking-widest">Reference</h2>
+               <div className="pb-1 mb-6 inline-block" style={{ borderBottom: `2px solid ${accentColor}` }}>
+                  <h2 className="text-lg font-bold uppercase tracking-widest" style={{ color: accentColor }}>Reference</h2>
                </div>
                <div className="grid grid-cols-2 gap-8">
                   <div>

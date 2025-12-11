@@ -19,7 +19,19 @@ import {
   Mail,
   MapPin,
   Globe,
-  Upload
+  Upload,
+  Palette,
+  Layout,
+  Target,
+  Zap,
+  MessageCircle,
+  CloudUpload,
+  Play,
+  XCircle,
+  AlertCircle,
+  Video,
+  CheckCircle,
+  TrendingUp
 } from 'lucide-react';
 
 export const Icons = {
@@ -41,5 +53,17 @@ export const Icons = {
   Mail,
   MapPin,
   Globe,
-  Upload
+  Upload,
+  Palette,
+  Layout,
+  Target,
+  Zap,
+  MessageCircle,
+  CloudUpload,
+  Play,
+  XCircle,
+  AlertCircle,
+  Video,
+  CheckCircle,
+  TrendingUp
 };

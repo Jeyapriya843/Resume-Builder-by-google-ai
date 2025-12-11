@@ -7,8 +7,10 @@ interface TemplateProps {
 }
 
 const SimpleProfessionalTemplate: React.FC<TemplateProps> = ({ data }) => {
+  const fontFamily = data.fontFamily || 'Poppins';
+
   return (
-    <div className="bg-white w-[21cm] min-h-[29.7cm] p-[1.5cm] text-gray-900 shadow-lg font-sans">
+    <div className="bg-white w-[21cm] h-[29.7cm] overflow-hidden p-[1.5cm] text-gray-900" style={{ fontFamily: `'${fontFamily}', sans-serif` }}>
       {/* Header */}
       <header className="text-center mb-10">
         <h1 className="text-5xl font-bold text-gray-900 uppercase mb-2 tracking-wider">

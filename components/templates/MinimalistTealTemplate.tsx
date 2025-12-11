@@ -8,16 +8,20 @@ interface TemplateProps {
 }
 
 const MinimalistTealTemplate: React.FC<TemplateProps> = ({ data }) => {
+  const fullName = `${data.firstName} ${data.lastName}`;
+  const nameSizeClass = fullName.length > 18 ? 'text-5xl' : 'text-6xl';
+  const fontFamily = data.fontFamily || 'Poppins';
+  
   return (
-    <div className="bg-white w-[21cm] min-h-[29.7cm] shadow-lg font-sans flex flex-col p-12">
+    <div className="bg-white w-[21cm] h-[29.7cm] overflow-hidden flex flex-col p-12" style={{ fontFamily: `'${fontFamily}', sans-serif` }}>
       {/* Header with Circular Photo */}
       <div className="flex items-center gap-10 mb-16">
          <div className="w-48 h-48 rounded-full bg-gray-200 border border-gray-100 overflow-hidden flex-shrink-0 flex items-center justify-center text-4xl text-gray-400">
             {/* Photo Placeholder */}
-            {data.firstName[0]}
+            {data.firstName?.[0]}
          </div>
          <div className="flex-1">
-            <h1 className="text-6xl font-bold text-[#333] mb-2 tracking-tight">
+            <h1 className={`${nameSizeClass} font-bold text-[#333] mb-2 tracking-tight break-words`}>
                {data.firstName} <br/> {data.lastName}
             </h1>
             <p className="text-2xl text-gray-600 font-light">

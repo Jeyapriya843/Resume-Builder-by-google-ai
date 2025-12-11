@@ -2,16 +2,28 @@
 import React, { useState } from 'react';
 import { Icons } from './ui/Icons';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAuth } from '../App';
 
 interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onLoginSuccess?: () => void;
 }
 
-const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
+const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onLoginSuccess }) => {
   const [mode, setMode] = useState<'signin' | 'signup'>('signup');
+  const { login } = useAuth();
 
   if (!isOpen) return null;
+
+  const handleContinue = () => {
+    // Simulate login process
+    login();
+    if (onLoginSuccess) {
+      onLoginSuccess();
+    }
+    onClose();
+  };
 
   return (
     <AnimatePresence>
@@ -70,7 +82,10 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                   />
                 </div>
 
-                <button className="w-full bg-[#0047ab] hover:bg-[#003580] text-white font-semibold py-3 rounded-lg shadow-md shadow-blue-900/10 transition-all mt-2">
+                <button 
+                  onClick={handleContinue}
+                  className="w-full bg-[#0047ab] hover:bg-[#003580] text-white font-semibold py-3 rounded-lg shadow-md shadow-blue-900/10 transition-all mt-2"
+                >
                   Continue
                 </button>
 

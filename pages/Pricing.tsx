@@ -10,8 +10,8 @@ const Pricing: React.FC = () => {
 
   const handleClose = () => {
     setIsModalOpen(false);
-    // Navigate back after a short delay to allow exit animation
-    setTimeout(() => navigate('/'), 300);
+    // Navigate to ATS page after closing modal
+    setTimeout(() => navigate('/ats'), 300);
   };
 
   // Re-open modal if user stays on page (just for this visual wrapper page)

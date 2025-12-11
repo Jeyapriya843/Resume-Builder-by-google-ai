@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { ResumeData } from '../../types';
 
@@ -6,8 +7,10 @@ interface TemplateProps {
 }
 
 const TimelineTemplate: React.FC<TemplateProps> = ({ data }) => {
+  const fontFamily = data.fontFamily || 'Poppins';
+
   return (
-    <div className="bg-white w-[21cm] min-h-[29.7cm] p-[1.5cm] text-gray-800 shadow-lg font-sans">
+    <div className="bg-white w-[21cm] h-[29.7cm] overflow-hidden p-[1.5cm] text-gray-800" style={{ fontFamily: `'${fontFamily}', sans-serif` }}>
        {/* Header */}
        <header className="flex justify-between items-start mb-12">
           <div>

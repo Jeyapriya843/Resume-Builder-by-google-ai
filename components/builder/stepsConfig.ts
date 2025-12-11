@@ -1,3 +1,4 @@
+
 import { Icons } from '../ui/Icons';
 
 export const steps = [
@@ -7,4 +8,6 @@ export const steps = [
   { id: 'projects', label: 'Projects', icon: Icons.Wrench, path: '/builder/projects' },
   { id: 'skills', label: 'Skills', icon: Icons.Check, path: '/builder/skills' },
   { id: 'summary', label: 'Summary', icon: Icons.FileText, path: '/builder/summary' },
+  { id: 'finalize', label: 'Finalize', icon: Icons.Palette, path: '/builder/finalize' },
+  { id: 'template', label: 'Template', icon: Icons.Layout, path: '/builder/template' },
 ];

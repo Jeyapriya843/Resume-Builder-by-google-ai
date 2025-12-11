@@ -1,4 +1,5 @@
 
+
 import React, { useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
@@ -11,21 +12,52 @@ import { useResume } from '../App';
 import { parseResumeFromText } from '../services/geminiService';
 import { parseResumeFromTextLocal } from '../services/localParserService';
 
-// Dummy data for the homepage preview
+// Populated dummy data for the homepage preview
 const previewData: ResumeData = {
   firstName: "Jane",
   lastName: "Doe",
-  jobTitle: "Software Engineer",
-  email: "jane@example.com",
+  jobTitle: "Senior Software Engineer",
+  email: "jane.doe@example.com",
   phone: "(555) 123-4567",
   city: "San Francisco",
   country: "CA",
-  summary: "Passionate developer with expertise in React and Node.js.",
-  experience: [],
-  education: [],
+  summary: "Results-driven Senior Software Engineer with over 6 years of experience specializing in modern web technologies. Proven track record of building scalable, high-performance web applications and leading cross-functional teams. Expert in React ecosystem, cloud infrastructure, and UI/UX best practices.",
+  experience: [
+    {
+      id: "1",
+      jobTitle: "Senior Frontend Engineer",
+      employer: "TechFlow Solutions",
+      startDate: "2021-03",
+      endDate: "Present",
+      location: "San Francisco, CA",
+      description: "• Lead a team of 5 developers in rebuilding the core customer dashboard, improving load times by 40%.\n• Architected a reusable component library using React and Tailwind CSS, adopted by 3 product teams.\n• Mentored junior developers and implemented code review standards that reduced production bugs by 25%."
+    },
+    {
+      id: "2",
+      jobTitle: "Software Engineer",
+      employer: "Creative Digital Agency",
+      startDate: "2018-06",
+      endDate: "2021-02",
+      location: "Austin, TX",
+      description: "• Developed responsive e-commerce websites for major retail clients, increasing mobile conversion rates by 15%.\n• Integrated third-party payment gateways (Stripe, PayPal) and headless CMS solutions.\n• Collaborated closely with designers to ensure pixel-perfect implementation of UI/UX designs."
+    }
+  ],
+  education: [
+    {
+      id: "1",
+      school: "University of California, Berkeley",
+      degree: "Bachelor of Science",
+      fieldOfStudy: "Computer Science",
+      startDate: "2014",
+      endDate: "2018",
+      location: "Berkeley, CA"
+    }
+  ],
   projects: [],
-  skills: ["React", "TypeScript", "Tailwind"],
-  templateId: 'modern'
+  skills: ["React", "TypeScript", "Node.js", "Tailwind CSS", "GraphQL", "AWS", "Next.js", "Docker"],
+  templateId: 'modern',
+  fontFamily: 'Poppins',
+  accentColor: '#3b82f6',
 };
 
 // --- Animation Variants ---
@@ -164,12 +196,18 @@ const Home: React.FC = () => {
 
   const extractTextFromPdf = async (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
+      // @ts-ignore
+      if (!window.pdfjsLib) {
+         reject(new Error("PDF Library not loaded. Check internet connection."));
+         return;
+      }
+      
       const reader = new FileReader();
       reader.onload = async (e) => {
         const typedarray = new Uint8Array(e.target?.result as ArrayBuffer);
         try {
           // @ts-ignore
-          const pdf = await window.pdfjsLib.getDocument(typedarray).promise;
+          const pdf = await window.pdfjsLib.getDocument({ data: typedarray }).promise;
           let fullText = '';
           for (let i = 1; i <= pdf.numPages; i++) {
             const page = await pdf.getPage(i);
@@ -182,6 +220,7 @@ const Home: React.FC = () => {
           reject(error);
         }
       };
+      reader.onerror = (err) => reject(err);
       reader.readAsArrayBuffer(file);
     });
   };
@@ -200,9 +239,17 @@ const Home: React.FC = () => {
         const data = JSON.parse(text);
         setResumeData(prev => ({ ...prev, ...data }));
         navigate('/builder/summary'); 
+        setIsImporting(false);
         return;
       } else if (file.type === 'application/pdf') {
-        textToParse = await extractTextFromPdf(file);
+        try {
+           textToParse = await extractTextFromPdf(file);
+        } catch (err) {
+           console.error("PDF Extraction Error:", err);
+           alert("Could not read PDF. If running locally, ensure you have internet access for the PDF library.");
+           setIsImporting(false);
+           return;
+        }
       } else {
         alert("Please upload a PDF or JSON file.");
         setIsImporting(false);
@@ -210,19 +257,23 @@ const Home: React.FC = () => {
       }
 
       if (textToParse) {
-        let parsedData = await parseResumeFromText(textToParse);
-        let method = 'AI';
+        let extractedData: Partial<ResumeData> = {};
+        let usedMethod = 'AI';
+        
+        const aiResult = await parseResumeFromText(textToParse);
 
-        if (Object.keys(parsedData).length === 0) {
-           console.log("AI parsing unavailable or failed. Falling back to local parser.");
-           parsedData = parseResumeFromTextLocal(textToParse);
-           method = 'Local';
+        if (aiResult) {
+           extractedData = aiResult.resumeData;
+        } else {
+           console.log("AI parsing unavailable (likely missing API key). Using Local Parser.");
+           extractedData = parseResumeFromTextLocal(textToParse);
+           usedMethod = 'Local';
         }
 
-        if (Object.keys(parsedData).length > 0) {
-           setResumeData(prev => ({ ...prev, ...parsedData }));
-           if (method === 'Local') {
-              alert("Resume imported using local parser. Some fields may need manual adjustment.");
+        if (Object.keys(extractedData).length > 0) {
+           setResumeData(prev => ({ ...prev, ...extractedData }));
+           if (usedMethod === 'Local') {
+              alert("Resume imported using Local Parser (No AI Key detected). Some fields may require manual editing.");
            }
            navigate('/builder/header');
         } else {

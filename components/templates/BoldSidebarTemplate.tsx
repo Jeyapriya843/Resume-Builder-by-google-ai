@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { ResumeData } from '../../types';
 
@@ -6,13 +7,26 @@ interface TemplateProps {
 }
 
 const BoldSidebarTemplate: React.FC<TemplateProps> = ({ data }) => {
+  const firstName = data.firstName || '';
+  const lastName = data.lastName || '';
+  const longestNamePart = Math.max(firstName.length, lastName.length);
+  const accentColor = data.accentColor || '#5c5c5c';
+  const fontFamily = data.fontFamily || 'Poppins';
+
+  let nameSizeClass = 'text-4xl leading-none';
+  if (longestNamePart > 13) {
+    nameSizeClass = 'text-2xl leading-tight';
+  } else if (longestNamePart > 10) {
+    nameSizeClass = 'text-3xl leading-snug';
+  }
+
   return (
-    <div className="bg-white w-[21cm] min-h-[29.7cm] flex shadow-lg font-sans">
+    <div className="bg-white w-[21cm] h-[29.7cm] overflow-hidden flex" style={{ fontFamily: `'${fontFamily}', sans-serif` }}>
        {/* Left Sidebar */}
-       <div className="w-[7cm] bg-[#e5e5e5] flex flex-col min-h-full">
+       <div className="w-[7cm] bg-[#e5e5e5] flex flex-col h-full">
           {/* Header Block */}
-          <div className="bg-[#5c5c5c] text-white p-8 pb-12">
-             <h1 className="text-4xl font-bold uppercase leading-none mb-2">
+          <div className="text-white p-8 pb-12" style={{ backgroundColor: accentColor }}>
+             <h1 className={`${nameSizeClass} font-bold uppercase mb-2 break-words`}>
                 {data.firstName}<br/>{data.lastName}
              </h1>
              <p className="text-md font-medium uppercase tracking-wider text-gray-200">
@@ -31,7 +45,7 @@ const BoldSidebarTemplate: React.FC<TemplateProps> = ({ data }) => {
              {/* Education */}
              {data.education.length > 0 && (
                 <section>
-                   <h2 className="text-lg font-bold text-[#5c5c5c] uppercase mb-4">Education</h2>
+                   <h2 className="text-lg font-bold uppercase mb-4" style={{ color: accentColor }}>Education</h2>
                    <div className="space-y-4">
                       {data.education.map(edu => (
                          <div key={edu.id}>
@@ -47,7 +61,7 @@ const BoldSidebarTemplate: React.FC<TemplateProps> = ({ data }) => {
              {/* Skills */}
              {data.skills.length > 0 && (
                 <section>
-                   <h2 className="text-lg font-bold text-[#5c5c5c] uppercase mb-4">Skills</h2>
+                   <h2 className="text-lg font-bold uppercase mb-4" style={{ color: accentColor }}>Skills</h2>
                    <ul className="space-y-2">
                       {data.skills.map(skill => (
                          <li key={skill} className="flex items-center gap-2 text-sm text-gray-700">
@@ -65,7 +79,7 @@ const BoldSidebarTemplate: React.FC<TemplateProps> = ({ data }) => {
           {/* Summary */}
           {data.summary && (
              <section className="mb-10">
-                <h2 className="text-xl font-bold text-[#5c5c5c] uppercase mb-4">Summary</h2>
+                <h2 className="text-xl font-bold uppercase mb-4" style={{ color: accentColor }}>Summary</h2>
                 <p className="text-sm leading-relaxed text-gray-600 text-justify">
                    {data.summary}
                 </p>
@@ -75,7 +89,7 @@ const BoldSidebarTemplate: React.FC<TemplateProps> = ({ data }) => {
           {/* Work Experience */}
           {data.experience.length > 0 && (
              <section className="mb-10">
-                <h2 className="text-xl font-bold text-[#5c5c5c] uppercase mb-6">Work Experience</h2>
+                <h2 className="text-xl font-bold uppercase mb-6" style={{ color: accentColor }}>Work Experience</h2>
                 <div className="space-y-8">
                    {data.experience.map(exp => (
                       <div key={exp.id}>
@@ -98,7 +112,7 @@ const BoldSidebarTemplate: React.FC<TemplateProps> = ({ data }) => {
           {/* Projects (if space allows) */}
           {data.projects && data.projects.length > 0 && (
              <section>
-                <h2 className="text-xl font-bold text-[#5c5c5c] uppercase mb-4">Projects</h2>
+                <h2 className="text-xl font-bold uppercase mb-4" style={{ color: accentColor }}>Projects</h2>
                 <div className="space-y-4">
                    {data.projects.map(proj => (
                       <div key={proj.id}>

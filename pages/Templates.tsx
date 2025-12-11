@@ -1,4 +1,5 @@
 
+
 import React from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -10,6 +11,7 @@ import { availableTemplates, TemplatesMap } from '../components/templates';
 import { ResumeData } from '../types';
 
 // Dummy data for previewing templates on the selection screen
+// FIX: Added missing properties to conform to ResumeData type
 const dummyData: ResumeData = {
   firstName: "Alex",
   lastName: "Morgan",
@@ -57,7 +59,9 @@ const dummyData: ResumeData = {
     "Design Systems", "Accessibility", "A/B Testing", "Agile Collaboration"
   ],
   projects: [],
-  templateId: 'modern'
+  templateId: 'modern',
+  fontFamily: 'Poppins',
+  accentColor: '#3b82f6',
 };
 
 const Templates: React.FC = () => {

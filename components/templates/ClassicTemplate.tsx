@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { ResumeData } from '../../types';
 
@@ -6,8 +7,10 @@ interface TemplateProps {
 }
 
 const ClassicTemplate: React.FC<TemplateProps> = ({ data }) => {
+  const fontFamily = data.fontFamily || 'Poppins';
+
   return (
-    <div className="bg-white w-[21cm] min-h-[29.7cm] p-[1.5cm] text-gray-900 font-serif shadow-lg">
+    <div className="bg-white w-[21cm] h-[29.7cm] overflow-hidden p-[1.5cm] text-gray-900" style={{ fontFamily: `'${fontFamily}', serif` }}>
       {/* Centered Header */}
       <header className="text-center border-b border-gray-900 pb-4 mb-6">
         <h1 className="text-3xl font-bold text-gray-900 mb-2 uppercase tracking-widest">

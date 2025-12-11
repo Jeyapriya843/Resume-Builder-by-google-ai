@@ -1,3 +1,4 @@
+
 export interface Experience {
   id: string;
   jobTitle: string;
@@ -40,6 +41,16 @@ export interface ResumeData {
   projects: Project[];
   skills: string[];
   templateId: string;
+  fontFamily: string;
+  accentColor: string;
+}
+
+export interface AnalysisResult {
+  score: number;
+  summary: string;
+  strengths: string[];
+  weaknesses: string[];
+  suggestions: Array<{ title: string; description: string }>;
 }
 
 export const initialResumeState: ResumeData = {
@@ -55,5 +66,7 @@ export const initialResumeState: ResumeData = {
   education: [],
   projects: [],
   skills: [],
-  templateId: 'professional'
+  templateId: 'professional',
+  fontFamily: 'Poppins',
+  accentColor: '#3b82f6',
 };

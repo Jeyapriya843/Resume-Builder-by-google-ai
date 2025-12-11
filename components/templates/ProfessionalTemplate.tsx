@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { ResumeData } from '../../types';
 
@@ -6,8 +7,11 @@ interface TemplateProps {
 }
 
 const ProfessionalTemplate: React.FC<TemplateProps> = ({ data }) => {
+  const accentColor = data.accentColor || '#3b82f6';
+  const fontFamily = data.fontFamily || 'Poppins';
+
   return (
-    <div className="bg-white w-[21cm] min-h-[29.7cm] p-[1.5cm] text-gray-800 shadow-lg font-sans">
+    <div className="bg-white w-[21cm] h-[29.7cm] overflow-hidden p-[1.5cm] text-gray-800" style={{ fontFamily: `'${fontFamily}', sans-serif` }}>
       {/* Header */}
       <header className="text-center mb-6">
         <h1 className="text-3xl font-bold text-navy-900 uppercase mb-2 tracking-wide">
@@ -60,7 +64,7 @@ const ProfessionalTemplate: React.FC<TemplateProps> = ({ data }) => {
                     </h3>
                   </div>
                   <div className="flex justify-between items-center text-sm mb-2">
-                    <span className="font-medium text-gray-700 border-l-2 border-blue-500 pl-2">
+                    <span className="font-medium text-gray-700 pl-2" style={{ borderLeft: `2px solid ${accentColor}` }}>
                       {exp.jobTitle}
                     </span>
                     <span className="text-gray-500 italic text-xs">
@@ -85,7 +89,7 @@ const ProfessionalTemplate: React.FC<TemplateProps> = ({ data }) => {
                    <div key={proj.id}>
                       <div className="flex justify-between items-baseline mb-1">
                          <h3 className="font-bold text-gray-900 text-md">{proj.title}</h3>
-                         {proj.link && <a href={proj.link} target="_blank" rel="noreferrer" className="text-xs text-blue-600 hover:underline">{proj.link}</a>}
+                         {proj.link && <a href={proj.link} target="_blank" rel="noreferrer" className="text-xs hover:underline" style={{ color: accentColor }}>{proj.link}</a>}
                       </div>
                       <p className="text-sm text-gray-700 leading-relaxed mb-1">{proj.description}</p>
                       {proj.technologies && proj.technologies.length > 0 && (
@@ -129,7 +133,7 @@ const ProfessionalTemplate: React.FC<TemplateProps> = ({ data }) => {
             <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-2">
               {data.skills.map((skill) => (
                 <div key={skill} className="flex items-center gap-2">
-                  <div className="w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
+                  <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: accentColor }}></div>
                   <span className="text-sm text-gray-700 font-medium">{skill}</span>
                 </div>
               ))}

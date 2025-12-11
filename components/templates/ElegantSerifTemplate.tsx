@@ -8,20 +8,26 @@ interface TemplateProps {
 }
 
 const ElegantSerifTemplate: React.FC<TemplateProps> = ({ data }) => {
+  const fullName = `${data.firstName} ${data.lastName}`;
+  const nameSizeClass = fullName.length > 18 ? 'text-5xl leading-tight' : 'text-6xl';
+  const accentColor = data.accentColor || '#8a9a8b';
+  const headerColor = data.accentColor || '#4a5d4b';
+  const fontFamily = data.fontFamily || 'Poppins';
+
   return (
-    <div className="bg-white w-[21cm] min-h-[29.7cm] shadow-lg font-serif text-gray-700 flex flex-col">
+    <div className="bg-white w-[21cm] h-[29.7cm] overflow-hidden text-gray-700 flex flex-col" style={{ fontFamily: `'${fontFamily}', serif` }}>
       {/* Top Split Header */}
       <div className="flex h-[8cm]">
          {/* Photo Box Left */}
-         <div className="w-[8cm] h-full bg-[#8a9a8b] relative overflow-hidden">
+         <div className="w-[8cm] h-full relative overflow-hidden" style={{ backgroundColor: accentColor }}>
              {/* Image placeholder - full cover */}
              <div className="w-full h-full bg-gray-400 flex items-center justify-center text-white/30 text-6xl">
-                {data.firstName[0]}
+                {data.firstName?.[0]}
              </div>
          </div>
          {/* Name Box Right */}
          <div className="flex-1 bg-[#e8e8e3] flex flex-col justify-center px-12">
-             <h1 className="text-6xl font-bold text-[#4a5d4b] mb-2 leading-tight">
+             <h1 className={`${nameSizeClass} font-bold mb-2 leading-tight break-words`} style={{ color: headerColor }}>
                 {data.firstName}<br/>{data.lastName}
              </h1>
              <p className="text-xl tracking-[0.2em] uppercase text-gray-500">
@@ -32,7 +38,7 @@ const ElegantSerifTemplate: React.FC<TemplateProps> = ({ data }) => {
 
       <div className="flex flex-1">
          {/* Left Sidebar (Green/Gray) */}
-         <div className="w-[8cm] bg-[#94a195] text-white p-8 space-y-10">
+         <div className="w-[8cm] text-white p-8 space-y-10" style={{ backgroundColor: accentColor }}>
             {/* Profile */}
             <section>
                <h2 className="text-2xl font-bold uppercase tracking-widest mb-4 border-b border-white/30 pb-2">Profile</h2>
@@ -85,7 +91,7 @@ const ElegantSerifTemplate: React.FC<TemplateProps> = ({ data }) => {
                   <div className="space-y-8">
                      {data.experience.map(exp => (
                         <div key={exp.id}>
-                           <h3 className="text-xl font-bold text-[#4a5d4b]">{exp.jobTitle}</h3>
+                           <h3 className="text-xl font-bold" style={{ color: headerColor }}>{exp.jobTitle}</h3>
                            <div className="text-sm text-gray-500 italic mb-2">
                               {exp.employer} | {exp.startDate} - {exp.endDate}
                            </div>

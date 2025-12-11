@@ -8,14 +8,17 @@ interface TemplateProps {
 }
 
 const DarkBlueBorderTemplate: React.FC<TemplateProps> = ({ data }) => {
+  const accentColor = data.accentColor || '#1e293b';
+  const fontFamily = data.fontFamily || 'Poppins';
+
   return (
-    <div className="bg-white w-[21cm] min-h-[29.7cm] p-6 shadow-lg font-sans text-gray-800 relative">
+    <div className="bg-white w-[21cm] h-[29.7cm] overflow-hidden p-6 text-gray-800 relative" style={{ fontFamily: `'${fontFamily}', sans-serif` }}>
       {/* Thick Border Frame */}
-      <div className="absolute inset-0 border-[12px] border-[#1e293b] pointer-events-none"></div>
+      <div className="absolute inset-0 border-[12px] pointer-events-none" style={{ borderColor: accentColor }}></div>
       
       <div className="h-full flex mt-4 mb-4 ml-4 mr-4">
         {/* Left Sidebar (Dark) */}
-        <div className="w-[7cm] bg-[#1e293b] text-white p-6 pt-10 flex flex-col min-h-[27cm]">
+        <div className="w-[7cm] text-white p-6 pt-10 flex flex-col h-full" style={{ backgroundColor: accentColor }}>
            {/* About Me */}
            <section className="mb-8">
               <h2 className="text-lg font-bold uppercase tracking-widest mb-4 border-b border-gray-500 pb-2 text-white">About Me</h2>
@@ -75,7 +78,7 @@ const DarkBlueBorderTemplate: React.FC<TemplateProps> = ({ data }) => {
         <div className="flex-1 p-8 pt-10 bg-white">
            {/* Header */}
            <header className="text-center mb-12">
-              <h1 className="text-4xl font-bold text-[#1e293b] uppercase tracking-widest mb-2">
+              <h1 className="text-4xl font-bold uppercase tracking-widest mb-2" style={{ color: accentColor }}>
                  {data.firstName} {data.lastName}
               </h1>
               <p className="text-lg font-bold tracking-[0.2em] text-gray-500 uppercase">
@@ -86,7 +89,7 @@ const DarkBlueBorderTemplate: React.FC<TemplateProps> = ({ data }) => {
            {/* Work Experience */}
            {data.experience.length > 0 && (
               <section className="mb-10">
-                 <h2 className="text-xl font-bold text-[#1e293b] uppercase tracking-widest mb-6 border-b border-gray-300 pb-2">
+                 <h2 className="text-xl font-bold uppercase tracking-widest mb-6 border-b border-gray-300 pb-2" style={{ color: accentColor }}>
                     Work Experience
                  </h2>
                  <div className="space-y-6">
@@ -109,7 +112,7 @@ const DarkBlueBorderTemplate: React.FC<TemplateProps> = ({ data }) => {
            {/* Education */}
            {data.education.length > 0 && (
               <section>
-                 <h2 className="text-xl font-bold text-[#1e293b] uppercase tracking-widest mb-6 border-b border-gray-300 pb-2">
+                 <h2 className="text-xl font-bold uppercase tracking-widest mb-6 border-b border-gray-300 pb-2" style={{ color: accentColor }}>
                     Education
                  </h2>
                  <div className="space-y-4">
@@ -128,7 +131,7 @@ const DarkBlueBorderTemplate: React.FC<TemplateProps> = ({ data }) => {
            
            {/* References (Stub) */}
            <section className="mt-10">
-              <h2 className="text-xl font-bold text-[#1e293b] uppercase tracking-widest mb-6 border-b border-gray-300 pb-2">
+              <h2 className="text-xl font-bold uppercase tracking-widest mb-6 border-b border-gray-300 pb-2" style={{ color: accentColor }}>
                  References
               </h2>
               <div className="grid grid-cols-2 gap-4">

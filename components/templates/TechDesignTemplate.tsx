@@ -7,11 +7,15 @@ interface TemplateProps {
 }
 
 const TechDesignTemplate: React.FC<TemplateProps> = ({ data }) => {
+  const fullName = `${data.firstName} ${data.lastName}`;
+  const nameSizeClass = fullName.length > 20 ? 'text-4xl' : 'text-5xl';
+  const fontFamily = data.fontFamily || 'Poppins';
+  
   return (
-    <div className="bg-white w-[21cm] min-h-[29.7cm] p-[1.5cm] text-gray-800 shadow-lg font-sans">
+    <div className="bg-white w-[21cm] h-[29.7cm] overflow-hidden p-[1.5cm] text-gray-800" style={{ fontFamily: `'${fontFamily}', sans-serif` }}>
       {/* Header */}
       <header className="mb-8">
-        <h1 className="text-5xl font-bold text-[#333] uppercase mb-1 tracking-tight">
+        <h1 className={`${nameSizeClass} font-bold text-[#333] uppercase mb-1 tracking-tight break-words`}>
           {data.firstName} {data.lastName}
         </h1>
         <p className="text-2xl font-bold text-gray-600 uppercase mb-4">

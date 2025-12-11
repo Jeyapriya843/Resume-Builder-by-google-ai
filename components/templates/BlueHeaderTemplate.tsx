@@ -8,11 +8,16 @@ interface TemplateProps {
 }
 
 const BlueHeaderTemplate: React.FC<TemplateProps> = ({ data }) => {
+  const fullName = `${data.firstName} ${data.lastName}`;
+  const nameSizeClass = fullName.length > 20 ? 'text-4xl' : 'text-5xl';
+  const accentColor = data.accentColor || '#1e3a5f';
+  const fontFamily = data.fontFamily || 'Poppins';
+  
   return (
-    <div className="bg-white w-[21cm] min-h-[29.7cm] shadow-lg font-sans flex flex-col">
+    <div className="bg-white w-[21cm] h-[29.7cm] overflow-hidden flex flex-col" style={{ fontFamily: `'${fontFamily}', sans-serif` }}>
       {/* Dark Header Block */}
-      <header className="bg-[#1e3a5f] text-white p-12 pt-16 pb-16 text-center">
-         <h1 className="text-5xl font-light uppercase tracking-[0.2em] mb-3 text-[#d4af37]">
+      <header className="text-white p-12 pt-16 pb-16 text-center" style={{ backgroundColor: accentColor }}>
+         <h1 className={`${nameSizeClass} font-light uppercase tracking-[0.2em] mb-3 text-white break-words`}>
             {data.firstName} {data.lastName}
          </h1>
          <p className="text-lg font-bold tracking-[0.3em] uppercase text-white/90">
@@ -69,19 +74,19 @@ const BlueHeaderTemplate: React.FC<TemplateProps> = ({ data }) => {
                <div className="space-y-3 text-xs text-gray-600">
                   {data.phone && (
                      <div className="flex items-center gap-3">
-                        <Icons.Phone size={14} className="text-[#d4af37]" />
+                        <Icons.Phone size={14} style={{ color: accentColor }} />
                         <span>{data.phone}</span>
                      </div>
                   )}
                   {data.email && (
                      <div className="flex items-center gap-3">
-                        <Icons.Mail size={14} className="text-[#d4af37]" />
+                        <Icons.Mail size={14} style={{ color: accentColor }} />
                         <span>{data.email}</span>
                      </div>
                   )}
                   {(data.city || data.country) && (
                      <div className="flex items-center gap-3">
-                        <Icons.MapPin size={14} className="text-[#d4af37]" />
+                        <Icons.MapPin size={14} style={{ color: accentColor }} />
                         <span>{data.city}, {data.country}</span>
                      </div>
                   )}
@@ -105,7 +110,7 @@ const BlueHeaderTemplate: React.FC<TemplateProps> = ({ data }) => {
                   <ul className="space-y-2">
                      {data.skills.map(skill => (
                         <li key={skill} className="text-xs text-gray-600 flex items-center gap-2">
-                           <span className="w-1 h-1 bg-[#d4af37] rounded-full"></span> {skill}
+                           <span className="w-1 h-1 rounded-full" style={{ backgroundColor: accentColor }}></span> {skill}
                         </li>
                      ))}
                   </ul>

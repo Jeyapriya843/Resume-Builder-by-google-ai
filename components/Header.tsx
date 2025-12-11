@@ -3,10 +3,12 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Icons } from './ui/Icons';
 import AuthModal from './AuthModal';
+import { useAuth } from '../App';
 
 const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const { isLoggedIn, logout } = useAuth();
 
   return (
     <>
@@ -27,12 +29,26 @@ const Header: React.FC = () => {
               <Link to="/templates" className="text-gray-600 hover:text-navy-900 text-sm font-medium transition-colors">Templates</Link>
               <Link to="/about" className="text-gray-600 hover:text-navy-900 text-sm font-medium transition-colors">About</Link>
               
-              <button 
-                onClick={() => setIsAuthModalOpen(true)}
-                className="text-gray-600 hover:text-navy-900 text-sm font-medium transition-colors"
-              >
-                Sign In
-              </button>
+              {isLoggedIn ? (
+                <div className="flex items-center gap-4">
+                  <div className="w-8 h-8 rounded-full bg-navy-900 text-white flex items-center justify-center font-bold text-sm shadow-md">
+                    <Icons.User size={16} />
+                  </div>
+                  <button 
+                    onClick={logout}
+                    className="text-gray-600 hover:text-navy-900 text-sm font-medium transition-colors"
+                  >
+                    Sign Out
+                  </button>
+                </div>
+              ) : (
+                <button 
+                  onClick={() => setIsAuthModalOpen(true)}
+                  className="text-gray-600 hover:text-navy-900 text-sm font-medium transition-colors"
+                >
+                  Sign In
+                </button>
+              )}
               
               <Link 
                 to="/builder"
@@ -58,15 +74,29 @@ const Header: React.FC = () => {
              <Link to="/resume" className="text-gray-600 font-medium p-2" onClick={() => setMobileMenuOpen(false)}>Resume</Link>
              <Link to="/templates" className="text-gray-600 font-medium p-2" onClick={() => setMobileMenuOpen(false)}>Templates</Link>
              <Link to="/about" className="text-gray-600 font-medium p-2" onClick={() => setMobileMenuOpen(false)}>About</Link>
-             <button 
-                className="text-gray-600 font-medium p-2 text-left"
-                onClick={() => {
-                  setIsAuthModalOpen(true);
-                  setMobileMenuOpen(false);
-                }}
-             >
-               Sign In
-             </button>
+             
+             {isLoggedIn ? (
+                <button 
+                  className="text-gray-600 font-medium p-2 text-left flex items-center gap-2"
+                  onClick={() => {
+                    logout();
+                    setMobileMenuOpen(false);
+                  }}
+                >
+                  Sign Out
+                </button>
+             ) : (
+                <button 
+                  className="text-gray-600 font-medium p-2 text-left"
+                  onClick={() => {
+                    setIsAuthModalOpen(true);
+                    setMobileMenuOpen(false);
+                  }}
+                >
+                  Sign In
+                </button>
+             )}
+             
              <Link to="/builder" className="bg-navy-900 text-white text-center py-3 rounded-lg font-semibold" onClick={() => setMobileMenuOpen(false)}>Build Resume</Link>
           </div>
         )}

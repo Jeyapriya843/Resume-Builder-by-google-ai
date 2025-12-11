@@ -8,14 +8,16 @@ interface TemplateProps {
 }
 
 const PhotoSidebarTemplate: React.FC<TemplateProps> = ({ data }) => {
+  const fontFamily = data.fontFamily || 'Poppins';
+
   return (
-    <div className="bg-white w-[21cm] min-h-[29.7cm] shadow-lg font-sans flex text-gray-800">
+    <div className="bg-white w-[21cm] h-[29.7cm] overflow-hidden flex text-gray-800" style={{ fontFamily: `'${fontFamily}', sans-serif` }}>
       {/* Left Sidebar (Light Blue/Gray) */}
       <div className="w-[7.5cm] bg-[#dfe6ed] flex flex-col p-8 pt-12 relative">
          {/* Circular Photo Placeholder Overlay */}
          <div className="absolute top-10 left-1/2 transform -translate-x-1/2 z-10">
             <div className="w-40 h-40 bg-gray-300 rounded-full border-4 border-white overflow-hidden flex items-center justify-center">
-                <span className="text-4xl font-bold text-gray-500">{data.firstName[0]}</span>
+                <span className="text-4xl font-bold text-gray-500">{data.firstName?.[0]}</span>
             </div>
          </div>
          

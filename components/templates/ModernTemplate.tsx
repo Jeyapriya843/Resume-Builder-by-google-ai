@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { ResumeData } from '../../types';
 
@@ -6,15 +7,20 @@ interface TemplateProps {
 }
 
 const ModernTemplate: React.FC<TemplateProps> = ({ data }) => {
+  const fullName = `${data.firstName} ${data.lastName}`;
+  const nameSizeClass = fullName.length > 22 ? 'text-3xl' : 'text-4xl';
+  const accentColor = data.accentColor || '#3b82f6';
+  const fontFamily = data.fontFamily || 'Poppins';
+
   return (
-    <div className="bg-white w-[21cm] min-h-[29.7cm] p-[1.2cm] text-gray-800 shadow-lg">
+    <div className="bg-white w-[21cm] h-[29.7cm] overflow-hidden p-[1.2cm] text-gray-800" style={{ fontFamily: `'${fontFamily}', sans-serif` }}>
       {/* Header */}
-      <header className="border-b-4 border-navy-900 pb-4 mb-6 flex justify-between items-end">
+      <header className="pb-4 mb-6 flex justify-between items-end" style={{ borderBottom: `4px solid ${accentColor}` }}>
         <div>
-          <h1 className="text-4xl font-bold text-navy-900 mb-2 uppercase tracking-wide">
+          <h1 className={`${nameSizeClass} font-bold text-navy-900 mb-2 uppercase tracking-wide break-words`}>
             {data.firstName || 'First Name'} {data.lastName || 'Last Name'}
           </h1>
-          <p className="text-xl text-blue-600 font-medium">
+          <p className="text-xl font-medium" style={{ color: accentColor }}>
             {data.jobTitle || 'Job Title'}
           </p>
         </div>
@@ -33,7 +39,7 @@ const ModernTemplate: React.FC<TemplateProps> = ({ data }) => {
           {data.summary && (
             <section>
               <h2 className="text-sm font-bold text-navy-900 uppercase tracking-wider border-b border-gray-200 pb-1 mb-2 flex items-center gap-2">
-                <span className="w-2 h-2 bg-blue-600 rounded-full inline-block"></span>
+                <span className="w-2 h-2 rounded-full inline-block" style={{ backgroundColor: accentColor }}></span>
                 Professional Summary
               </h2>
               <p className="text-sm leading-relaxed text-gray-700 text-justify">
@@ -46,7 +52,7 @@ const ModernTemplate: React.FC<TemplateProps> = ({ data }) => {
           {data.experience.length > 0 && (
             <section>
               <h2 className="text-sm font-bold text-navy-900 uppercase tracking-wider border-b border-gray-200 pb-1 mb-3 flex items-center gap-2">
-                <span className="w-2 h-2 bg-blue-600 rounded-full inline-block"></span>
+                <span className="w-2 h-2 rounded-full inline-block" style={{ backgroundColor: accentColor }}></span>
                 Experience
               </h2>
               <div className="space-y-4">
@@ -58,7 +64,7 @@ const ModernTemplate: React.FC<TemplateProps> = ({ data }) => {
                         {exp.startDate} - {exp.endDate}
                       </span>
                     </div>
-                    <div className="text-sm text-blue-600 font-medium mb-2">
+                    <div className="text-sm font-medium mb-2" style={{ color: accentColor }}>
                       {exp.employer} {exp.location && `| ${exp.location}`}
                     </div>
                     <p className="text-sm text-gray-700 whitespace-pre-line leading-relaxed text-justify">
@@ -74,7 +80,7 @@ const ModernTemplate: React.FC<TemplateProps> = ({ data }) => {
           {data.projects && data.projects.length > 0 && (
             <section>
               <h2 className="text-sm font-bold text-navy-900 uppercase tracking-wider border-b border-gray-200 pb-1 mb-3 flex items-center gap-2">
-                <span className="w-2 h-2 bg-blue-600 rounded-full inline-block"></span>
+                <span className="w-2 h-2 rounded-full inline-block" style={{ backgroundColor: accentColor }}></span>
                 Projects
               </h2>
               <div className="space-y-4">
@@ -82,7 +88,7 @@ const ModernTemplate: React.FC<TemplateProps> = ({ data }) => {
                     <div key={proj.id}>
                        <div className="flex justify-between items-baseline mb-1">
                           <h3 className="font-bold text-gray-900 text-md">{proj.title}</h3>
-                          {proj.link && <span className="text-xs text-blue-500">{proj.link}</span>}
+                          {proj.link && <span className="text-xs" style={{ color: accentColor }}>{proj.link}</span>}
                        </div>
                        <p className="text-sm text-gray-700 leading-relaxed mb-1">{proj.description}</p>
                        {proj.technologies && proj.technologies.length > 0 && (
@@ -100,7 +106,7 @@ const ModernTemplate: React.FC<TemplateProps> = ({ data }) => {
            {data.education.length > 0 && (
             <section>
                <h2 className="text-sm font-bold text-navy-900 uppercase tracking-wider border-b border-gray-200 pb-1 mb-3 flex items-center gap-2">
-                <span className="w-2 h-2 bg-blue-600 rounded-full inline-block"></span>
+                <span className="w-2 h-2 rounded-full inline-block" style={{ backgroundColor: accentColor }}></span>
                 Education
               </h2>
               <div className="space-y-3">
