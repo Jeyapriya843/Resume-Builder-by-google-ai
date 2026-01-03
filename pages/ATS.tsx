@@ -1,9 +1,12 @@
 
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Icons } from '../components/ui/Icons';
 import Header from '../components/Header';
+
+const MotionDiv = motion.div as any;
 
 const ATS: React.FC = () => {
   const navigate = useNavigate();
@@ -26,7 +29,7 @@ const ATS: React.FC = () => {
       <Header />
       
       <main className="flex-1 flex items-center justify-center p-4">
-        <motion.div 
+        <MotionDiv 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="max-w-md w-full bg-white rounded-3xl shadow-xl p-8 md:p-12 text-center relative overflow-hidden"
@@ -72,7 +75,7 @@ const ATS: React.FC = () => {
            >
              Skip
            </button>
-        </motion.div>
+        </MotionDiv>
       </main>
     </div>
   );

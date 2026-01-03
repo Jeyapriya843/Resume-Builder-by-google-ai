@@ -1,5 +1,4 @@
 
-
 import React from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -10,14 +9,19 @@ import { useResume } from '../App';
 import { availableTemplates, TemplatesMap } from '../components/templates';
 import { ResumeData } from '../types';
 
+const MotionDiv = motion.div as any;
+const MotionH1 = motion.h1 as any;
+const MotionP = motion.p as any;
+
 // Dummy data for previewing templates on the selection screen
-// FIX: Added missing properties to conform to ResumeData type
+// Fix: Added missing address, achievements, and customSections properties to satisfy ResumeData interface
 const dummyData: ResumeData = {
   firstName: "Alex",
   lastName: "Morgan",
   jobTitle: "Product Designer",
   email: "alex@example.com",
   phone: "+1 (234) 567-890",
+  address: "456 Design Ave",
   city: "San Francisco",
   country: "CA",
   summary: "Creative Product Designer with 6+ years of experience designing intuitive, user-centered digital products for SaaS, e-commerce, and mobile applications. Skilled in conducting user research, defining design systems, and collaborating with cross-functional teams to deliver pixel-perfect interfaces. Strong believer in data-driven design, accessibility, and seamless product experiences.",
@@ -58,10 +62,17 @@ const dummyData: ResumeData = {
     "Wireframing", "User Research", "Prototyping", "Usability Testing",
     "Design Systems", "Accessibility", "A/B Testing", "Agile Collaboration"
   ],
+  certifications: [],
+  languages: [],
+  achievements: [],
+  // Added missing required property
+  customSections: [],
   projects: [],
   templateId: 'modern',
   fontFamily: 'Poppins',
   accentColor: '#3b82f6',
+  fontSize: 'medium',
+  customGaps: {},
 };
 
 const Templates: React.FC = () => {
@@ -84,21 +95,21 @@ const Templates: React.FC = () => {
            <div className="absolute bottom-0 left-0 w-72 h-72 bg-purple-600 rounded-full blur-3xl opacity-20 -ml-20 -mb-20"></div>
 
            <div className="max-w-7xl mx-auto px-4 relative z-10 text-center">
-              <motion.h1 
+              <MotionH1 
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="text-4xl md:text-5xl font-bold mb-6"
               >
                 Choose Your <span className="text-blue-400">Perfect Resume</span>
-              </motion.h1>
-              <motion.p 
+              </MotionH1>
+              <MotionP 
                  initial={{ opacity: 0, y: 20 }}
                  animate={{ opacity: 1, y: 0 }}
                  transition={{ delay: 0.1 }}
                  className="text-gray-300 text-lg max-w-2xl mx-auto mb-8"
               >
                 Stand out from the crowd with our professionally designed, ATS-friendly resume templates.
-              </motion.p>
+              </MotionP>
            </div>
         </section>
 
@@ -110,7 +121,7 @@ const Templates: React.FC = () => {
                     const TemplateComponent = TemplatesMap[template.id];
                     
                     return (
-                        <motion.div
+                        <MotionDiv
                            key={template.id}
                            initial={{ opacity: 0, y: 20 }}
                            whileInView={{ opacity: 1, y: 0 }}
@@ -154,7 +165,7 @@ const Templates: React.FC = () => {
                                  Select Template <Icons.ChevronRight size={16} />
                               </button>
                            </div>
-                        </motion.div>
+                        </MotionDiv>
                     );
                  })}
               </div>

@@ -18,9 +18,19 @@ import PhotoSidebarTemplate from './PhotoSidebarTemplate';
 import ElegantSerifTemplate from './ElegantSerifTemplate';
 import MinimalistTealTemplate from './MinimalistTealTemplate';
 import CleanSplitTemplate from './CleanSplitTemplate';
-import { ResumeData } from '../../types';
+import { ResumeData, Experience, Education } from '../../types';
 
-export const TemplatesMap: Record<string, React.FC<{ data: ResumeData }>> = {
+export interface TemplateProps {
+  data: ResumeData;
+  isAdjusting?: boolean;
+  onAdjustGap?: (key: string, amount: number) => void;
+  // Direct Editing Handlers
+  onUpdateField?: (field: keyof ResumeData, value: any) => void;
+  onUpdateExperience?: (id: string, field: keyof Experience, value: string) => void;
+  onUpdateEducation?: (id: string, field: keyof Education, value: string) => void;
+}
+
+export const TemplatesMap: Record<string, React.FC<TemplateProps>> = {
   'modern': ModernTemplate,
   'classic': ClassicTemplate,
   'minimal': MinimalTemplate,

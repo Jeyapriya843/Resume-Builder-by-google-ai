@@ -1,7 +1,10 @@
 
+
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icons } from './ui/Icons';
+
+const MotionDiv = motion.div as any;
 
 interface ATSJobDescriptionModalProps {
   isOpen: boolean;
@@ -28,14 +31,14 @@ const ATSJobDescriptionModal: React.FC<ATSJobDescriptionModalProps> = ({ isOpen,
   return (
     <AnimatePresence>
       <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 font-sans">
-        <motion.div 
+        <MotionDiv 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           className="absolute inset-0 bg-white/90 backdrop-blur-sm"
         />
 
-        <motion.div
+        <MotionDiv
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -75,7 +78,7 @@ const ATSJobDescriptionModal: React.FC<ATSJobDescriptionModalProps> = ({ isOpen,
                  Skip
                </button>
            </div>
-        </motion.div>
+        </MotionDiv>
       </div>
     </AnimatePresence>
   );

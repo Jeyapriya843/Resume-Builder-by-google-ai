@@ -1,22 +1,79 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Icons } from '../components/ui/Icons';
 import Header from '../components/Header';
+import { useResume } from '../App';
+import { optimizeResumeForJD } from '../services/geminiService';
+
+const MotionDiv = motion.div as any;
 
 const JobTarget: React.FC = () => {
   const navigate = useNavigate();
+  const { resumeData, setResumeData } = useResume();
   const [jobDescription, setJobDescription] = useState('');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [statusMessage, setStatusMessage] = useState('');
 
-  const handleAnalyze = () => {
+  const statusMessages = [
+    "Analyzing Job Description...",
+    "Extracting critical keywords...",
+    "Aligning professional summary...",
+    "Optimizing experience bullet points...",
+    "Cross-referencing technical skills...",
+    "Finalizing ATS-friendly version..."
+  ];
+
+  useEffect(() => {
+    let interval: any;
+    if (isAnalyzing) {
+      let idx = 0;
+      setStatusMessage(statusMessages[0]);
+      interval = setInterval(() => {
+        idx = (idx + 1) % statusMessages.length;
+        setStatusMessage(statusMessages[idx]);
+      }, 2500);
+    }
+    return () => clearInterval(interval);
+  }, [isAnalyzing]);
+
+  const handleAnalyze = async () => {
+    if (!jobDescription.trim()) {
+      alert("Please paste a job description to optimize your resume.");
+      return;
+    }
+
     setIsAnalyzing(true);
-    // Here you would integrate with your AI service to optimize the resume based on the job description
-    // For now, we simulate a delay and navigate to the success page
-    setTimeout(() => {
+    
+    try {
+      const optimizedData = await optimizeResumeForJD(resumeData, jobDescription);
+      
+      if (optimizedData) {
+        setResumeData(prev => ({
+          ...prev,
+          ...optimizedData,
+          // Ensure we don't lose non-optimized fields like education if AI misses them
+          education: optimizedData.education || prev.education,
+          certifications: optimizedData.certifications || prev.certifications,
+          languages: optimizedData.languages || prev.languages,
+          customSections: optimizedData.customSections || prev.customSections,
+        }));
+        
+        // Brief pause for "success" feel
+        await new Promise(r => setTimeout(r, 800));
+        navigate('/success');
+      } else {
+        alert("AI Optimization failed. We'll proceed with your current content.");
+        navigate('/success');
+      }
+    } catch (error) {
+      console.error("Analyze error:", error);
+      alert("Something went wrong. Proceeding with your current resume.");
       navigate('/success');
-    }, 2000);
+    } finally {
+      setIsAnalyzing(false);
+    }
   };
 
   const handleSkip = () => {
@@ -28,7 +85,7 @@ const JobTarget: React.FC = () => {
       <Header />
       
       <main className="flex-1 flex items-center justify-center p-4">
-        <motion.div 
+        <MotionDiv 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="max-w-lg w-full bg-white rounded-3xl shadow-xl p-8 md:p-12 text-center relative overflow-hidden"
@@ -47,46 +104,67 @@ const JobTarget: React.FC = () => {
            </h1>
 
            <p className="text-gray-500 leading-relaxed mb-8 text-sm md:text-base px-2">
-             Paste the job description below. Our AI will optimize your keywords and phrasing to match this specific role.
+             Paste the job description below. Our AI will rewrite your summary and experience points to mirror exactly what the recruiter is looking for.
            </p>
 
-           <div className="relative mb-8">
+           <div className="relative mb-8 text-left">
+              <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-1 block">Job Description / Requirements</label>
               <textarea
                 value={jobDescription}
                 onChange={(e) => setJobDescription(e.target.value)}
-                placeholder="Paste job description text here..."
-                className="w-full h-40 p-4 rounded-xl bg-gray-50 border border-gray-200 focus:border-blue-500 focus:bg-white outline-none resize-none text-sm text-gray-700 placeholder:text-gray-400"
+                placeholder="Paste the requirements section from the job post here..."
+                className="w-full h-48 p-4 rounded-xl bg-gray-50 border border-gray-200 focus:border-blue-500 focus:bg-white outline-none resize-none text-sm text-gray-700 placeholder:text-gray-300 transition-colors"
               />
-              <span className="absolute bottom-4 right-4 text-xs text-gray-400 font-medium pointer-events-none select-none">
-                Optional
-              </span>
            </div>
 
-           <button 
-             onClick={handleAnalyze}
-             disabled={isAnalyzing}
-             className="w-full bg-[#2563eb] hover:bg-[#1d4ed8] text-white font-bold text-lg py-3.5 rounded-xl shadow-lg shadow-blue-500/30 transition-all transform active:scale-[0.98] flex items-center justify-center gap-2 mb-6 disabled:opacity-70 disabled:cursor-not-allowed"
-           >
-             {isAnalyzing ? (
-               <>
-                 <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                 Analyzing...
-               </>
-             ) : (
-               <>
-                 <Icons.Sparkles size={20} />
-                 Analyze & Optimize
-               </>
-             )}
-           </button>
+           <div className="space-y-4">
+              <button 
+                onClick={handleAnalyze}
+                disabled={isAnalyzing}
+                className="w-full bg-[#2563eb] hover:bg-[#1d4ed8] text-white font-bold text-lg py-4 rounded-xl shadow-lg shadow-blue-500/30 transition-all transform active:scale-[0.98] flex items-center justify-center gap-3 disabled:opacity-70 disabled:cursor-not-allowed group"
+              >
+                {isAnalyzing ? (
+                  <>
+                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    <span>Processing...</span>
+                  </>
+                ) : (
+                  <>
+                    <Icons.Sparkles size={20} className="group-hover:animate-pulse text-yellow-300" />
+                    Analyze & Optimize Content
+                  </>
+                )}
+              </button>
 
-           <button 
-             onClick={handleSkip}
-             className="text-gray-400 hover:text-gray-600 font-medium text-sm transition-colors"
-           >
-             Skip this step
-           </button>
-        </motion.div>
+              <button 
+                onClick={handleSkip}
+                disabled={isAnalyzing}
+                className="text-gray-400 hover:text-navy-900 font-medium text-sm transition-colors block mx-auto"
+              >
+                Skip this step
+              </button>
+           </div>
+
+           {/* AI Insight Bubble during Analysis */}
+           <AnimatePresence>
+             {isAnalyzing && (
+               <MotionDiv
+                 initial={{ opacity: 0, y: 10 }}
+                 animate={{ opacity: 1, y: 0 }}
+                 exit={{ opacity: 0, y: -10 }}
+                 className="absolute bottom-6 left-6 right-6 p-4 bg-navy-900 text-white rounded-2xl shadow-2xl flex items-center gap-3 z-20"
+               >
+                  <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center shrink-0">
+                     <Icons.Sparkles size={16} className="text-blue-400" />
+                  </div>
+                  <div className="text-left">
+                     <div className="text-[10px] font-bold text-blue-400 uppercase tracking-widest">AI Agent Active</div>
+                     <div className="text-xs font-medium text-white/90">{statusMessage}</div>
+                  </div>
+               </MotionDiv>
+             )}
+           </AnimatePresence>
+        </MotionDiv>
       </main>
     </div>
   );

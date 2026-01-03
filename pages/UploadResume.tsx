@@ -1,4 +1,3 @@
-
 import React, { useRef, useState, useEffect } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { Icons } from '../components/ui/Icons';
@@ -129,6 +128,42 @@ const UploadResume: React.FC = () => {
     });
   };
 
+  const convertPdfToImage = async (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      // @ts-ignore
+      if (!window.pdfjsLib) {
+         reject(new Error("PDF Library not loaded."));
+         return;
+      }
+      
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        const typedarray = new Uint8Array(e.target?.result as ArrayBuffer);
+        try {
+          // @ts-ignore
+          const pdf = await window.pdfjsLib.getDocument({ data: typedarray }).promise;
+          // Render 1st page
+          const page = await pdf.getPage(1);
+          const viewport = page.getViewport({ scale: 2.0 });
+          const canvas = document.createElement('canvas');
+          const context = canvas.getContext('2d');
+          canvas.height = viewport.height;
+          canvas.width = viewport.width;
+          
+          await page.render({ canvasContext: context, viewport: viewport }).promise;
+          
+          // Convert to base64 string (remove data prefix)
+          const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
+          resolve(dataUrl.split(',')[1]);
+        } catch (error) {
+          reject(error);
+        }
+      };
+      reader.onerror = (err) => reject(err);
+      reader.readAsArrayBuffer(file);
+    });
+  };
+
   const blobToBase64 = (blob: Blob): Promise<string> => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -159,18 +194,40 @@ const UploadResume: React.FC = () => {
         setStatusText('Reading PDF...');
         const text = await extractTextFromPdf(file);
         
-        setStatusText('Analyzing content...');
-        result = await parseResumeFromText(text);
-        
-        if (!result) {
-           console.log("AI parsing unavailable. Using Local Parser.");
-           setStatusText('Using local parser...');
-           parsedData = parseResumeFromTextLocal(text);
-           const completeness = Object.keys(parsedData).filter(k => Array.isArray(parsedData[k as keyof ResumeData]) ? parsedData[k as keyof ResumeData].length > 0 : !!parsedData[k as keyof ResumeData]).length;
-           analysisData = { ...defaultAnalysis, score: Math.min(100, completeness * 10 + 40) };
+        // Intelligent Fallback: Check if text is mostly empty (scanned PDF or Image-based PDF)
+        if (text.trim().length < 50) {
+           setStatusText('Image-based PDF detected. Switching to AI Vision...');
+           try {
+              const imageBase64 = await convertPdfToImage(file);
+              setStatusText('Analyzing visual layout...');
+              result = await parseResumeFromImage(imageBase64, 'image/jpeg');
+              
+              if (result) {
+                parsedData = result.resumeData;
+                analysisData = result.analysis;
+              } else {
+                 throw new Error("Vision parsing failed");
+              }
+           } catch (visionError) {
+              console.error("Vision fallback failed", visionError);
+              alert("Could not read PDF text or image. Please try a different file.");
+              setViewState('upload');
+              return;
+           }
         } else {
-           parsedData = result.resumeData;
-           analysisData = result.analysis;
+           setStatusText('Analyzing content...');
+           result = await parseResumeFromText(text);
+           
+           if (!result) {
+              console.log("AI parsing unavailable. Using Local Parser.");
+              setStatusText('Using local parser...');
+              parsedData = parseResumeFromTextLocal(text);
+              const completeness = Object.keys(parsedData).filter(k => Array.isArray(parsedData[k as keyof ResumeData]) ? (parsedData[k as keyof ResumeData] as any[]).length > 0 : !!parsedData[k as keyof ResumeData]).length;
+              analysisData = { ...defaultAnalysis, score: Math.min(100, completeness * 10 + 40) };
+           } else {
+              parsedData = result.resumeData;
+              analysisData = result.analysis;
+           }
         }
       } 
       else if (file.type.startsWith('image/')) {
@@ -198,11 +255,14 @@ const UploadResume: React.FC = () => {
         experience: parsedData.experience || prev.experience || [],
         education: parsedData.education || prev.education || [],
         skills: parsedData.skills || prev.skills || [],
-        projects: parsedData.projects || prev.projects || []
+        projects: parsedData.projects || prev.projects || [],
+        certifications: parsedData.certifications || prev.certifications || [],
+        languages: parsedData.languages || prev.languages || [],
+        achievements: parsedData.achievements || prev.achievements || [],
+        customSections: parsedData.customSections || prev.customSections || [],
       }));
       setLocalAnalysis(analysisData);
       
-      // Removed artificial delay to speed up UX
       setViewState('result');
 
     } catch (error) {
@@ -257,9 +317,8 @@ const UploadResume: React.FC = () => {
              </div>
              <h2 className="text-2xl md:text-3xl font-bold text-navy-900 mb-3">Analyzing your resume...</h2>
              <p className="text-gray-500 text-lg">
-               Reading structure, extracting skills, and identifying improvements.
+               {statusText || "Reading structure, extracting skills, and identifying improvements."}
              </p>
-             {statusText && <p className="text-sm text-gray-400 mt-4 animate-pulse">{statusText}</p>}
           </div>
         </main>
       </div>
@@ -289,24 +348,6 @@ const UploadResume: React.FC = () => {
                        >
                           <Icons.Sparkles size={18} />
                           Make it ATS Friendly <Icons.ArrowLeft className="rotate-180" size={16} />
-                       </button>
-                    </div>
-
-                    {/* AI Video Profile Card (Beta) */}
-                    <div className="bg-purple-50 rounded-2xl p-6 border border-purple-100 relative overflow-hidden">
-                       <div className="flex justify-between items-start mb-4 relative z-10">
-                          <div className="flex items-center gap-2 text-purple-700 font-bold">
-                             <Icons.Video size={18} />
-                             AI Video Profile
-                          </div>
-                          <span className="bg-purple-200 text-purple-800 text-[10px] font-bold px-2 py-0.5 rounded uppercase">Beta</span>
-                       </div>
-                       <p className="text-sm text-gray-600 mb-6 relative z-10 leading-relaxed">
-                          Generate a professional video intro based on your resume summary using Veo 3.
-                       </p>
-                       <button className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-2 relative z-10 shadow-md shadow-purple-500/20">
-                          <Icons.Play size={16} fill="currentColor" />
-                          Generate Video Intro
                        </button>
                     </div>
 
@@ -396,7 +437,7 @@ const UploadResume: React.FC = () => {
                                 <div className="flex flex-wrap gap-4 text-sm text-gray-500">
                                    {resumeData.email && <span className="flex items-center gap-1"><Icons.Mail size={14}/> {resumeData.email}</span>}
                                    {resumeData.phone && <span className="flex items-center gap-1"><Icons.Phone size={14}/> {resumeData.phone}</span>}
-                                   {resumeData.link && <span className="flex items-center gap-1"><Icons.Globe size={14}/> Portfolio / LinkedIn</span>}
+                                   {resumeData.city && <span className="flex items-center gap-1"><Icons.MapPin size={14}/> {resumeData.city}</span>}
                                 </div>
                              </div>
 
@@ -439,6 +480,27 @@ const UploadResume: React.FC = () => {
                                       ))}
                                    </div>
                                 </section>
+                             )}
+                             
+                             {/* Custom Sections (Extracted Data) */}
+                             {resumeData.customSections?.length > 0 && (
+                               <section className="mb-8">
+                                  <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Additional Information</h2>
+                                  <div className="space-y-6">
+                                     {resumeData.customSections.map(section => (
+                                       <div key={section.id} className="p-4 bg-gray-50 rounded-xl border border-gray-100">
+                                          <h3 className="text-sm font-bold text-navy-900 mb-2">{section.title}</h3>
+                                          {section.type === 'list' ? (
+                                            <ul className="list-disc list-inside text-sm text-gray-600 space-y-1">
+                                               {section.content.split('\n').map((line, i) => line.trim() && <li key={i}>{line}</li>)}
+                                            </ul>
+                                          ) : (
+                                            <p className="text-sm text-gray-600 leading-relaxed whitespace-pre-line">{section.content}</p>
+                                          )}
+                                       </div>
+                                     ))}
+                                  </div>
+                               </section>
                              )}
 
                           </div>

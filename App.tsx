@@ -21,6 +21,7 @@ interface ResumeContextType {
   resumeData: ResumeData;
   setResumeData: React.Dispatch<React.SetStateAction<ResumeData>>;
   updateField: (field: keyof ResumeData, value: any) => void;
+  updateGap: (key: string, amount: number) => void;
 }
 
 const ResumeContext = createContext<ResumeContextType | undefined>(undefined);
@@ -43,6 +44,8 @@ const sanitizeData = (data: any): ResumeData => {
     education: Array.isArray(data.education) ? data.education : [],
     projects: Array.isArray(data.projects) ? data.projects : [],
     skills: Array.isArray(data.skills) ? data.skills : [],
+    customGaps: data.customGaps || {},
+    fontSize: data.fontSize || 'medium',
   };
 };
 
@@ -65,8 +68,21 @@ const ResumeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =
     setResumeData(prev => ({ ...prev, [field]: value }));
   };
 
+  const updateGap = (key: string, amount: number) => {
+    setResumeData(prev => {
+        const current = prev.customGaps[key] || 0;
+        return {
+            ...prev,
+            customGaps: {
+                ...prev.customGaps,
+                [key]: Math.max(0, current + amount)
+            }
+        };
+    });
+  };
+
   return (
-    <ResumeContext.Provider value={{ resumeData, setResumeData, updateField }}>
+    <ResumeContext.Provider value={{ resumeData, setResumeData, updateField, updateGap }}>
       {children}
     </ResumeContext.Provider>
   );

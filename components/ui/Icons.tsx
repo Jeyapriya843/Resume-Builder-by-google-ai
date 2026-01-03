@@ -31,7 +31,9 @@ import {
   AlertCircle,
   Video,
   CheckCircle,
-  TrendingUp
+  TrendingUp,
+  Search,
+  Type
 } from 'lucide-react';
 
 export const Icons = {
@@ -65,5 +67,7 @@ export const Icons = {
   AlertCircle,
   Video,
   CheckCircle,
-  TrendingUp
+  TrendingUp,
+  Search,
+  Type
 };

@@ -1,9 +1,12 @@
+
 import React from 'react';
 import { useResume } from '../../../App';
 import { useNavigate } from 'react-router-dom';
 import { Icons } from '../../ui/Icons';
 import { Project } from '../../../types';
 import { motion, AnimatePresence } from 'framer-motion';
+
+const MotionDiv = motion.div as any;
 
 const ProjectsStep: React.FC = () => {
   const { resumeData, updateField } = useResume();
@@ -15,7 +18,8 @@ const ProjectsStep: React.FC = () => {
       title: '',
       link: '',
       description: '',
-      technologies: []
+      technologies: [],
+      descriptionType: 'list'
     };
     updateField('projects', [...resumeData.projects, newProject]);
   };
@@ -32,7 +36,6 @@ const ProjectsStep: React.FC = () => {
   };
 
   const handleTechChange = (id: string, value: string) => {
-      // Simple comma separated string to array
       const techs = value.split(',').map(s => s.trim()).filter(s => s !== '');
       updateProjectItem(id, 'technologies', techs);
   };
@@ -44,79 +47,87 @@ const ProjectsStep: React.FC = () => {
         <p className="text-gray-500">Add relevant academic or personal projects.</p>
       </div>
 
-      {/* Best Practice Banner */}
-      <div className="flex items-center gap-3 mb-8">
-         <span className="bg-navy-900 text-white text-xs font-bold px-2 py-1 rounded-sm">Best practice</span>
-         <span className="text-sm text-gray-500">Include links to live demos or GitHub repositories</span>
-      </div>
-
       <div className="space-y-6">
         <AnimatePresence>
           {resumeData.projects.map((project, index) => (
-            <motion.div 
+            <MotionDiv 
               key={project.id}
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              className="relative group"
+              className="relative group bg-white p-6 rounded-2xl border border-gray-100 shadow-sm"
             >
-              {index > 0 && <hr className="border-gray-100 mb-8" />}
               <button 
                 onClick={() => removeProject(project.id)}
-                className="absolute -right-2 -top-2 text-gray-300 hover:text-red-500 transition-colors"
+                className="absolute right-4 top-4 text-gray-300 hover:text-red-500 transition-colors p-2"
               >
                 <Icons.Trash2 size={18} />
               </button>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6 mb-6">
                 <div className="space-y-1.5">
-                   <label className="text-sm font-medium text-gray-700">Project Title</label>
+                   <label className="text-sm font-bold text-gray-700 uppercase tracking-wider">Project Title</label>
                    <input 
                      placeholder="e.g. E-commerce Dashboard" 
                      value={project.title}
                      onChange={(e) => updateProjectItem(project.id, 'title', e.target.value)}
-                     className="w-full px-4 py-3.5 rounded-lg bg-gray-100 border-transparent focus:bg-white focus:border-blue-500 outline-none"
+                     className="w-full px-4 py-3.5 rounded-lg bg-gray-100 border-transparent focus:bg-white focus:border-blue-500 outline-none transition-all font-semibold"
                    />
                 </div>
                 <div className="space-y-1.5">
-                   <label className="text-sm font-medium text-gray-700">Link</label>
+                   <label className="text-sm font-bold text-gray-700 uppercase tracking-wider">Link</label>
                    <input 
                      placeholder="e.g. github.com/user/repo" 
                      value={project.link}
                      onChange={(e) => updateProjectItem(project.id, 'link', e.target.value)}
-                     className="w-full px-4 py-3.5 rounded-lg bg-gray-100 border-transparent focus:bg-white focus:border-blue-500 outline-none"
-                   />
-                </div>
-                <div className="space-y-1.5 md:col-span-2">
-                   <label className="text-sm font-medium text-gray-700">Technologies used</label>
-                   <input 
-                     placeholder="React, Node.js, MongoDB (comma separated)" 
-                     defaultValue={project.technologies.join(', ')}
-                     onBlur={(e) => handleTechChange(project.id, e.target.value)}
-                     className="w-full px-4 py-3.5 rounded-lg bg-gray-100 border-transparent focus:bg-white focus:border-blue-500 outline-none"
+                     className="w-full px-4 py-3.5 rounded-lg bg-gray-100 border-transparent focus:bg-white focus:border-blue-500 outline-none transition-all font-semibold"
                    />
                 </div>
               </div>
 
-              <div className="space-y-1.5">
-                 <label className="text-sm font-medium text-gray-700">Description</label>
+              <div className="space-y-4">
+                 <div className="flex justify-between items-center">
+                    <div className="flex bg-gray-100 p-1 rounded-xl w-fit">
+                       <button 
+                         onClick={() => updateProjectItem(project.id, 'descriptionType', 'paragraph')}
+                         className={`flex items-center gap-2 py-1.5 px-4 rounded-lg text-xs font-bold transition-all relative ${project.descriptionType === 'paragraph' ? 'text-navy-900' : 'text-gray-500 hover:text-gray-700'}`}
+                       >
+                          {project.descriptionType === 'paragraph' && (
+                             <MotionDiv layoutId={`proj-toggle-${project.id}`} className="absolute inset-0 bg-white rounded-lg shadow-sm" />
+                          )}
+                          <Icons.Type size={14} className="relative z-10" />
+                          <span className="relative z-10">Paragraph</span>
+                       </button>
+                       <button 
+                         onClick={() => updateProjectItem(project.id, 'descriptionType', 'list')}
+                         className={`flex items-center gap-2 py-1.5 px-4 rounded-lg text-xs font-bold transition-all relative ${(!project.descriptionType || project.descriptionType === 'list') ? 'text-navy-900' : 'text-gray-500 hover:text-gray-700'}`}
+                       >
+                          {(!project.descriptionType || project.descriptionType === 'list') && (
+                             <MotionDiv layoutId={`proj-toggle-${project.id}`} className="absolute inset-0 bg-white rounded-lg shadow-sm" />
+                          )}
+                          <Icons.Menu size={14} className="relative z-10" />
+                          <span className="relative z-10">List</span>
+                       </button>
+                    </div>
+                    <label className="text-sm font-bold text-gray-700 uppercase tracking-wider">Description</label>
+                 </div>
                  <textarea 
-                   placeholder="Describe what you built, your role, and the outcome..." 
+                   placeholder={project.descriptionType === 'list' ? "Enter points, each on a new line..." : "Describe what you built, your role, and the outcome..."} 
                    value={project.description}
                    onChange={(e) => updateProjectItem(project.id, 'description', e.target.value)}
-                   className="w-full px-4 py-4 rounded-lg bg-gray-100 border-transparent focus:bg-white focus:border-blue-500 outline-none h-24 resize-none"
+                   className="w-full px-4 py-4 rounded-lg bg-gray-100 border-transparent focus:bg-white focus:border-blue-500 outline-none h-32 resize-none transition-all"
                  />
               </div>
-            </motion.div>
+            </MotionDiv>
           ))}
         </AnimatePresence>
 
         <div className="flex justify-center mt-8">
            <button 
              onClick={addProject}
-             className="flex items-center gap-2 px-6 py-3 border border-navy-900 rounded-lg text-navy-900 font-semibold hover:bg-gray-50 transition-colors"
+             className="flex items-center gap-2 px-8 py-4 border-2 border-dashed border-gray-200 rounded-2xl text-gray-400 hover:border-blue-500 hover:text-blue-500 hover:bg-blue-50/30 transition-all font-bold group"
            >
-             <Icons.Plus size={18} />
+             <Icons.Plus size={20} />
              Add Project
            </button>
         </div>

@@ -1,10 +1,13 @@
 
+
 import React from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { Icons } from '../components/ui/Icons';
+
+const MotionDiv = motion.div as any;
 
 const Resume: React.FC = () => {
   const navigate = useNavigate();
@@ -24,7 +27,7 @@ const Resume: React.FC = () => {
 
               <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
                  {/* Create New Card */}
-                 <motion.div 
+                 <MotionDiv 
                     whileHover={{ y: -5 }}
                     onClick={() => navigate('/builder')}
                     className="bg-blue-50 p-8 md:p-12 rounded-3xl cursor-pointer hover:shadow-xl transition-all border border-blue-100 group flex flex-col items-start h-full"
@@ -36,10 +39,10 @@ const Resume: React.FC = () => {
                     <p className="text-gray-600 text-lg leading-relaxed">
                        Make a resume from scratch with our AI optimization
                     </p>
-                 </motion.div>
+                 </MotionDiv>
 
                  {/* Upload Card */}
-                 <motion.div 
+                 <MotionDiv 
                     whileHover={{ y: -5 }}
                     onClick={() => navigate('/upload-resume')}
                     className="bg-[#fff9e6] p-8 md:p-12 rounded-3xl cursor-pointer hover:shadow-xl transition-all border border-yellow-100 group flex flex-col items-start h-full relative overflow-hidden"
@@ -51,7 +54,7 @@ const Resume: React.FC = () => {
                     <p className="text-gray-600 text-lg leading-relaxed">
                        Optimize your resume with our ATS friendly template and optimize content
                     </p>
-                 </motion.div>
+                 </MotionDiv>
               </div>
            </div>
         </section>

@@ -1,8 +1,11 @@
 
+
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icons } from './ui/Icons';
 import { useAuth } from '../App';
+
+const MotionDiv = motion.div as any;
 
 interface ATSSignUpModalProps {
   isOpen: boolean;
@@ -27,7 +30,7 @@ const ATSSignUpModal: React.FC<ATSSignUpModalProps> = ({ isOpen, onClose, onSucc
   return (
     <AnimatePresence>
       <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 font-sans">
-        <motion.div 
+        <MotionDiv 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -35,7 +38,7 @@ const ATSSignUpModal: React.FC<ATSSignUpModalProps> = ({ isOpen, onClose, onSucc
           className="absolute inset-0 bg-white/80 backdrop-blur-sm"
         />
 
-        <motion.div
+        <MotionDiv
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -82,7 +85,7 @@ const ATSSignUpModal: React.FC<ATSSignUpModalProps> = ({ isOpen, onClose, onSucc
            <p className="text-xs text-gray-400 text-center mt-6">
               By signing up you agree to our Terms & Privacy Policy.
            </p>
-        </motion.div>
+        </MotionDiv>
       </div>
     </AnimatePresence>
   );

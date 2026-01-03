@@ -1,6 +1,10 @@
+
 import React from 'react';
 import { useResume } from '../../../App';
 import { Icons } from '../../ui/Icons';
+import { motion } from 'framer-motion';
+
+const MotionDiv = motion.div as any;
 
 const fonts = [
   { id: 'Poppins', name: 'Poppins', className: 'font-sans' },
@@ -28,6 +32,12 @@ const colors = [
   { id: 'burgundy', value: '#881337' },
 ];
 
+const fontSizes: { id: 'small' | 'medium' | 'large'; label: string }[] = [
+  { id: 'small', label: 'Small' },
+  { id: 'medium', label: 'Medium' },
+  { id: 'large', label: 'Large' },
+];
+
 const FinalizeStep: React.FC = () => {
   const { resumeData, updateField } = useResume();
 
@@ -40,7 +50,9 @@ const FinalizeStep: React.FC = () => {
 
       {/* Font Family Selection */}
       <div className="mb-10">
-        <h3 className="text-lg font-semibold text-gray-800 mb-4">Font Family</h3>
+        <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+           <Icons.Palette size={18} className="text-blue-500" /> Font Family
+        </h3>
         <div className="grid grid-cols-2 gap-4">
           {fonts.map((font) => (
             <button
@@ -48,7 +60,7 @@ const FinalizeStep: React.FC = () => {
               onClick={() => updateField('fontFamily', font.id)}
               className={`p-6 rounded-lg border-2 transition-all text-left ${
                 resumeData.fontFamily === font.id
-                  ? 'border-blue-500 bg-blue-50'
+                  ? 'border-blue-500 bg-blue-50 shadow-sm'
                   : 'border-gray-200 bg-white hover:border-gray-300'
               }`}
             >
@@ -61,22 +73,53 @@ const FinalizeStep: React.FC = () => {
         </div>
       </div>
 
+      {/* Font Size Selection */}
+      <div className="mb-10">
+        <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+           <Icons.Type size={18} className="text-blue-500" /> Font Size
+        </h3>
+        <div className="bg-gray-100 p-1.5 rounded-xl flex items-center gap-1 w-fit">
+          {fontSizes.map((size) => (
+            <button
+              key={size.id}
+              onClick={() => updateField('fontSize', size.id)}
+              className={`relative px-8 py-2.5 rounded-lg text-sm font-bold transition-all ${
+                resumeData.fontSize === size.id 
+                  ? 'text-white' 
+                  : 'text-gray-500 hover:text-navy-900'
+              }`}
+            >
+              {resumeData.fontSize === size.id && (
+                <MotionDiv
+                  layoutId="finalizeFontSizeBg"
+                  className="absolute inset-0 bg-navy-900 rounded-lg shadow-md"
+                  transition={{ type: "spring", bounce: 0.15, duration: 0.5 }}
+                />
+              )}
+              <span className="relative z-10">{size.label}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
       {/* Accent Color Selection */}
-      <div>
-        <h3 className="text-lg font-semibold text-gray-800 mb-4">Accent Color</h3>
-        <div className="flex flex-wrap gap-4">
+      <div className="mb-10">
+        <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+           <Icons.Sparkles size={18} className="text-blue-500" /> Accent Color
+        </h3>
+        <div className="flex flex-wrap gap-4 bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
           {colors.map((color) => (
             <button
               key={color.id}
               onClick={() => updateField('accentColor', color.value)}
               className={`w-12 h-12 rounded-full transition-all transform hover:scale-110 flex items-center justify-center ${
-                resumeData.accentColor === color.value ? 'ring-2 ring-offset-2 ring-blue-500' : ''
+                resumeData.accentColor === color.value ? 'ring-4 ring-offset-2 ring-blue-100' : ''
               }`}
               style={{ backgroundColor: color.value }}
               aria-label={`Select ${color.id} color`}
             >
               {resumeData.accentColor === color.value && (
-                <Icons.Check size={24} className="text-white" />
+                <Icons.Check size={24} className="text-white" strokeWidth={3} />
               )}
             </button>
           ))}

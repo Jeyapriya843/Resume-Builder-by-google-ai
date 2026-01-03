@@ -1,9 +1,13 @@
+
+
 import React from 'react';
 import { useResume } from '../../../App';
 import { useNavigate } from 'react-router-dom';
 import { Icons } from '../../ui/Icons';
 import { Education } from '../../../types';
 import { motion, AnimatePresence } from 'framer-motion';
+
+const MotionDiv = motion.div as any;
 
 const EducationStep: React.FC = () => {
   const { resumeData, updateField } = useResume();
@@ -43,7 +47,7 @@ const EducationStep: React.FC = () => {
       <div className="space-y-8">
         <AnimatePresence>
           {resumeData.education.map((edu, index) => (
-            <motion.div 
+            <MotionDiv 
               key={edu.id}
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
@@ -128,7 +132,7 @@ const EducationStep: React.FC = () => {
                  </div>
                  Currently working here
               </div>
-            </motion.div>
+            </MotionDiv>
           ))}
         </AnimatePresence>
 

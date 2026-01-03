@@ -1,4 +1,5 @@
 
+
 import React, { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -9,6 +10,8 @@ import { useResume } from '../App';
 import { Icons } from '../components/ui/Icons';
 import ATSFlowHeader from '../components/ATSFlowHeader';
 import { ResumeData } from '../types';
+
+const MotionDiv = motion.div as any;
 
 // Memoized Wrapper to prevent re-rendering of heavy resume previews when only ID changes
 const MemoizedTemplatePreview = React.memo(
@@ -112,7 +115,7 @@ const ATSTemplates: React.FC = () => {
               const isSelected = resumeData.templateId === template.id;
 
               return (
-                <motion.div
+                <MotionDiv
                   key={template.id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -162,7 +165,7 @@ const ATSTemplates: React.FC = () => {
                       ))}
                     </div>
                   </div>
-                </motion.div>
+                </MotionDiv>
               );
             })}
           </div>

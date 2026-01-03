@@ -1,8 +1,11 @@
 
+
 import React, { useState } from 'react';
 import { Icons } from './ui/Icons';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../App';
+
+const MotionDiv = motion.div as any;
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -30,7 +33,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onLoginSuccess }
       {isOpen && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
           {/* Backdrop */}
-          <motion.div 
+          <MotionDiv 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -39,7 +42,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onLoginSuccess }
           />
 
           {/* Modal Card */}
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -117,7 +120,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onLoginSuccess }
                 </button>
               </div>
             </div>
-          </motion.div>
+          </MotionDiv>
         </div>
       )}
     </AnimatePresence>

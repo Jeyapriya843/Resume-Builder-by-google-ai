@@ -1,9 +1,13 @@
+
+
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Icons } from '../ui/Icons';
 import { steps } from './stepsConfig';
 import CircularProgress from '../ui/CircularProgress';
 import { motion, AnimatePresence } from 'framer-motion';
+
+const MotionDiv = motion.div as any;
 
 const BuilderHeader: React.FC = () => {
   const navigate = useNavigate();
@@ -45,12 +49,12 @@ const BuilderHeader: React.FC = () => {
               className="flex items-center gap-2 text-navy-900 font-bold text-lg hover:opacity-80 transition-opacity"
             >
               {currentStep.label}
-              <motion.div 
+              <MotionDiv 
                 animate={{ rotate: isMenuOpen ? 180 : 0 }}
                 transition={{ duration: 0.2 }}
               >
                 <Icons.ChevronRight size={16} className="rotate-90" />
-              </motion.div>
+              </MotionDiv>
             </button>
           </div>
 
@@ -66,7 +70,7 @@ const BuilderHeader: React.FC = () => {
         {isMenuOpen && (
           <>
             {/* Backdrop */}
-            <motion.div 
+            <MotionDiv 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -75,7 +79,7 @@ const BuilderHeader: React.FC = () => {
             />
             
             {/* Menu Content */}
-            <motion.div
+            <MotionDiv
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
@@ -132,7 +136,7 @@ const BuilderHeader: React.FC = () => {
                     </button>
                  </div>
               </div>
-            </motion.div>
+            </MotionDiv>
           </>
         )}
       </AnimatePresence>

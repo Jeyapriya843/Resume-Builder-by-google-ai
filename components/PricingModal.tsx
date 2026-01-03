@@ -1,7 +1,10 @@
 
+
 import React, { useState } from 'react';
 import { Icons } from './ui/Icons';
 import { motion, AnimatePresence } from 'framer-motion';
+
+const MotionDiv = motion.div as any;
 
 interface PricingModalProps {
   isOpen: boolean;
@@ -45,7 +48,7 @@ const PricingModal: React.FC<PricingModalProps> = ({ isOpen, onClose }) => {
       {isOpen && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 font-sans">
           {/* Backdrop */}
-          <motion.div 
+          <MotionDiv 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -54,7 +57,7 @@ const PricingModal: React.FC<PricingModalProps> = ({ isOpen, onClose }) => {
           />
 
           {/* Modal Card */}
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -153,7 +156,7 @@ const PricingModal: React.FC<PricingModalProps> = ({ isOpen, onClose }) => {
                 </button>
               </div>
             </div>
-          </motion.div>
+          </MotionDiv>
         </div>
       )}
     </AnimatePresence>

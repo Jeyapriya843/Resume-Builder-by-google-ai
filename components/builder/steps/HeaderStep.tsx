@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useResume } from '../../../App';
 import { useNavigate } from 'react-router-dom';
@@ -16,7 +17,7 @@ const HeaderStep: React.FC = () => {
       {/* Best Practice Banner */}
       <div className="flex items-center gap-3 mb-8">
          <span className="bg-navy-900 text-white text-xs font-bold px-2 py-1 rounded-sm">Best practice</span>
-         <span className="text-sm text-gray-500">The best practice goes here</span>
+         <span className="text-sm text-gray-500">Ensure your contact details are up to date and professional.</span>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
@@ -28,7 +29,7 @@ const HeaderStep: React.FC = () => {
             value={resumeData.firstName}
             onChange={(e) => updateField('firstName', e.target.value)}
             className="w-full px-4 py-3.5 rounded-lg bg-gray-100 border-transparent focus:bg-white focus:border-blue-500 focus:ring-0 outline-none transition-all font-medium text-gray-900"
-            placeholder="Frontend developer"
+            placeholder="e.g. Adfrin"
           />
         </div>
 
@@ -40,11 +41,11 @@ const HeaderStep: React.FC = () => {
             value={resumeData.lastName}
             onChange={(e) => updateField('lastName', e.target.value)}
             className="w-full px-4 py-3.5 rounded-lg bg-gray-100 border-transparent focus:bg-white focus:border-blue-500 focus:ring-0 outline-none transition-all font-medium text-gray-900"
-            placeholder="Frontend developer"
+            placeholder="e.g. Goldin"
           />
         </div>
 
-        {/* Job Title (Full Width in design concept, but splitting here for grid consistency) */}
+        {/* Job Title */}
         <div className="space-y-1.5 md:col-span-2">
           <label className="text-sm font-medium text-gray-700">Job Title</label>
           <input 
@@ -52,7 +53,7 @@ const HeaderStep: React.FC = () => {
             value={resumeData.jobTitle}
             onChange={(e) => updateField('jobTitle', e.target.value)}
             className="w-full px-4 py-3.5 rounded-lg bg-gray-100 border-transparent focus:bg-white focus:border-blue-500 focus:ring-0 outline-none transition-all font-medium text-gray-900"
-            placeholder="e.g. Senior Frontend Engineer"
+            placeholder="e.g. Senior Analyst"
           />
         </div>
 
@@ -80,6 +81,18 @@ const HeaderStep: React.FC = () => {
           />
         </div>
         
+        {/* Address */}
+        <div className="space-y-1.5 md:col-span-2">
+          <label className="text-sm font-medium text-gray-700">Full Address</label>
+          <input 
+            type="text" 
+            value={resumeData.address}
+            onChange={(e) => updateField('address', e.target.value)}
+            className="w-full px-4 py-3.5 rounded-lg bg-gray-100 border-transparent focus:bg-white focus:border-blue-500 focus:ring-0 outline-none transition-all font-medium text-gray-900"
+            placeholder="11-79, Jainivas, Hospital Road..."
+          />
+        </div>
+
         {/* City */}
         <div className="space-y-1.5">
           <label className="text-sm font-medium text-gray-700">City</label>
@@ -88,19 +101,19 @@ const HeaderStep: React.FC = () => {
             value={resumeData.city}
             onChange={(e) => updateField('city', e.target.value)}
             className="w-full px-4 py-3.5 rounded-lg bg-gray-100 border-transparent focus:bg-white focus:border-blue-500 focus:ring-0 outline-none transition-all font-medium text-gray-900"
-            placeholder="Enter your country"
+            placeholder="Kanyakumari"
           />
         </div>
 
-        {/* Pincode/Country */}
+        {/* Country */}
          <div className="space-y-1.5">
-          <label className="text-sm font-medium text-gray-700">Pincode</label>
+          <label className="text-sm font-medium text-gray-700">Country/Pincode</label>
           <input 
             type="text" 
             value={resumeData.country}
             onChange={(e) => updateField('country', e.target.value)}
             className="w-full px-4 py-3.5 rounded-lg bg-gray-100 border-transparent focus:bg-white focus:border-blue-500 focus:ring-0 outline-none transition-all font-medium text-gray-900"
-            placeholder="Enter your pincode"
+            placeholder="India"
           />
         </div>
       </div>

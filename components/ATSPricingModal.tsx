@@ -1,7 +1,10 @@
 
+
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icons } from './ui/Icons';
+
+const MotionDiv = motion.div as any;
 
 interface ATSPricingModalProps {
   isOpen: boolean;
@@ -17,7 +20,7 @@ const ATSPricingModal: React.FC<ATSPricingModalProps> = ({ isOpen, onClose, onCo
   return (
     <AnimatePresence>
       <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 font-sans">
-        <motion.div 
+        <MotionDiv 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -25,7 +28,7 @@ const ATSPricingModal: React.FC<ATSPricingModalProps> = ({ isOpen, onClose, onCo
           className="absolute inset-0 bg-white/80 backdrop-blur-sm"
         />
 
-        <motion.div
+        <MotionDiv
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -91,7 +94,7 @@ const ATSPricingModal: React.FC<ATSPricingModalProps> = ({ isOpen, onClose, onCo
            >
              Continue to Optimize
            </button>
-        </motion.div>
+        </MotionDiv>
       </div>
     </AnimatePresence>
   );
