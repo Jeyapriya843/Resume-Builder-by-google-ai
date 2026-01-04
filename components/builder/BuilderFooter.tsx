@@ -22,6 +22,7 @@ const BuilderFooter: React.FC = () => {
     if (!isLastStep) {
       navigate(steps[activeIndex + 1].path);
     } else {
+      // From ATS Boost, we go to final preview
       navigate('/preview');
     }
   };
@@ -42,7 +43,7 @@ const BuilderFooter: React.FC = () => {
           onClick={handleNext}
           className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-3 rounded-lg shadow-lg shadow-blue-600/20 transition-all flex items-center gap-2"
         >
-          {isLastStep ? 'Finish & Preview' : 'Next Step'}
+          {isLastStep ? 'Finish & Review' : 'Next Step'}
           <Icons.ChevronRight size={18} />
         </button>
 

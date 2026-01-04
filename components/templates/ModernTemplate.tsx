@@ -160,6 +160,28 @@ const ModernTemplate: React.FC<TemplateProps> = ({
               </div>
             </section>
            )}
+
+           {data.customSections?.map((section) => (
+            <section key={section.id} style={{ marginTop: `${data.customGaps[`custom-${section.id}-top`] !== undefined ? data.customGaps[`custom-${section.id}-top`] : 20}px` }} className="relative group/section">
+              <GapHandle id={`custom-${section.id}-top`} />
+              <h2 className={`section-header ${s.section} font-bold text-navy-900 uppercase tracking-widest border-b border-gray-200 pb-1 mb-3 flex items-center gap-3`}>
+                <span className="w-2 h-2 rounded-full inline-block" style={{ backgroundColor: accentColor }}></span>
+                {section.title}
+              </h2>
+              {section.type === 'list' ? (
+                <ul className="list-disc list-outside ml-4 text-gray-700 leading-relaxed space-y-1">
+                   {section.content.split('\n').filter(l => l.trim()).map((line, i) => {
+                      const cleanLine = line.replace(/^[\u2022\u25CF\u00B7\-\*]\s*/, '').trim();
+                      return cleanLine && <li key={i} className="description-line">{cleanLine}</li>;
+                   })}
+                </ul>
+              ) : (
+                <div className="leading-relaxed text-gray-700 text-justify whitespace-pre-line text-sm">
+                  {section.content}
+                </div>
+              )}
+            </section>
+          ))}
         </div>
 
         <div className="col-span-4 space-y-8">

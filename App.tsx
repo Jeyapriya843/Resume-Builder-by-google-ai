@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { HashRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { ResumeData, initialResumeState } from './types';
@@ -15,6 +14,7 @@ import Success from './pages/Success';
 import UploadResume from './pages/UploadResume';
 import ATSTemplates from './pages/ATSTemplates';
 import FinalReview from './pages/FinalReview';
+import Dashboard from './pages/Dashboard';
 
 // --- Resume Context Setup ---
 interface ResumeContextType {
@@ -138,6 +138,7 @@ const App: React.FC = () => {
                <Route path="/" element={<Home />} />
                <Route path="/about" element={<About />} />
                <Route path="/resume" element={<Resume />} />
+               <Route path="/dashboard" element={<Dashboard />} />
                <Route path="/upload-resume" element={<UploadResume />} />
                <Route path="/templates" element={<Templates />} />
                <Route path="/ats-templates" element={<ATSTemplates />} />

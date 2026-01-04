@@ -1,4 +1,3 @@
-
 import React, { useRef, useState, useLayoutEffect, useEffect } from 'react';
 import { useResume } from '../App';
 import { TemplatesMap } from './templates';
@@ -79,14 +78,16 @@ const LivePreview: React.FC = () => {
   const generateMask = () => {
     if (PAGE_GAP_PX === 0) return 'none';
     const parts = [];
-    for(let i=0; i<10; i++) {
+    // Dynamic mask generation to avoid "transparent" text beyond fixed loops
+    const numMasks = Math.max(totalPages, 5);
+    for(let i=0; i<numMasks; i++) {
         const start = i * (A4_HEIGHT_PX + PAGE_GAP_PX);
         const end = start + A4_HEIGHT_PX;
         const gapEnd = end + PAGE_GAP_PX;
-        parts.push(`black ${start}px`);
-        parts.push(`black ${end}px`);
-        parts.push(`transparent ${end}px`);
-        parts.push(`transparent ${gapEnd}px`);
+        parts.push(`rgba(255,255,255,1) ${start}px`);
+        parts.push(`rgba(255,255,255,1) ${end}px`);
+        parts.push(`rgba(255,255,255,0) ${end}px`);
+        parts.push(`rgba(255,255,255,0) ${gapEnd}px`);
     }
     return `linear-gradient(to bottom, ${parts.join(', ')})`;
   };

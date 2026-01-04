@@ -85,6 +85,27 @@ const CleanModernTemplate: React.FC<TemplateProps> = ({ data, isAdjusting = fals
               </div>
             </section>
           )}
+
+          {data.customSections?.map((section) => (
+            <section key={section.id} style={{ marginTop: `${data.customGaps[`custom-${section.id}-top`] !== undefined ? data.customGaps[`custom-${section.id}-top`] : 20}px` }}>
+              <GapHandle id={`custom-${section.id}-top`} />
+              <h2 className="section-header text-sm font-bold tracking-[0.2em] text-gray-500 bg-gray-100 py-1 px-2 mb-6 uppercase">
+                {section.title}
+              </h2>
+              {section.type === 'list' ? (
+                <ul className="list-disc list-outside ml-4 text-xs text-gray-600 leading-relaxed text-justify space-y-1">
+                   {section.content.split('\n').filter(l => l.trim()).map((line, i) => {
+                      const cleanLine = line.replace(/^[\u2022\u25CF\u00B7\-\*]\s*/, '').trim();
+                      return cleanLine && <li key={i} className="description-line">{cleanLine}</li>;
+                   })}
+                </ul>
+              ) : (
+                <div className="text-xs text-gray-600 leading-relaxed text-justify whitespace-pre-line">
+                  {section.content}
+                </div>
+              )}
+            </section>
+          ))}
           
            {data.projects && data.projects.length > 0 && (
             <section style={{ marginTop: `${data.customGaps['projects-top'] !== undefined ? data.customGaps['projects-top'] : 20}px` }}>

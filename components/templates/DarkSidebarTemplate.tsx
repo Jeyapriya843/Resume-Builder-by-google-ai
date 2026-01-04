@@ -145,6 +145,29 @@ const DarkSidebarTemplate: React.FC<TemplateProps> = ({ data, isAdjusting = fals
              </div>
           </section>
 
+          {data.customSections?.map((section) => (
+             <section key={section.id} style={{ marginTop: `${data.customGaps[`custom-${section.id}-top`] !== undefined ? data.customGaps[`custom-${section.id}-top`] : 20}px` }}>
+                <GapHandle id={`custom-${section.id}-top`} />
+                <h2 className="text-2xl font-bold pb-2 mb-6 section-header" style={{ color: accentColor, borderBottom: `2px solid ${accentColor}` }}>
+                   {section.title}
+                </h2>
+                <div className="space-y-4">
+                   {section.type === 'list' ? (
+                     <ul className="list-disc list-outside ml-5 text-sm text-gray-600 leading-relaxed space-y-1">
+                        {section.content.split('\n').filter(l => l.trim()).map((line, i) => {
+                           const cleanLine = line.replace(/^[\u2022\u25CF\u00B7\-\*]\s*/, '').trim();
+                           return cleanLine && <li key={i} className="description-line">{cleanLine}</li>;
+                        })}
+                     </ul>
+                   ) : (
+                     <div className="text-sm text-gray-600 whitespace-pre-line text-justify leading-relaxed">
+                        {section.content}
+                     </div>
+                   )}
+                </div>
+             </section>
+          ))}
+
           {data.projects && data.projects.length > 0 && (
              <section className="mt-10" style={{ marginTop: `${data.customGaps['projects-top'] !== undefined ? data.customGaps['projects-top'] : 20}px` }}>
                 <GapHandle id="projects-top" />

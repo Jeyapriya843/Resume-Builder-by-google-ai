@@ -92,6 +92,43 @@ const SimpleProfessionalTemplate: React.FC<TemplateProps> = ({ data, isAdjusting
           </section>
         )}
 
+        {data.education.length > 0 && (
+          <section style={{ marginTop: `${data.customGaps['education-top'] !== undefined ? data.customGaps['education-top'] : 20}px` }}>
+            <GapHandle id="education-top" />
+            <h2 className="section-header text-sm font-bold text-gray-800 uppercase tracking-widest mb-3 border-b border-gray-200 pb-1">Education</h2>
+            <div className="space-y-3">
+              {data.education.map((edu) => (
+                <div key={edu.id} className="job-header">
+                  <div className="flex justify-between items-baseline">
+                     <h3 className="text-gray-900 font-bold text-sm">{edu.degree}</h3>
+                     <span className="text-gray-500 text-xs">{edu.startDate} - {edu.endDate}</span>
+                  </div>
+                  <div className="text-xs text-gray-600">{edu.school}, {edu.location}</div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {data.customSections?.map((section) => (
+          <section key={section.id} style={{ marginTop: `${data.customGaps[`custom-${section.id}-top`] !== undefined ? data.customGaps[`custom-${section.id}-top`] : 20}px` }}>
+            <GapHandle id={`custom-${section.id}-top`} />
+            <h2 className="section-header text-sm font-bold text-gray-800 uppercase tracking-widest mb-3 border-b border-gray-200 pb-1">{section.title}</h2>
+            {section.type === 'list' ? (
+              <ul className="list-disc list-inside text-xs text-gray-600 leading-relaxed text-justify space-y-1">
+                 {section.content.split('\n').filter(l => l.trim()).map((line, i) => {
+                    const cleanLine = line.replace(/^[\u2022\u25CF\u00B7\-\*]\s*/, '').trim();
+                    return cleanLine && <li key={i} className="description-line">{cleanLine}</li>;
+                 })}
+              </ul>
+            ) : (
+              <div className="text-xs leading-loose text-gray-600 text-justify whitespace-pre-line">
+                 {section.content}
+              </div>
+            )}
+          </section>
+        ))}
+
         {data.projects && data.projects.length > 0 && (
            <section style={{ marginTop: `${data.customGaps['projects-top'] !== undefined ? data.customGaps['projects-top'] : 20}px` }}>
             <GapHandle id="projects-top" />
@@ -121,24 +158,6 @@ const SimpleProfessionalTemplate: React.FC<TemplateProps> = ({ data, isAdjusting
                ))}
             </div>
            </section>
-        )}
-
-        {data.education.length > 0 && (
-          <section style={{ marginTop: `${data.customGaps['education-top'] !== undefined ? data.customGaps['education-top'] : 20}px` }}>
-            <GapHandle id="education-top" />
-            <h2 className="section-header text-sm font-bold text-gray-800 uppercase tracking-widest mb-3 border-b border-gray-200 pb-1">Education</h2>
-            <div className="space-y-3">
-              {data.education.map((edu) => (
-                <div key={edu.id} className="job-header">
-                  <div className="flex justify-between items-baseline">
-                     <h3 className="text-gray-900 font-bold text-sm">{edu.degree}</h3>
-                     <span className="text-gray-500 text-xs">{edu.startDate} - {edu.endDate}</span>
-                  </div>
-                  <div className="text-xs text-gray-600">{edu.school}, {edu.location}</div>
-                </div>
-              ))}
-            </div>
-          </section>
         )}
 
         {data.skills.length > 0 && (

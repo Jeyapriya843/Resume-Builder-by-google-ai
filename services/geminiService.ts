@@ -114,7 +114,8 @@ const PARSE_AND_ANALYZE_SCHEMA = {
 
 export const generateResumeSummary = async (jobTitle: string, skills: string[], experiences: Experience[]): Promise<string> => {
   try {
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || "" });
+    // Initializing Gemini client strictly following guidelines
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     const expSummary = experiences.slice(0, 3).map(e => `${e.jobTitle} at ${e.employer}: ${e.description}`).join('\n');
     
     const prompt = `Act as a world-class executive recruiter. Write a compelling, high-impact 3-4 sentence professional summary for a "${jobTitle}".
@@ -142,7 +143,8 @@ export const generateResumeSummary = async (jobTitle: string, skills: string[], 
 
 export const enhanceResumeSummary = async (currentSummary: string, jobTitle: string, skills: string[]): Promise<string> => {
   try {
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || "" });
+    // Initializing Gemini client strictly following guidelines
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     const prompt = `Refine and enhance the following professional summary for a "${jobTitle}". 
     Make it more professional, high-impact, and ATS-friendly by using industry-standard terminology and powerful action verbs.
     Maintain the core message but significantly improve the vocabulary and professional tone.
@@ -166,7 +168,8 @@ export const enhanceResumeSummary = async (currentSummary: string, jobTitle: str
 
 export const generateExperienceDescription = async (jobTitle: string, employer: string): Promise<string> => {
   try {
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || "" });
+    // Initializing Gemini client strictly following guidelines
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     const prompt = `Act as a professional resume writer. Write 4-5 high-impact professional achievement lines for a "${jobTitle}" at "${employer}". 
     
     GUIDELINES:
@@ -190,7 +193,8 @@ export const generateExperienceDescription = async (jobTitle: string, employer: 
 
 export const enhanceExperienceDescription = async (currentDescription: string, jobTitle: string): Promise<string> => {
   try {
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || "" });
+    // Initializing Gemini client strictly following guidelines
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     const prompt = `Refine and professionally enhance the following resume bullet points for a "${jobTitle}".
     Improve the tone, use stronger action verbs, and make the statements more ATS-friendly.
     Ensure each point highlights impact or results while maintaining the original facts.
@@ -214,7 +218,8 @@ export const enhanceExperienceDescription = async (currentDescription: string, j
 
 export const optimizeResumeForJD = async (resume: ResumeData, jd: string): Promise<Partial<ResumeData> | null> => {
   try {
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || "" });
+    // Initializing Gemini client strictly following guidelines
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     const prompt = `
       Act as an expert ATS (Applicant Tracking System) Specialist and Executive Resume Writer.
       
@@ -256,7 +261,8 @@ export const optimizeResumeForJD = async (resume: ResumeData, jd: string): Promi
 
 export const parseResumeFromText = async (text: string): Promise<{ resumeData: Partial<ResumeData>, analysis: AnalysisResult } | null> => {
   try {
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || "" });
+    // Initializing Gemini client strictly following guidelines
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     const prompt = `
       EXTRACT EVERY SINGLE PIECE OF INFORMATION from the following resume text. 
       
@@ -296,7 +302,8 @@ export const parseResumeFromText = async (text: string): Promise<{ resumeData: P
 
 export const parseResumeFromImage = async (base64Image: string, mimeType: string): Promise<{ resumeData: Partial<ResumeData>, analysis: AnalysisResult } | null> => {
   try {
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || "" });
+    // Initializing Gemini client strictly following guidelines
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     const prompt = `
       PERFORM FULL OCR AND DATA MAPPING for this resume image.
       

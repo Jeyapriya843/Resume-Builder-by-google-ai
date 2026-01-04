@@ -137,7 +137,7 @@ const BoldSidebarTemplate: React.FC<TemplateProps> = ({ data, isAdjusting = fals
           )}
 
           {data.projects && data.projects.length > 0 && (
-             <section style={{ marginTop: `${data.customGaps['projects-top'] !== undefined ? data.customGaps['projects-top'] : 20}px` }}>
+             <section className="mb-10" style={{ marginTop: `${data.customGaps['projects-top'] !== undefined ? data.customGaps['projects-top'] : 20}px` }}>
                 <GapHandle id="projects-top" />
                 <h2 className="text-xl font-bold uppercase mb-4 section-header" style={{ color: accentColor }}>Projects</h2>
                 <div className="space-y-4">
@@ -161,6 +161,25 @@ const BoldSidebarTemplate: React.FC<TemplateProps> = ({ data, isAdjusting = fals
                 </div>
              </section>
           )}
+
+          {data.customSections?.map((section) => (
+             <section key={section.id} style={{ marginTop: `${data.customGaps[`custom-${section.id}-top`] !== undefined ? data.customGaps[`custom-${section.id}-top`] : 20}px` }}>
+                <GapHandle id={`custom-${section.id}-top`} />
+                <h2 className="text-xl font-bold uppercase mb-4 section-header" style={{ color: accentColor }}>{section.title}</h2>
+                <div className="text-sm text-gray-600">
+                   {section.type === 'list' ? (
+                     <ul className="list-disc list-outside ml-4 space-y-1">
+                        {section.content.split('\n').filter(l => l.trim()).map((line, i) => {
+                           const cleanLine = line.replace(/^[\u2022\u25CF\u00B7\-\*]\s*/, '').trim();
+                           return cleanLine && <li key={i} className="description-line">{cleanLine}</li>;
+                        })}
+                     </ul>
+                   ) : (
+                     <p className="whitespace-pre-line leading-relaxed text-justify">{section.content}</p>
+                   )}
+                </div>
+             </section>
+          ))}
        </div>
     </div>
   );

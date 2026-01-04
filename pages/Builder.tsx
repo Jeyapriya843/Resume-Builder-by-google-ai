@@ -12,6 +12,7 @@ import TemplateStep from '../components/builder/steps/TemplateStep';
 import CertificationsStep from '../components/builder/steps/CertificationsStep';
 import LanguagesStep from '../components/builder/steps/LanguagesStep';
 import CustomSectionsStep from '../components/builder/steps/CustomSectionsStep';
+import ATSOptimizationStep from '../components/builder/steps/ATSOptimizationStep';
 import LivePreview from '../components/LivePreview';
 import BuilderHeader from '../components/builder/BuilderHeader';
 import BuilderFooter from '../components/builder/BuilderFooter';
@@ -36,6 +37,7 @@ const Builder: React.FC = () => {
                    <Route path="custom" element={<CustomSectionsStep />} />
                    <Route path="summary" element={<SummaryStep />} />
                    <Route path="finalize" element={<FinalizeStep />} />
+                   <Route path="ats" element={<ATSOptimizationStep />} />
                    <Route path="template" element={<TemplateStep />} />
                  </Routes>
                  <div className="mt-12 xl:hidden border-t border-gray-200 pt-10 max-w-3xl mx-auto">

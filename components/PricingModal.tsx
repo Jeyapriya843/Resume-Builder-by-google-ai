@@ -1,5 +1,4 @@
 
-
 import React, { useState } from 'react';
 import { Icons } from './ui/Icons';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -9,6 +8,8 @@ const MotionDiv = motion.div as any;
 interface PricingModalProps {
   isOpen: boolean;
   onClose: () => void;
+  // Added optional onContinue callback to support flows where closing the modal triggers the next step
+  onContinue?: () => void;
 }
 
 const plans = [
@@ -38,7 +39,8 @@ const plans = [
   }
 ];
 
-const PricingModal: React.FC<PricingModalProps> = ({ isOpen, onClose }) => {
+// Added onContinue to destructured props to fix the type mismatch in ATSOptimizationStep.tsx
+const PricingModal: React.FC<PricingModalProps> = ({ isOpen, onClose, onContinue }) => {
   const [selectedPlan, setSelectedPlan] = useState('annual');
 
   if (!isOpen) return null;
@@ -148,8 +150,9 @@ const PricingModal: React.FC<PricingModalProps> = ({ isOpen, onClose }) => {
 
               {/* Continue Button */}
               <div className="mt-8">
+                {/* Fixed: Use onContinue callback if provided, fallback to onClose to ensure consistency across different UI contexts */}
                 <button 
-                  onClick={onClose}
+                  onClick={onContinue || onClose}
                   className="w-full bg-[#2563eb] hover:bg-[#1d4ed8] text-white font-bold text-lg py-3.5 rounded-xl shadow-lg shadow-blue-500/30 transition-all transform active:scale-[0.98] outline-none focus:ring-4 focus:ring-blue-200"
                 >
                   Continue

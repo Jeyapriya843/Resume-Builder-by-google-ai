@@ -57,14 +57,12 @@ const Preview: React.FC = () => {
       const container = contentRef.current;
       if (!container) return;
 
-      // Select EVERY atomic text unit.
       const elements = Array.from(container.querySelectorAll('.section-header, .job-header, .description-line, .skill-item, li, h1, h2, h3, h4, h5, p'));
       
       let maxPage = 1;
       const pageHeight = A4_HEIGHT_PX;
       const totalPageHeight = A4_HEIGHT_PX + PAGE_GAP_PX;
 
-      // Reset margins
       elements.forEach(el => {
           (el as HTMLElement).style.marginTop = '';
       });
@@ -83,7 +81,6 @@ const Preview: React.FC = () => {
         const pageIndex = Math.floor(relativeTop / totalPageHeight);
         const currentPageEnd = (pageIndex * totalPageHeight) + pageHeight;
 
-        // If the element bottom is within 8px of the page boundary, push it entirely.
         if (elementBottom > (currentPageEnd - 8)) {
              const nextPageStart = (pageIndex + 1) * totalPageHeight;
              const pushAmount = nextPageStart - relativeTop + PAGE_TOP_PADDING;
@@ -125,15 +122,18 @@ const Preview: React.FC = () => {
   const generateMask = () => {
       if (PAGE_GAP_PX === 0) return 'none';
       const parts = [];
-      for(let i=0; i<10; i++) {
+      // Generate mask dynamically based on page count to prevent clipping
+      const numMasks = Math.max(totalPages, 5); 
+      for(let i=0; i<numMasks; i++) {
           const totalHeight = A4_HEIGHT_PX + PAGE_GAP_PX;
           const start = i * totalHeight;
           const end = start + A4_HEIGHT_PX;
           const gapEnd = end + PAGE_GAP_PX;
-          parts.push(`black ${start}px`);
-          parts.push(`black ${end}px`);
-          parts.push(`transparent ${end}px`);
-          parts.push(`transparent ${gapEnd}px`);
+          // Using white instead of black for alpha mask (safer in Chrome)
+          parts.push(`rgba(255,255,255,1) ${start}px`);
+          parts.push(`rgba(255,255,255,1) ${end}px`);
+          parts.push(`rgba(255,255,255,0) ${end}px`);
+          parts.push(`rgba(255,255,255,0) ${gapEnd}px`);
       }
       return `linear-gradient(to bottom, ${parts.join(', ')})`;
   };

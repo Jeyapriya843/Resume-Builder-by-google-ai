@@ -103,30 +103,6 @@ const TealModernTemplate: React.FC<TemplateProps> = ({ data, isAdjusting = false
           </section>
         )}
 
-        {data.education.length > 0 && (
-          <section style={{ marginTop: `${data.customGaps['education-top'] !== undefined ? data.customGaps['education-top'] : 20}px` }}>
-            <GapHandle id="education-top" />
-            <h2 className="text-lg font-bold mb-4 flex items-center gap-3 section-header" style={{ color: accentColor }}>
-                Education
-                <span className="flex-1 h-[1px]" style={{ backgroundColor: accentColor }}></span>
-            </h2>
-            <div className="space-y-4">
-              {data.education.map((edu, idx) => (
-                <div key={edu.id} className="mb-2" style={{ marginTop: idx > 0 ? `${data.customGaps[`edu-${edu.id}-top`] !== undefined ? data.customGaps[`edu-${edu.id}-top`] : 20}px` : 0 }}>
-                  {idx > 0 && <GapHandle id={`edu-${edu.id}-top`} />}
-                  <div className="job-header">
-                      <div className="flex justify-between items-baseline mb-1">
-                         <h3 className="font-bold text-black text-md">{edu.school}</h3>
-                         <span className="text-sm italic font-medium" style={{ color: accentColor }}>{edu.startDate} - {edu.endDate}</span>
-                      </div>
-                      <div className="text-sm text-gray-700">{edu.degree} in {edu.fieldOfStudy}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
-
         {data.experience.length > 0 && (
           <section style={{ marginTop: `${data.customGaps['experience-top'] !== undefined ? data.customGaps['experience-top'] : 20}px` }}>
             <GapHandle id="experience-top" />
@@ -157,6 +133,54 @@ const TealModernTemplate: React.FC<TemplateProps> = ({ data, isAdjusting = false
                        })}
                     </ul>
                   )}
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {data.customSections?.map((section) => (
+          <section key={section.id} style={{ marginTop: `${data.customGaps[`custom-${section.id}-top`] !== undefined ? data.customGaps[`custom-${section.id}-top`] : 20}px` }}>
+            <GapHandle id={`custom-${section.id}-top`} />
+            <h2 className="text-lg font-bold mb-4 flex items-center gap-3 section-header" style={{ color: accentColor }}>
+                {section.title}
+                <span className="flex-1 h-[1px]" style={{ backgroundColor: accentColor }}></span>
+            </h2>
+            <div className="space-y-4">
+               {section.type === 'list' ? (
+                 <ul className="list-disc list-outside ml-5 text-sm text-gray-700 leading-relaxed space-y-1">
+                    {section.content.split('\n').filter(l => l.trim()).map((line, i) => {
+                       const cleanLine = line.replace(/^[\u2022\u25CF\u00B7\-\*]\s*/, '').trim();
+                       return cleanLine && <li key={i} className="description-line">{cleanLine}</li>;
+                    })}
+                 </ul>
+               ) : (
+                 <p className="text-sm text-gray-700 whitespace-pre-line leading-relaxed text-justify">
+                    {section.content}
+                 </p>
+               )}
+            </div>
+          </section>
+        ))}
+
+        {data.education.length > 0 && (
+          <section style={{ marginTop: `${data.customGaps['education-top'] !== undefined ? data.customGaps['education-top'] : 20}px` }}>
+            <GapHandle id="education-top" />
+            <h2 className="text-lg font-bold mb-4 flex items-center gap-3 section-header" style={{ color: accentColor }}>
+                Education
+                <span className="flex-1 h-[1px]" style={{ backgroundColor: accentColor }}></span>
+            </h2>
+            <div className="space-y-4">
+              {data.education.map((edu, idx) => (
+                <div key={edu.id} className="mb-2" style={{ marginTop: idx > 0 ? `${data.customGaps[`edu-${edu.id}-top`] !== undefined ? data.customGaps[`edu-${edu.id}-top`] : 20}px` : 0 }}>
+                  {idx > 0 && <GapHandle id={`edu-${edu.id}-top`} />}
+                  <div className="job-header">
+                      <div className="flex justify-between items-baseline mb-1">
+                         <h3 className="font-bold text-black text-md">{edu.school}</h3>
+                         <span className="text-sm italic font-medium" style={{ color: accentColor }}>{edu.startDate} - {edu.endDate}</span>
+                      </div>
+                      <div className="text-sm text-gray-700">{edu.degree} in {edu.fieldOfStudy}</div>
+                  </div>
                 </div>
               ))}
             </div>

@@ -149,7 +149,7 @@ const ClassicTemplate: React.FC<TemplateProps> = ({ data, isAdjusting = false, o
                           </ul>
                         )}
                      </div>
-                     {proj.technologies && (
+                     {proj.technologies && proj.technologies.length > 0 && (
                        <div className="description-line text-[10px] text-gray-600 italic">Technology: {proj.technologies.join(', ')}</div>
                      )}
                   </div>
@@ -180,6 +180,28 @@ const ClassicTemplate: React.FC<TemplateProps> = ({ data, isAdjusting = false, o
             </div>
           </section>
         )}
+
+        {/* Custom Sections */}
+        {data.customSections?.map((section) => (
+          <section key={section.id} style={{ marginTop: `${data.customGaps[`custom-${section.id}-top`] !== undefined ? data.customGaps[`custom-${section.id}-top`] : 20}px` }}>
+            <GapHandle id={`custom-${section.id}-top`} />
+            <h2 className={`section-header ${s.section} font-bold text-gray-900 uppercase border-b border-gray-300 mb-3`}>
+              {section.title}
+            </h2>
+            {section.type === 'list' ? (
+              <ul className="list-disc list-outside ml-5 space-y-1">
+                 {section.content.split('\n').filter(l => l.trim()).map((line, i) => {
+                    const cleanLine = line.replace(/^[\u2022\u25CF\u00B7\-\*]\s*/, '').trim();
+                    return cleanLine && <li key={i} className="description-line">{cleanLine}</li>;
+                 })}
+              </ul>
+            ) : (
+              <div className="leading-relaxed text-justify whitespace-pre-line text-sm text-gray-800">
+                 {section.content}
+              </div>
+            )}
+          </section>
+        ))}
 
         {/* Skills */}
         {data.skills.length > 0 && (

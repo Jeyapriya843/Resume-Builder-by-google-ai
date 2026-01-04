@@ -111,6 +111,27 @@ const TechDesignTemplate: React.FC<TemplateProps> = ({ data, isAdjusting = false
           </section>
         )}
 
+        {data.customSections?.map((section) => (
+          <section key={section.id} style={{ marginTop: `${data.customGaps[`custom-${section.id}-top`] !== undefined ? data.customGaps[`custom-${section.id}-top`] : 20}px` }}>
+            <GapHandle id={`custom-${section.id}-top`} />
+            <div className="bg-gray-200 rounded-full px-4 py-1.5 inline-block mb-3 section-header">
+               <h2 className="text-xs font-bold text-gray-700 uppercase tracking-wider italic">{section.title}</h2>
+            </div>
+            {section.type === 'list' ? (
+              <ul className="list-disc list-outside ml-4 text-xs text-gray-700 leading-relaxed space-y-1">
+                 {section.content.split('\n').filter(l => l.trim()).map((line, i) => {
+                    const cleanLine = line.replace(/^[\u2022\u25CF\u00B7\-\*]\s*/, '').trim();
+                    return cleanLine && <li key={i} className="description-line">{cleanLine}</li>;
+                 })}
+              </ul>
+            ) : (
+              <div className="text-xs leading-relaxed text-gray-700 text-justify whitespace-pre-line">
+                 {section.content}
+              </div>
+            )}
+          </section>
+        ))}
+
         {data.education.length > 0 && (
           <section style={{ marginTop: `${data.customGaps['education-top'] !== undefined ? data.customGaps['education-top'] : 20}px` }}>
             <GapHandle id="education-top" />

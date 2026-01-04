@@ -12,5 +12,5 @@ export const steps = [
   { id: 'custom', label: 'Custom Sections', icon: Icons.Plus, path: '/builder/custom' },
   { id: 'summary', label: 'Summary', icon: Icons.FileText, path: '/builder/summary' },
   { id: 'finalize', label: 'Finalize', icon: Icons.Palette, path: '/builder/finalize' },
-  { id: 'template', label: 'Template', icon: Icons.Layout, path: '/builder/template' },
+  { id: 'ats', label: 'ATS Boost', icon: Icons.Sparkles, path: '/builder/ats' },
 ];

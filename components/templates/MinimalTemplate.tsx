@@ -84,6 +84,25 @@ const MinimalTemplate: React.FC<TemplateProps> = ({ data, isAdjusting = false, o
           </section>
         )}
 
+        {data.customSections?.map((section) => (
+          <section key={section.id} style={{ marginTop: `${data.customGaps[`custom-${section.id}-top`] !== undefined ? data.customGaps[`custom-${section.id}-top`] : 20}px` }}>
+            <GapHandle id={`custom-${section.id}-top`} />
+            <h2 className={`section-header ${s.section} font-bold text-gray-400 uppercase tracking-widest mb-3`}>{section.title}</h2>
+            {section.type === 'list' ? (
+              <ul className="list-disc list-outside ml-6 space-y-1 text-gray-600 leading-relaxed">
+                 {section.content.split('\n').filter(l => l.trim()).map((line, i) => {
+                    const cleanLine = line.replace(/^[\u2022\u25CF\u00B7\-\*]\s*/, '').trim();
+                    return cleanLine && <li key={i} className="description-line">{cleanLine}</li>;
+                 })}
+              </ul>
+            ) : (
+              <div className="text-gray-600 leading-relaxed text-justify whitespace-pre-line text-sm">
+                 {section.content}
+              </div>
+            )}
+          </section>
+        ))}
+
         {data.projects && data.projects.length > 0 && (
           <section style={{ marginTop: `${data.customGaps['projects-top'] !== undefined ? data.customGaps['projects-top'] : 20}px` }}>
              <GapHandle id="projects-top" />
@@ -98,7 +117,7 @@ const MinimalTemplate: React.FC<TemplateProps> = ({ data, isAdjusting = false, o
                             return cleanLine && <div key={i} className="description-line mb-0.5">{cleanLine}</div>;
                          })}
                       </div>
-                      {proj.technologies.length > 0 && (
+                      {proj.technologies && proj.technologies.length > 0 && (
                          <div className="flex flex-wrap gap-1">
                             {proj.technologies.map((t, i) => (
                                <span key={i} className="skill-item text-[9px] bg-white px-1 py-0.5 rounded text-gray-500 border border-gray-100">{t}</span>

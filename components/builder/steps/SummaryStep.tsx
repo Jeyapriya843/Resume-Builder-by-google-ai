@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useResume } from '../../../App';
 import { Icons } from '../../ui/Icons';
@@ -58,34 +57,21 @@ const SummaryStep: React.FC = () => {
         throw new Error("No summary returned");
       }
     } catch (e) {
-      setError("AI service failed. Please check your connection and try again.");
-      setStagingSummary("Request failed. Please try again.");
-    } finally {
-      setIsGenerating(false);
-    }
-  };
-
-  const handleRegenerate = async () => {
-    setIsGenerating(true);
-    setError(null);
-    try {
-      let summary = '';
-      if (mode === 'generate') {
-        summary = await generateResumeSummary(resumeData.jobTitle, resumeData.skills, resumeData.experience);
-      } else {
-        summary = await enhanceResumeSummary(resumeData.summary, resumeData.jobTitle, resumeData.skills);
-      }
-      setStagingSummary(summary || '');
-    } catch (e) {
-      setError("Regeneration failed.");
+      setError("AI service failed. Please check your connection.");
+      setStagingSummary("AI service is currently busy. Please try again in a few moments.");
     } finally {
       setIsGenerating(false);
     }
   };
 
   const applySummary = () => {
-    updateField('summary', stagingSummary);
-    setIsModalOpen(false);
+    // Safety check: Don't apply error messages as the actual summary
+    if (stagingSummary && !stagingSummary.includes("Please try again") && !stagingSummary.includes("failed")) {
+      updateField('summary', stagingSummary);
+      setIsModalOpen(false);
+    } else if (!isGenerating) {
+      setIsModalOpen(false);
+    }
   };
 
   return (
@@ -95,7 +81,7 @@ const SummaryStep: React.FC = () => {
         <p className="text-gray-500">Briefly describe your career goals and key achievements</p>
       </div>
 
-      <div className="bg-white p-1 rounded-2xl border border-gray-100 shadow-sm overflow-hidden mb-6">
+      <div className="bg-white p-1 rounded-2xl border border-gray-100 shadow-sm overflow-hidden mb-6 relative z-10">
         <div className="flex flex-wrap justify-between items-center px-4 py-3 bg-gray-50/50 border-b border-gray-100 gap-3">
            <div className="flex items-center gap-4">
               <label className="text-xs font-bold text-navy-900 uppercase tracking-wider">Format</label>
@@ -141,12 +127,12 @@ const SummaryStep: React.FC = () => {
            </div>
         </div>
 
-        <div className="relative">
+        <div className="relative bg-white">
           <textarea 
             value={resumeData.summary}
             onChange={(e) => updateField('summary', e.target.value)}
             placeholder={resumeData.summaryType === 'list' ? "Enter summary points, each on a new line..." : "E.g. Dynamic Software Engineer with 5+ years of experience in..."}
-            className="w-full h-72 px-6 py-6 outline-none resize-none text-base leading-relaxed text-gray-700 placeholder:text-gray-300 transition-all"
+            className="w-full h-72 px-6 py-6 outline-none resize-none text-base leading-relaxed text-gray-700 bg-white placeholder:text-gray-300 transition-all relative z-10"
           />
           
           <AnimatePresence>
@@ -155,7 +141,7 @@ const SummaryStep: React.FC = () => {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 10 }}
-                className="absolute bottom-6 left-6 right-6 bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm font-medium flex items-center gap-2 shadow-sm"
+                className="absolute bottom-6 left-6 right-6 bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm font-medium flex items-center gap-2 shadow-sm z-20"
               >
                 <Icons.AlertCircle size={16} />
                 {error}
@@ -190,7 +176,7 @@ const SummaryStep: React.FC = () => {
          </div>
       </div>
 
-      {/* AI POP-UP MODAL - REUSED FROM PREVIOUS VERSION */}
+      {/* AI POP-UP MODAL */}
       <AnimatePresence>
         {isModalOpen && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
@@ -244,7 +230,7 @@ const SummaryStep: React.FC = () => {
               <div className="px-6 py-4 bg-gray-50 border-t border-gray-100 flex justify-end items-center gap-3">
                  <button 
                    onClick={applySummary}
-                   disabled={isGenerating || !stagingSummary || stagingSummary.includes('failed')}
+                   disabled={isGenerating || !stagingSummary}
                    className="bg-navy-900 hover:bg-navy-800 text-white px-6 py-2.5 rounded-xl font-bold text-sm shadow-lg transition-all flex items-center gap-2 disabled:opacity-50"
                  >
                     Apply Changes

@@ -95,6 +95,27 @@ const TimelineTemplate: React.FC<TemplateProps> = ({ data, isAdjusting = false, 
                    </div>
                 </section>
              )}
+
+             {data.customSections?.map((section) => (
+                <section key={section.id} className="mt-10" style={{ marginTop: `${data.customGaps[`custom-${section.id}-top`] !== undefined ? data.customGaps[`custom-${section.id}-top`] : 20}px` }}>
+                   <GapHandle id={`custom-${section.id}-top`} />
+                   <h2 className="text-sm font-bold tracking-[0.2em] uppercase text-gray-800 mb-6 border-b border-gray-100 pb-2 section-header">
+                      {section.title}
+                   </h2>
+                   {section.type === 'list' ? (
+                     <ul className="list-disc list-outside ml-4 text-xs text-gray-600 space-y-1">
+                        {section.content.split('\n').filter(l => l.trim()).map((line, i) => {
+                           const cleanLine = line.replace(/^[\u2022\u25CF\u00B7\-\*]\s*/, '').trim();
+                           return cleanLine && <li key={i} className="description-line">{cleanLine}</li>;
+                        })}
+                     </ul>
+                   ) : (
+                     <p className="text-xs leading-loose text-gray-600 text-justify whitespace-pre-line">
+                        {section.content}
+                     </p>
+                   )}
+                </section>
+             ))}
           </div>
 
           <div className="col-span-5 pt-2">
