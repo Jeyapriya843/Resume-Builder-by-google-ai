@@ -1,20 +1,18 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# AI-Powered Resume Builder
 
-# Run and deploy your AI Studio app
+A resume builder app powered by Google Gemini AI, built with 
+React, TypeScript, and Vite.
 
-This contains everything you need to run your app locally.
+## Features
+- AI-generated resume content using Google Gemini API
+- Real-time resume preview
+- Built with React + TypeScript
 
-View your app in AI Studio: https://ai.studio/apps/drive/1BfPsGpf26Q1QUO7qD3uF-VvR13kZq37X
+## Tech Stack
+React | TypeScript | Google Gemini AI | Vite
 
 ## Run Locally
-
-**Prerequisites:**  Node.js
-
-
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+1. Clone the repo
+2. Run `npm install`
+3. Add your `GEMINI_API_KEY` to `.env.local`
+4. Run `npm run dev`
